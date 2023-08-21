@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "darkreader": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1692432251,
+        "narHash": "sha256-remwdRSqOf7BCNGmhIlEKtXJHToEGLvnB6732kyAlSw=",
+        "owner": "darkreader",
+        "repo": "darkreader",
+        "rev": "0b2b1cb26ff1e9ecb564a6d685a7cdba0e9a490c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "darkreader",
+        "repo": "darkreader",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -52,10 +68,44 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1653917367,
+        "narHash": "sha256-04MsJC0g9kE01nBuXThMppZK+yvCZECQnUaZKSU+HJo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "437c8e6554911095f0557d524e9d2ffe1c26e33a",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "npm-build": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1686315622,
+        "narHash": "sha256-ccqZqY6wUFot0ewyNKQUrMR6IEliGza+pjKoSVMXIeM=",
+        "owner": "serokell",
+        "repo": "nix-npm-buildpackage",
+        "rev": "991a792bccd611842f6bc1aa99fe80380ad68d44",
+        "type": "github"
+      },
+      "original": {
+        "owner": "serokell",
+        "repo": "nix-npm-buildpackage",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "darkreader": "darkreader",
         "flake-parts": "flake-parts",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "npm-build": "npm-build"
       }
     }
   },

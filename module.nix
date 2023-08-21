@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  self,
   pkgs,
   ...
 }:
@@ -160,6 +161,7 @@ in {
             "browser.toolbars.bookmarks.visibility" = "never";
             "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
             "toolkit.zoomManager.zoomValues" = ".8,.90,.95,1,1.1,1.2";
+            "xpinstall.signatures.required" = false;
             "browser.uidensity" = 1;
             "general.useragent.override" = cfg.userAgent;
 
