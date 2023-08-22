@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   background ? "1e1e2e",
+  foreground ? "cdd6f4",
   ...
 }:
 buildNpmPackage {
@@ -20,6 +21,7 @@ buildNpmPackage {
   patchPhase = ''
     runHook prePatch
     sed -i 's/181a1b/${background}/g' src/defaults.ts
+    sed -i 's/e8e6e3/${foreground}/g' src/defaults.ts
     runHook postPatch
   '';
 

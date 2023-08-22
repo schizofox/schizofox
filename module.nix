@@ -1,12 +1,39 @@
-{
+self: {
   config,
   lib,
-  self,
   pkgs,
   ...
 }:
 with lib; let
+
+    inherit (pkgs.stdenv.hostPlatform) isDarwin;
+
   cfg = config.programs.schizofox;
+  
+  darkreader = self.packages.${pkgs.stdenv.hostPlatform.system}.darkreader;
+
+profilesIni = generators.toINI { } nameValuePair "Profile0" {
+  Name = "schizo";
+  Path = if isDarwin then "Profiles/schizo.default" else "schizo.default";
+  IsRelative = 1;
+  Default = 1;
+} // {
+      General = { StartWithLastProfile = 1; };
+    };
+
+    mozillaConfigPath =
+    if isDarwin then "Library/Application Support/Mozilla" else ".mozilla";
+
+  firefoxConfigPath = if isDarwin then
+    "Library/Application Support/Firefox"
+  else
+    "${mozillaConfigPath}/firefox";
+
+  profilesPath =
+    if isDarwin then "${firefoxConfigPath}/Profiles" else firefoxConfigPath;
+
+    defaultProfile = "${profilesPath}/schizo.default";
+
 in {
   meta.maintainers = with maintainers; [sioodmy];
   options.programs.schizofox = {
@@ -23,11 +50,44 @@ in {
       # Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
       # Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
     };
+    background = mkOption {
+      type = types.str;
+      example = "1e1e2e";
+      default = "1e1e2e";
+      description = "Dark reader background color";
+    };
+    foreground = mkOption {
+      type = types.str;
+      example = "cdd6f4";
+      default = "cdd6f4";
+      description = "Dark reader text color";
+    };
+
+    surface = mkOption {
+      type = types.str;
+      example = "313244";
+      default = "313244";
+      description = "Dark reader secondary background color";
+    };
   };
 
   config = mkIf cfg.enable {
+
+    home.file."${firefoxConfigPath}/profiles.ini".text = ''
+      [Profile0]
+      Name=default
+      IsRelative=1
+      Path=schizo.default
+      Default=1
+
+      [General]
+      StartWithLastProfile=1
+      Version=2
+      '';
+    home.file."${defaultProfile}/chrome/userChrome.css".source= ./userChrome.nix;
+    home.file."${defaultProfile}/chrome/userContent.css".source= ./userContent.css;
     home.packages = [
-      (wrapFirefox pkgs.firefox-esr-102-unwrapped {
+      (pkgs.wrapFirefox pkgs.firefox-esr-102-unwrapped {
         # see https://github.com/mozilla/policy-templates/blob/master/README.md
         extraPolicies = {
           CaptivePortal = false;
@@ -105,8 +165,10 @@ in {
                 URLTemplate = "https://librex.beparanoid.de/search.php?q={searchTerms}&p=0&t=0";
               }
             ];
-            Default = "Google";
+            Default = "Librex";
+            # google glowies crying rn
             Remove = [
+              "Google"
               "Bing"
               "Amazon.com"
               "eBay"
@@ -121,9 +183,13 @@ in {
               builtins.mapAttrs
               (name: cfg: {installation_mode = "force_installed";} // cfg)
               extensions;
+            reader = darkreader.override {
+              background = cfg.background;
+              foreground = cfg.foreground;
+                    };
           in
             mkForceInstalled {
-              "addon@darkreader.org".install_url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
+              "addon@darkreader.org".install_url = "file://${reader}/release/darkreader-firefox.xpi";
               "uBlock0@raymondhill.net".install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
               "{36bdf805-c6f2-4f41-94d2-9b646342c1dc}".install_url = "https://addons.mozilla.org/firefox/downloads/latest/export-cookies-txt/latest.xpi";
               "{74145f27-f039-47ce-a470-a662b129930a}".install_url = "https://addons.mozilla.org/firefox/downloads/latest/clearurls/latest.xpi";
