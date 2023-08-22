@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
-
   };
 
   outputs = inputs @ {
@@ -13,32 +12,29 @@
     self,
     ...
   }:
-    flake-parts.lib.mkFlake {inherit inputs ; } {
+    flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["x86_64-linux"];
       perSystem = {
         system,
         pkgs,
         config,
         ...
-      }: 
-      
+      }:
       # pkgs = import nixpkgs {
       #   inherit system;
       #   overlays = [
       #     inputs.npm-build.overlays.default
       #   ];
       # };
-      
       {
         packages = {
           darkreader = pkgs.callPackage ./addons/darkreader.nix {};
-       };
+        };
         formatter = pkgs.alejandra;
       };
       flake = {
-        
         homeManagerModules = {
-          schizofox = (import ./module.nix);
+          schizofox = import ./module.nix;
           default = self.homeManagerModules.schizofox;
         };
         homeManagerModule = self.homeManagerModules.default self;
