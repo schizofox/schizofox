@@ -26,12 +26,6 @@
   */
 
 
-  @-moz-document url("about:home"), url("about:newtab"){
-  .search-handoff-button{ background-image: url("${./assets/glowie.jpg}") !important }
-  }
-  @-moz-document url(about:newtab), url(about:home) {  
-  /* Changes the logo on the about:home screen */
-  .logo {background-image: url("${./assets/glowie.jpg}") !important;}
   #appMenu-popup #appMenu-header-description {
   	filter: blur(4px) !important;
   	transition: filter 350ms ease-out !important;
