@@ -57,6 +57,12 @@ in {
       # Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
       # Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
     };
+    font = mkOption {
+      type = types.str;
+      example = "Lato";
+      default = "Lexend";
+      description = "Default firefox font";
+    };
     background-darker = mkOption {
       type = types.str;
       example = "181825";

@@ -1,4 +1,4 @@
-{colors ? ["181825" "1e1e2e" "cdd6f4" "313244"], ...}: ''
+{colors ? ["181825" "1e1e2e" "cdd6f4" "313244"], font ? "Lato", ...}: ''
     /*
     ┌─┐┬┌┬┐┌─┐┬  ┌─┐
     └─┐││││├─┘│  ├┤
@@ -28,6 +28,15 @@
     :root {
       --sfwindow: #19171a;
       --sfsecondary: #201e21;
+      --mff-tab-font-family: "${font}";
+      --mff-tab-font-size: 11pt;
+      --mff-tab-font-weight: 400;
+      --mff-urlbar-font-family: "${font}";
+      --mff-urlbar-font-size: 11pt;
+      --mff-urlbar-font-weight: 700;
+      --mff-urlbar-results-font-family: "${font}";
+      --mff-urlbar-results-font-size: 11pt;
+      --mff-urlbar-results-font-weight: 700;
     }
 
     /* Urlbar View */
