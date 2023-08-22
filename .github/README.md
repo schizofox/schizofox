@@ -1,6 +1,7 @@
 # Schizofox
-* our goal is to get on the CIA watchlist*
+*our goal is to get on the CIA watchlist*
 
+![glowie](../assets/glowie.jpg)
 
 this project is still very, very WIP
 DONT USE IT JUST YET RETARDS
