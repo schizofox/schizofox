@@ -11,7 +11,7 @@ Hey, so this configuration started as a part of my [dotfiles repo](https://githu
 Compared to other browsers/configuration I would say its pretty schizophrenic, but I use it as my daily driver, so I had to keep some sane defaults (if you really need to, just use Tor Browser).
 Another cool thing is declarative theming. Just specify 3 colors and your font of choice and nix will do the rest (userChrome.css and darkreader config). 
 
-⚠️ Tip: Use Ctrl+I to allow cookies for sites of your choice
+⚠️ Tip: Use Ctrl+I to allow cookies for sites of your choice. Also history is disabled (learn to use bookmarks kids)
 
 Make sure to submit an issue in case anything brakes (or contribute if you know how to fix it)
 
