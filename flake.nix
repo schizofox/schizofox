@@ -19,14 +19,7 @@
         pkgs,
         config,
         ...
-      }:
-      # pkgs = import nixpkgs {
-      #   inherit system;
-      #   overlays = [
-      #     inputs.npm-build.overlays.default
-      #   ];
-      # };
-      {
+      }: {
         packages = {
           darkreader = pkgs.callPackage ./addons/darkreader.nix {};
         };
@@ -34,7 +27,7 @@
       };
       flake = {
         homeManagerModules = {
-          schizofox = import ./module.nix;
+          schizofox = import ./hm-module.nix;
           default = self.homeManagerModules.schizofox;
         };
         homeManagerModule = self.homeManagerModules.default self;

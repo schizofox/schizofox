@@ -51,20 +51,20 @@
       URLTemplate = "https://search.nixos.org/packages?&query={searchTerms}";
     }
     {
-      Name = "youtube";
-      Description = "not really";
-      Alias = "!yt";
+      Name = "Brave";
+      Description = "Brave search";
+      Alias = "!b";
       Method = "GET";
-      URLTemplate = "https://yt.femboy.hu/search?q={searchTerms}";
+      URLTemplate = "https://search.brave.com/search?q={searchTerms}&source=web";
     }
     {
-      Name = "Librex";
-      Description = "A privacy respecting free as in freedom meta search engine for Google and popular torrent sites ";
-      Alias = "!librex";
+      Name = "Searx";
+      Description = "Searx";
+      Alias = "!sx";
       Method = "GET";
-      URLTemplate = "https://librex.beparanoid.de/search.php?q={searchTerms}&p=0&t=0";
+      URLTemplate = cfg.searxQuery;
     }
   ];
-  Default = "Librex";
+  Default = cfg.defaultSearchEngine;
   Remove = cfg.removeEngines;
 }

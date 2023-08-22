@@ -82,17 +82,10 @@ in {
       description = "Dark reader text color";
     };
 
-    surface = mkOption {
-      type = types.str;
-      example = "313244";
-      default = "313244";
-      description = "Dark reader secondary background color";
-    };
-
     defaultSearchEngine = mkOption {
       type = types.str;
       example = "DuckDuckGo";
-      default = "DuckDuckGo";
+      default = "Brave";
       description = "Default search engine";
     };
 
@@ -101,6 +94,30 @@ in {
       example = ["Google"];
       default = ["Google" "Bing" "Amazon.com" "eBay" "Twitter" "Wikipedia"];
       description = "List of default search engines to remove";
+    };
+
+    searxQuery = mkOption {
+      type = types.str;
+      example = "https://searx.be/search?q={searchTerms}&categories=general";
+      default = "https://searx.be/search?q={searchTerms}&categories=general";
+      description = "Search query for searx (or any other schizo search engine)";
+    };
+
+    sanitizeOnShutdown = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Clear cookies, history and other data on shutdown. Disabled on default, because it's quite annoying. Tip: use ctrl+i";
+    };
+
+    drmFix = mkOption {
+      type = types.bool;
+      default = false;
+      description = "netflix no worky (just use torrents lmao)";
+    };
+    disableWebgl = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Disable WebGL, note that it brakes stuff and this aint tor browser";
     };
   };
 
@@ -116,8 +133,9 @@ in {
       StartWithLastProfile=1
       Version=2
     '';
-    home.file."${defaultProfile}/chrome/userChrome.css".text = import ./userChrome.nix {colros = with cfg; [background-dark background foreground surface];};
-    home.file."${defaultProfile}/chrome/userContent.css".source = ./userContent.css;
+    home.file."${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./userChrome.nix {inherit background-darker background foreground font;};
+    home.file."${defaultProfile}/chrome/userContent.css".text = import ./userContent.nix {};
+
     home.packages = [
       (pkgs.wrapFirefox pkgs.firefox-esr-102-unwrapped {
         # see https://github.com/mozilla/policy-templates/blob/master/README.md
@@ -128,7 +146,7 @@ in {
           DisableTelemetry = true;
           DisableFirefoxAccounts = true;
           DisableFormHistory = true;
-          DisplayBookmarksToolbar = true;
+          DisplayBookmarksToolbar = false;
           DontCheckDefaultBrowser = true;
 
           ExtensionSettings = import ./addons {inherit cfg darkreader;};
@@ -145,15 +163,19 @@ in {
             SkipOnboarding = true;
           };
 
-          SanitizeOnShutdown = {
-            Cache = true;
-            History = true;
-            Cookies = true;
-            Downloads = true;
-            FormData = true;
-            Sessions = true;
-            OfflineApps = true;
+          SanitizeOnShutdown = let
+            b = cfg.sanitizeOnShutdown;
+          in {
+            Cache = b;
+            History = b;
+            Cookies = b;
+            Downloads = b;
+            FormData = b;
+            Sessions = b;
+            OfflineApps = b;
+            Locked = false;
           };
+          Cookies.Locked = false;
 
           Preferences = import ./config.nix {inherit cfg;};
         };
