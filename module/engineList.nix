@@ -1,5 +1,5 @@
-{cfg, ...}: {
-  Add = [
+cfg: {
+  defaultEngines = [
     {
       Name = "Sourcegraph/Nix";
       Description = "Sourcegraph nix search";
@@ -65,6 +65,4 @@
       URLTemplate = cfg.searxQuery;
     }
   ];
-  Default = cfg.defaultSearchEngine;
-  Remove = cfg.removeEngines;
 }

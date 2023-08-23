@@ -6,31 +6,37 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = inputs @ {
+  outputs = {
     flake-parts,
-    nixpkgs,
     self,
     ...
-  }:
+  } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux"];
-      perSystem = {
-        system,
-        pkgs,
-        config,
-        ...
-      }: {
-        packages = {
-          darkreader = pkgs.callPackage ./addons/darkreader.nix {};
+      imports = [./pkgs];
+
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        # add more systems if they are supported
+      ];
+
+      perSystem = {pkgs, ...}: {
+        devShells.default = pkgs.mkShell {
+          name = "schizofox-dev";
+          packages = with pkgs; [
+            statix
+            deadnix
+          ];
         };
         formatter = pkgs.alejandra;
       };
+
       flake = {
-        homeManagerModules = {
-          schizofox = import ./hm-module.nix;
-          default = self.homeManagerModules.schizofox;
-        };
         homeManagerModule = self.homeManagerModules.default self;
+        homeManagerModules = rec {
+          schizofox = import ./module/hm.nix;
+          default = schizofox;
+        };
       };
     };
 }

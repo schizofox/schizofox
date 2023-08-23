@@ -200,16 +200,6 @@
 
   "font.default.x-western" = "sans-serif";
 
-  # Preferences for the Get Add-ons panel
-  "extensions.webservice.discoverURL" = "http://127.0.0.1/";
-  "extensions.getAddons.search.url" = "http://127.0.0.1/";
-  "extensions.getAddons.search.browseURL" = "http://127.0.0.1/";
-  "extensions.getAddons.get.url" = "http://127.0.0.1/";
-  "extensions.getAddons.link.url" = "http://127.0.0.1/";
-  "extensions.getAddons.discovery.api_url" = "http://127.0.0.1/";
-  "extensions.systemAddon.update.url" = "";
-  "extensions.systemAddon.update.enabled" = false;
-
   "extensions.getAddons.langpacks.url" = "http://127.0.0.1/";
   "lightweightThemes.getMoreURL" = "http://127.0.0.1/";
   "browser.geolocation.warning.infoURL" = "";
