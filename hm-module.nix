@@ -105,7 +105,7 @@ in {
 
     sanitizeOnShutdown = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = "Clear cookies, history and other data on shutdown. Disabled on default, because it's quite annoying. Tip: use ctrl+i";
     };
 
@@ -163,19 +163,13 @@ in {
             SkipOnboarding = true;
           };
 
-          SanitizeOnShutdown = let
-            b = cfg.sanitizeOnShutdown;
-          in {
-            Cache = b;
-            History = b;
-            Cookies = b;
-            Downloads = b;
-            FormData = b;
-            Sessions = b;
-            OfflineApps = b;
+          DisableSetDesktopBackground = true;
+          SanitizeOnShutdown = cfg.sanitizeOnShutdown;
+          Cookies = {
+            Behavior = "accept";
+            ExpireAtSessionEnd = false;
             Locked = false;
           };
-          Cookies.Locked = false;
 
           Preferences = import ./config.nix {inherit cfg;};
         };
