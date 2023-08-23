@@ -1,10 +1,6 @@
-{
-  background-darker,
-  background,
-  foreground,
-  font ? "Lato",
-  ...
-}: ''
+{theme}: let
+  inherit (theme) background-darker background foreground font;
+in ''
   /*
   ┌─┐┬┌┬┐┌─┐┬  ┌─┐
   └─┐││││├─┘│  ├┤

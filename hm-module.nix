@@ -3,16 +3,18 @@ self: {
   lib,
   pkgs,
   ...
-}:
-with lib; let
+}: let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (lib) mkIf mkEnableOption mkOption mdDoc maintainers types literalExpression;
+  # inherit (lib.generators) toINI;
+  # inherit (lib.attrSets) nameValuePair;
+  inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) darkreader;
 
   cfg = config.programs.schizofox;
 
-  darkreader = self.packages.${pkgs.stdenv.hostPlatform.system}.darkreader;
-
+  /*
   profilesIni =
-    generators.toINI {} nameValuePair "Profile0" {
+    toINI {} nameValuePair "Profile0" {
       Name = "schizo";
       Path =
         if isDarwin
@@ -24,6 +26,7 @@ with lib; let
     // {
       General = {StartWithLastProfile = 1;};
     };
+  */
 
   mozillaConfigPath =
     if isDarwin
@@ -44,9 +47,8 @@ with lib; let
 in {
   meta.maintainers = with maintainers; [sioodmy];
   options.programs.schizofox = {
-    enable =
-      mkEnableOption
-      "Schizo firefox esr setup";
+    enable = mkEnableOption (mdDoc "Schizo firefox esr setup");
+
     userAgent = mkOption {
       type = types.str;
       example = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0";
@@ -57,29 +59,35 @@ in {
       # Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
       # Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
     };
-    font = mkOption {
-      type = types.str;
-      example = "Lato";
-      default = "Lexend";
-      description = "Default firefox font";
-    };
-    background-darker = mkOption {
-      type = types.str;
-      example = "181825";
-      default = "181825";
-      description = "Darker background color";
-    };
-    background = mkOption {
-      type = types.str;
-      example = "1e1e2e";
-      default = "1e1e2e";
-      description = "Dark reader background color";
-    };
-    foreground = mkOption {
-      type = types.str;
-      example = "cdd6f4";
-      default = "cdd6f4";
-      description = "Dark reader text color";
+
+    theme = {
+      font = mkOption {
+        type = types.str;
+        example = "Lato";
+        default = "Lexend";
+        description = "Default firefox font";
+      };
+
+      background-darker = mkOption {
+        type = types.str;
+        example = "181825";
+        default = "181825";
+        description = "Darker background color";
+      };
+
+      background = mkOption {
+        type = types.str;
+        example = "1e1e2e";
+        default = "1e1e2e";
+        description = "Dark reader background color";
+      };
+
+      foreground = mkOption {
+        type = types.str;
+        example = "cdd6f4";
+        default = "cdd6f4";
+        description = "Dark reader text color";
+      };
     };
 
     defaultSearchEngine = mkOption {
@@ -90,17 +98,17 @@ in {
     };
 
     removeEngines = mkOption {
-      type = types.listOf types.str;
-      example = ["Google"];
+      type = with types; listOf str;
       default = ["Google" "Bing" "Amazon.com" "eBay" "Twitter" "Wikipedia"];
       description = "List of default search engines to remove";
+      example = literalExpression ["Google"];
     };
 
     searxQuery = mkOption {
       type = types.str;
-      example = "https://searx.be/search?q={searchTerms}&categories=general";
       default = "https://searx.be/search?q={searchTerms}&categories=general";
       description = "Search query for searx (or any other schizo search engine)";
+      example = literalExpression "https://searx.be/search?q={searchTerms}&categories=general";
     };
 
     sanitizeOnShutdown = mkOption {
@@ -133,7 +141,7 @@ in {
       StartWithLastProfile=1
       Version=2
     '';
-    home.file."${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./userChrome.nix {inherit background-darker background foreground font;};
+    home.file."${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./userChrome.nix {inherit theme;};
     home.file."${defaultProfile}/chrome/userContent.css".text = import ./userContent.nix {};
 
     home.packages = [
@@ -156,12 +164,18 @@ in {
             Pocket = false;
             Snippets = false;
           };
+
           PasswordManagerEnabled = false;
           PromptForDownloadLocation = true;
+
           UserMessaging = {
             ExtensionRecommendations = false;
             SkipOnboarding = true;
           };
+
+          Cookies.Locked = false;
+
+          Preferences = import ./config.nix {inherit cfg;};
 
           SanitizeOnShutdown = let
             b = cfg.sanitizeOnShutdown;
@@ -175,9 +189,6 @@ in {
             OfflineApps = b;
             Locked = false;
           };
-          Cookies.Locked = false;
-
-          Preferences = import ./config.nix {inherit cfg;};
         };
       })
     ];
