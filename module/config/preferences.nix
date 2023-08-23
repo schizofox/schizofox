@@ -10,7 +10,7 @@
   "browser.uidensity" = 1;
 
   # User agent
-  "general.useragent.override" = cfg.userAgent;
+  "general.useragent.override" = cfg.security.userAgent;
 
   # Remove useless stuff from the bar
   "browser.uiCustomization.state" = ''
@@ -180,7 +180,7 @@
 
   # Canvas fingerprint protection
   "privacy.resistFingerprinting" = true;
-  "webgl.disabled" = cfg.extra.disableWebgl;
+  "webgl.disabled" = cfg.misc.disableWebgl;
   "privacy.trackingprotection.cryptomining.enabled" = true;
   "privacy.trackingprotection.fingerprinting.enabled" = true;
 

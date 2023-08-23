@@ -6,29 +6,10 @@ self: {
 }: let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
   inherit (lib) mkIf mkEnableOption mkOption mkPackageOption mdDoc maintainers types literalExpression;
-  # inherit (lib.generators) toINI;
-  # inherit (lib.attrSets) nameValuePair;
 
   cfg = config.programs.schizofox;
 
-  /*
-  profilesIni =
-    toINI {} nameValuePair "Profile0" {
-      Name = "schizo";
-      Path =
-        if isDarwin
-        then "Profiles/schizo.default"
-        else "schizo.default";
-      IsRelative = 1;
-      Default = 1;
-    }
-    // {
-      General = {
-        StartWithLastProfile = 1;
-        Version=2;
-      };
-    };
-  */
+  darkreader = self.packages.${pkgs.system}.darkreader;
 
   mozillaConfigPath =
     if isDarwin
@@ -38,7 +19,7 @@ self: {
   firefoxConfigPath =
     if isDarwin
     then "Library/Application Support/Firefox"
-    else mozillaConfigPath + /firefox;
+    else mozillaConfigPath + "/firefox";
 
   profilesPath =
     if isDarwin
@@ -51,7 +32,7 @@ in {
 
   options.programs.schizofox = {
     enable = mkEnableOption (mdDoc "Schizophrenic Firefox ESR setup for the delusional");
-    package = mkPackageOption pkgs pkgs.firefox-esr-102-unwrapped {
+    package = mkPackageOption pkgs "firefox-esr-102-unwrapped" {
       example = "firefox-esr-115-unwrapped";
     };
 
@@ -95,7 +76,7 @@ in {
 
       addEngines = mkOption {
         type = with types; listOf attrs;
-        default = (import ./engineList.nix).defaultEngines cfg;
+        default = import ./engineList.nix cfg;
         description = "List of search engines to add to your Schizofox configuration";
         example = literalExpression ''
           [
@@ -190,6 +171,8 @@ in {
       };
     };
 
+    };
+
     config = mkIf cfg.enable {
       home.file = {
         # profile config
@@ -224,7 +207,8 @@ in {
             DisplayBookmarksToolbar = false;
             DontCheckDefaultBrowser = true;
 
-            ExtensionSettings = import ./extensions {inherit cfg;};
+            # FIXME: im gonna kms, it hurts my eyes
+            ExtensionSettings = import ./extensions {inherit cfg darkreader pkgs lib;};
             SearchEngines = import ./config/engines.nix {inherit cfg;};
 
             FirefoxHome = {
@@ -241,7 +225,7 @@ in {
             };
 
             DisableSetDesktopBackground = true;
-            SanitizeOnShutdown = cfg.sanitizeOnShutdown;
+            SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
 
             Cookies = {
               Behavior = "accept";
@@ -254,5 +238,4 @@ in {
         })
       ];
     };
-  };
 }

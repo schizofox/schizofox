@@ -1,14 +1,15 @@
 {
   pkgs,
   lib,
-  self,
+  # FIXME
+  darkreader,
   cfg,
   ...
 }: let
   mkForceInstalled = builtins.mapAttrs (_: cfg: {installation_mode = "force_installed";} // cfg);
-  reader = self.packages.${pkgs.system}.darkreader {
-    inherit (cfg) background;
-    inherit (cfg) foreground;
+  reader = darkreader.override {
+    inherit (cfg.theme) background;
+    inherit (cfg.theme) foreground;
   };
 in
   mkForceInstalled {

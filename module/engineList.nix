@@ -1,5 +1,5 @@
-cfg: {
-  defaultEngines = [
+cfg: 
+  [
     {
       Name = "Sourcegraph/Nix";
       Description = "Sourcegraph nix search";
@@ -48,7 +48,7 @@ cfg: {
       Description = "Searx";
       Alias = "!sx";
       Method = "GET";
-      URLTemplate = cfg.searxQuery;
+      URLTemplate = cfg.search.searxQuery;
     }
-  ];
-}
+  ]
+
