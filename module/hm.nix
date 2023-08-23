@@ -158,7 +158,7 @@ in {
 
       sanitizeOnShutdown = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         example = true;
         description = ''
           Clear cookies, history and other data on shutdown.
