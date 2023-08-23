@@ -64,6 +64,17 @@ in {
         default = "cdd6f4";
         description = "Dark reader text color";
       };
+
+      extraCss = mkOption {
+        type =types.str;
+        example = ''
+          body {
+            background-color: red;
+          }
+        '';
+        default = "";
+        description = "Extra css for userChrome.css";
+      };
     };
 
     bookmarks = mkOption {
@@ -204,7 +215,7 @@ in {
         Version=2
       '';
       # userChrome content
-      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme;};
+      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme cfg lib;};
 
       # userContent
       "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};

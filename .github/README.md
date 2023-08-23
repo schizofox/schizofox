@@ -29,6 +29,11 @@ programs.schizofox = {
     background = "1e1e2e";
     foreground = "cdd6f4";
     font = "Lexend";
+    extraCss = ''
+      body {
+        color: red !important;
+      }
+    '';
   };
 
   search = {
