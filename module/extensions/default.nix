@@ -1,15 +1,14 @@
 {
+  pkgs,
+  lib,
+  self,
   cfg,
-  darkreader,
   ...
 }: let
-  mkForceInstalled = extensions:
-    builtins.mapAttrs
-    (name: cfg: {installation_mode = "force_installed";} // cfg)
-    extensions;
-  reader = darkreader.override {
-    background = cfg.background;
-    foreground = cfg.foreground;
+  mkForceInstalled = builtins.mapAttrs (_: cfg: {installation_mode = "force_installed";} // cfg);
+  reader = self.packages.${pkgs.system}.darkreader {
+    inherit (cfg) background;
+    inherit (cfg) foreground;
   };
 in
   mkForceInstalled {
@@ -22,6 +21,6 @@ in
     "{531906d3-e22f-4a6c-a102-8057b88a1a63}".install_url = "https://addons.mozilla.org/firefox/downloads/latest/single-file/latest.xpi";
     "{c607c8df-14a7-4f28-894f-29e8722976af}".install_url = "https://addons.mozilla.org/firefox/downloads/latest/temporary-containers/latest.xpi";
     "skipredirect@sblask".install_url = "https://addons.mozilla.org/firefox/downloads/latest/skip-redirect/latest.xpi";
-    "webextension@metamask.io".install_url = "https://addons.mozilla.org/firefox/downloads/latest/ether-metamask/latest.xpi";
     "smart-referer@meh.paranoid.pk".install_url = "https://github.com/catppuccin/firefox/releases/download/old/smart-referer.xpi";
   }
+  // lib.optionalAttrs (cfg.extensions.extraExtensions != {}) cfg.extensions.extraExtensions

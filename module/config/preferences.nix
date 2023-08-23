@@ -180,7 +180,7 @@
 
   # Canvas fingerprint protection
   "privacy.resistFingerprinting" = true;
-  "webgl.disabled" = cfg.disableWebgl;
+  "webgl.disabled" = cfg.extra.disableWebgl;
   "privacy.trackingprotection.cryptomining.enabled" = true;
   "privacy.trackingprotection.fingerprinting.enabled" = true;
 
