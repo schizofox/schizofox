@@ -1,10 +1,9 @@
-# 🥑 Schizofox
-*our goal is to get on the CIA watchlist*
-
 <p align="center">
-<img src="../assets/ss.png" alt="screenshot" width="600" align="center" />  
-<img src="../assets/glowie.jpg" alt="screenshot" width="400" align="center" />  
+<img src="../assets/logo.png" alt="screenshot" width="200" align="center" />  
 </p>
+
+# Schizofox
+*our goal is to get on the CIA watchlist*
 
 ## About
 Hey, so this configuration started as a part of my [dotfiles repo](https://github.com/sioodmy/dotfiles), but apparently people actually used it, so I decided to move it into its own flake.
