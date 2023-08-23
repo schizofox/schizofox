@@ -16,13 +16,6 @@ cfg: {
       URLTemplate = "https://librex.beparanoid.de/search.php?q={searchTerms}&t=3&p=0";
     }
     {
-      Name = "Etherscan";
-      Description = "Checking balances";
-      Alias = "!eth";
-      Method = "GET";
-      URLTemplate = "https://etherscan.io/search?f=0&q={searchTerms}";
-    }
-    {
       Name = "Stackoverflow";
       Description = "Stealing code";
       Alias = "!so";
@@ -49,13 +42,6 @@ cfg: {
       Alias = "!nix";
       Method = "GET";
       URLTemplate = "https://search.nixos.org/packages?&query={searchTerms}";
-    }
-    {
-      Name = "Brave";
-      Description = "Brave search";
-      Alias = "!b";
-      Method = "GET";
-      URLTemplate = "https://search.brave.com/search?q={searchTerms}&source=web";
     }
     {
       Name = "Searx";

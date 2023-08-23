@@ -8,7 +8,6 @@ self: {
   inherit (lib) mkIf mkEnableOption mkOption mkPackageOption mdDoc maintainers types literalExpression;
   # inherit (lib.generators) toINI;
   # inherit (lib.attrSets) nameValuePair;
-  inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) darkreader;
 
   cfg = config.programs.schizofox;
 
