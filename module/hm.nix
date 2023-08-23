@@ -66,6 +66,23 @@ in {
       };
     };
 
+    bookmarks = mkOption {
+      type = with types; listOf attrs;
+      default = [];
+      description = "List of bookmarks to add to your Schizofox configuration";
+      example = literalExpression ''
+        [
+          {
+            Title = "Example";
+            URL = "https://example.com";
+            Favicon = "https://example.com/favicon.ico";
+            Placement = "toolbar";
+            Folder = "FolderName";
+          }
+        ]
+      '';
+    };
+
     search = {
       defaultSearchEngine = mkOption {
         type = types.str;
@@ -170,72 +187,71 @@ in {
         '';
       };
     };
+  };
 
+  config = mkIf cfg.enable {
+    home.file = {
+      # profile config
+      "${firefoxConfigPath}/profiles.ini".text = ''
+        [Profile0]
+        Name=default
+        IsRelative=1
+        Path=schizo.default
+        Default=1
+
+        [General]
+        StartWithLastProfile=1
+        Version=2
+      '';
+      # userChrome content
+      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme;};
+
+      # userContent
+      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};
     };
 
-    config = mkIf cfg.enable {
-      home.file = {
-        # profile config
-        "${firefoxConfigPath}/profiles.ini".text = ''
-          [Profile0]
-          Name=default
-          IsRelative=1
-          Path=schizo.default
-          Default=1
+    home.packages = [
+      (pkgs.wrapFirefox cfg.package {
+        # see https://github.com/mozilla/policy-templates/blob/master/README.md
+        extraPolicies = {
+          CaptivePortal = false;
+          DisableFirefoxStudies = true;
+          DisablePocket = true;
+          DisableTelemetry = true;
+          DisableFirefoxAccounts = true;
+          DisableFormHistory = true;
+          DisplayBookmarksToolbar = false;
+          DontCheckDefaultBrowser = true;
 
-          [General]
-          StartWithLastProfile=1
-          Version=2
-        '';
-        # userChrome content
-        "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme;};
-
-        # userContent
-        "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};
-      };
-
-      home.packages = [
-        (pkgs.wrapFirefox cfg.package {
-          # see https://github.com/mozilla/policy-templates/blob/master/README.md
-          extraPolicies = {
-            CaptivePortal = false;
-            DisableFirefoxStudies = true;
-            DisablePocket = true;
-            DisableTelemetry = true;
-            DisableFirefoxAccounts = true;
-            DisableFormHistory = true;
-            DisplayBookmarksToolbar = false;
-            DontCheckDefaultBrowser = true;
-
-            # FIXME: im gonna kms, it hurts my eyes
-            ExtensionSettings = import ./extensions {inherit cfg darkreader pkgs lib;};
-            SearchEngines = import ./config/engines.nix {inherit cfg;};
-
-            FirefoxHome = {
-              Pocket = false;
-              Snippets = false;
-            };
-
-            PasswordManagerEnabled = false;
-            PromptForDownloadLocation = true;
-
-            UserMessaging = {
-              ExtensionRecommendations = false;
-              SkipOnboarding = true;
-            };
-
-            DisableSetDesktopBackground = true;
-            SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
-
-            Cookies = {
-              Behavior = "accept";
-              ExpireAtSessionEnd = false;
-              Locked = false;
-            };
-
-            Preferences = import ./config/preferences.nix {inherit cfg;};
+          # FIXME: im gonna kms, it hurts my eyes
+          ExtensionSettings = import ./extensions {inherit cfg darkreader pkgs lib;};
+          SearchEngines = import ./config/engines.nix {inherit cfg;};
+          Bookmarks = lib.optionalAttrs (cfg.bookmarks != {}) cfg.bookmarks;
+          FirefoxHome = {
+            Pocket = false;
+            Snippets = false;
           };
-        })
-      ];
-    };
+
+          PasswordManagerEnabled = false;
+          PromptForDownloadLocation = true;
+
+          UserMessaging = {
+            ExtensionRecommendations = false;
+            SkipOnboarding = true;
+          };
+
+          DisableSetDesktopBackground = true;
+          SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
+
+          Cookies = {
+            Behavior = "accept";
+            ExpireAtSessionEnd = false;
+            Locked = false;
+          };
+
+          Preferences = import ./config/preferences.nix {inherit cfg;};
+        };
+      })
+    ];
+  };
 }
