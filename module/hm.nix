@@ -66,7 +66,7 @@ in {
       };
 
       extraCss = mkOption {
-        type =types.str;
+        type = types.str;
         example = ''
           body {
             background-color: red;

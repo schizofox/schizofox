@@ -1,4 +1,8 @@
-{theme, cfg, lib}: let
+{
+  theme,
+  cfg,
+  lib,
+}: let
   inherit (theme) background-darker background foreground font;
 in ''
   /*
@@ -228,5 +232,5 @@ in ''
 
 
   ${cfg.theme.extraCss}
-  
+
 ''
