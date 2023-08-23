@@ -43,3 +43,4 @@ programs.schizofox = {
 
 ## Credits <3
 [NotAShelf](https://github.com/NotAShelf)
+[hnhx](https://github.com/hnhx)
