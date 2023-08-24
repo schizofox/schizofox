@@ -170,6 +170,7 @@ in {
           Disabled on default, because it's quite annoying. Tip: use ctrl+i";
         '';
       };
+
       sandbox = mkOption {
         type = types.bool;
         default = true;
@@ -194,6 +195,15 @@ in {
           Force WebGL to be disabled.
           Do note that it'll break plenty of websites that mess with the canvas (practically anything at this point)
         '';
+      };
+
+      startPageURL = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        example = literalExpression ''
+          "file://${builtins.fromFile ./startpage.html}"
+        '';
+        description = "An URL or an absolute path to your Firefox startpage";
       };
     };
 
@@ -249,6 +259,7 @@ in {
           ExtensionSettings = import ./extensions {inherit cfg darkreader pkgs lib;};
           SearchEngines = import ./config/engines.nix {inherit cfg;};
           Bookmarks = lib.optionalAttrs (cfg.bookmarks != {}) cfg.bookmarks;
+
           FirefoxHome = {
             Pocket = false;
             Snippets = false;

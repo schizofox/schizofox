@@ -9,6 +9,11 @@
   "xpinstall.signatures.required" = false;
   "browser.uidensity" = 1;
 
+  "browser.startup.homepage" =
+    if cfg.misc.startPageURL != null
+    then "${cfg.misc.startPageURL}"
+    else "";
+
   # User agent
   "general.useragent.override" = cfg.security.userAgent;
 
