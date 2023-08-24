@@ -226,7 +226,7 @@ in {
         Version=2
       '';
       # userChrome content
-      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme cfg lib;};
+      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme cfg;};
 
       # userContent
       "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};
