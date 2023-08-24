@@ -10,8 +10,6 @@
 
   cfg = config.programs.schizofox;
 
-  inherit (self.packages.${pkgs.system}) darkreader;
-
   mkNixPak = self.inputs.nixpak.lib.nixpak {
     inherit (pkgs) lib;
     inherit pkgs;
@@ -69,7 +67,7 @@ in {
           DontCheckDefaultBrowser = true;
 
           # TODO: the package should be obtained from self.packages - WHY NO WORKY???
-          ExtensionSettings = import ./extensions {inherit cfg darkreader pkgs lib;};
+          ExtensionSettings = import ./extensions {inherit self cfg pkgs lib;};
           SearchEngines = import ./config/engines.nix {inherit cfg;};
           Bookmarks = lib.optionalAttrs (cfg.bookmarks != {}) cfg.bookmarks;
 
