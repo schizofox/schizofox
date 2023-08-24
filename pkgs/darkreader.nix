@@ -16,7 +16,7 @@ buildNpmPackage rec {
     rev = "v${version}";
     hash = "sha256-VvhVtaZ4A3l1W+yJeqVhjBzCNGvcDbhkWJzTaPmONvA=";
   };
-  npmDepsHash = "sha256-va92uYgdyGtVYGRI7dACRRcLMd5KAVZAGkcR3ul7i7s=";
+  npmDepsHash = "sha256-5Qhxsz0HnaL+G8KivtDCdILrwiwEseHtMbrJ7uHOZHc=";
 
   patchPhase = ''
     runHook prePatch
