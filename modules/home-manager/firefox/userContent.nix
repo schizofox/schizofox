@@ -5,7 +5,7 @@
 }: let
   inherit (lib) mkIf;
 in ''
-  ${mkIf cfg.misc.simplefox.enable ''
+  ${mkIf cfg.theme.simplefox.enable ''
     /*
     ┌─┐┬┌┬┐┌─┐┬  ┌─┐
     └─┐││││├─┘│  ├┤
@@ -29,5 +29,9 @@ in ''
     }
   ''}
 
-  ${cfg.theme.extraUserContent}
+  ${
+    mkIf (cfg.theme.extraUserContent != "") ''
+      ${cfg.theme.extraUserContent}
+    ''
+  }
 ''

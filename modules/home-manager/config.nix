@@ -1,4 +1,5 @@
-self: {
+{
+  self,
   config,
   lib,
   pkgs,
@@ -33,7 +34,6 @@ self: {
 
   defaultProfile = "${profilesPath}/schizo.default";
 in {
-  imports = [./options.nix];
   config = mkIf cfg.enable {
     home.file = {
       # profile config

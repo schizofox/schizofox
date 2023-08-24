@@ -30,9 +30,9 @@ in ''
 
 
     #appMenu-popup #appMenu-header-description {
-    	filter: blur(4px) !important;
-    	transition: filter 350ms ease-out !important;
-    	transition-delay: 250ms !important;
+    filter: blur(4px) !important;
+    transition: filter 350ms ease-out !important;
+    transition-delay: 250ms !important;
     }
     #appMenu-popup #appMenu-fxa-label2:hover #appMenu-header-description {
     filter: blur(0px) !important;
@@ -239,3 +239,5 @@ in ''
   ${cfg.theme.extraCss}
 
 ''
+
+

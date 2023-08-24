@@ -37,11 +37,13 @@
       };
 
       flake = {
-        homeManagerModule = self.homeManagerModules.default self;
         homeManagerModules = rec {
-          schizofox = import ./module/hm.nix;
+          schizofox = import ./modules/home-manager {inherit self;};
           default = schizofox;
         };
+
+        # If we ever add a NixOS module, it will be here
+        # ...
       };
     };
 }

@@ -1,4 +1,4 @@
-self: {
+{
   config,
   lib,
   pkgs,
@@ -47,18 +47,20 @@ in {
       };
 
       extraCss = mkOption {
-        type = types.str;
+        default = "";
+        description = "Extra css for userChrome.css";
+        type = types.lines;
         example = ''
            body {
              background-color: red;
           }
         '';
-        default = "";
-        description = "Extra css for userChrome.css";
       };
 
       extraUserContent = mkOption {
-        type = types.str;
+        type = types.lines;
+        default = "";
+        description = "Extra lines to append userContent.css";
         example = ''
           @-moz-document domain("example.com") {
             body {
@@ -66,10 +68,12 @@ in {
             }
           }
         '';
-        default = "";
-        description = "Extra lines to append userContent.css";
       };
     };
+
+    simplefox.enable = mkEnableOption ''
+      A Userstyle theme for Firefox minimalist and Keyboard centered.
+    '';
 
     bookmarks = mkOption {
       type = with types; listOf attrs;
@@ -98,7 +102,7 @@ in {
 
       addEngines = mkOption {
         type = with types; listOf attrs;
-        default = import ./engineList.nix cfg;
+        default = import ./config/engineList.nix cfg;
         description = "List of search engines to add to your Schizofox configuration";
         example = literalExpression ''
           [
@@ -194,10 +198,6 @@ in {
         '';
         description = "An URL or an absolute path to your Firefox startpage";
       };
-
-      simplefox.enable = mkEnableOption ''
-        A Userstyle theme for Firefox minimalist and Keyboard centered.
-      '';
     };
 
     extensions = {
