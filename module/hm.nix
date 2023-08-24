@@ -201,7 +201,7 @@ in {
         type = with types; nullOr str;
         default = null;
         example = literalExpression ''
-          "file://${builtins.fromFile ./startpage.html}"
+          "file://${builtins.readFile ./startpage.html}"
         '';
         description = "An URL or an absolute path to your Firefox startpage";
       };
