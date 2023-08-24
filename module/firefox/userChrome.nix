@@ -1,7 +1,6 @@
 {
   theme,
   cfg,
-  lib,
 }: let
   inherit (theme) background-darker background foreground font;
 in ''
