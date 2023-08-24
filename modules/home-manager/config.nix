@@ -68,7 +68,7 @@ in {
           DisplayBookmarksToolbar = false;
           DontCheckDefaultBrowser = true;
 
-          # FIXME: im gonna kms, it hurts my eyes
+          # TODO: the package should be obtained from self.packages - WHY NO WORKY???
           ExtensionSettings = import ./extensions {inherit cfg darkreader pkgs lib;};
           SearchEngines = import ./config/engines.nix {inherit cfg;};
           Bookmarks = lib.optionalAttrs (cfg.bookmarks != {}) cfg.bookmarks;

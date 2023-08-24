@@ -3,9 +3,9 @@
   lib,
   ...
 }: let
-  inherit (lib) mkIf;
+  inherit (lib) optionalString;
 in ''
-  ${mkIf cfg.theme.simplefox.enable ''
+  ${optionalString cfg.theme.simplefox.enable ''
     /*
     ┌─┐┬┌┬┐┌─┐┬  ┌─┐
     └─┐││││├─┘│  ├┤
@@ -29,9 +29,5 @@ in ''
     }
   ''}
 
-  ${
-    mkIf (cfg.theme.extraUserContent != "") ''
-      ${cfg.theme.extraUserContent}
-    ''
-  }
+  ${optionalString (cfg.theme.extraUserContent != "") (builtins.toString cfg.theme.extraUserContent)}
 ''

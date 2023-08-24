@@ -69,11 +69,11 @@ in {
           }
         '';
       };
-    };
 
-    simplefox.enable = mkEnableOption ''
-      A Userstyle theme for Firefox minimalist and Keyboard centered.
-    '';
+      simplefox.enable = mkEnableOption ''
+        A Userstyle theme for Firefox minimalist and Keyboard centered.
+      '';
+    };
 
     bookmarks = mkOption {
       type = with types; listOf attrs;

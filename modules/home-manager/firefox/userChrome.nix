@@ -3,11 +3,11 @@
   lib,
   ...
 }: let
-  inherit (lib) mkIf;
+  inherit (lib) optionalString;
   inherit (cfg.theme) background-darker background foreground font;
 in ''
 
-  ${mkIf cfg.theme.simplefox.enable ''
+  ${optionalString (cfg.theme.simplefox.enable) ''
     /*
     ┌─┐┬┌┬┐┌─┐┬  ┌─┐
     └─┐││││├─┘│  ├┤
@@ -234,9 +234,5 @@ in ''
     }
   ''}
 
-  ${
-    mkIf (cfg.theme.extraCss != "") ''
-      ${toString cfg.theme.extraCss}
-    ''
-  }
+  ${optionalString (cfg.theme.extraCss != "") (builtins.toString cfg.theme.extraCss)}
 ''
