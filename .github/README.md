@@ -63,6 +63,7 @@ programs.schizofox = {
   misc = {
     drmFix = true;
     disableWebgl = false;
+    startPageURL = "file://${builtins.fromFile ./startpage.html}";
   };
   
   extensions.extraExtensions = {
