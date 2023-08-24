@@ -14,9 +14,9 @@ buildNpmPackage rec {
     owner = "darkreader";
     repo = "darkreader";
     rev = "v${version}";
-    sha256 = "sha256-remwdRSqOf7BCNGmhIlEKtXJHToEGLvnB6732kyAlSw=";
+    hash = "sha256-VvhVtaZ4A3l1W+yJeqVhjBzCNGvcDbhkWJzTaPmONvA=";
   };
-  npmDepsHash = "sha256-va92uYgdyGtVYGRI7dACRRcLMd5KAVZAGkcR3ul7i7s=";
+  npmDepsHash = "sha256-5Qhxsz0HnaL+G8KivtDCdILrwiwEseHtMbrJ7uHOZHc=";
 
   patchPhase = ''
     runHook prePatch
