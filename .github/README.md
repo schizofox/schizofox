@@ -65,6 +65,7 @@ programs.schizofox = {
   };
 
   misc = {
+    simplefox.enable = true;
     drmFix = true;
     disableWebgl = false;
     startPageURL = "file://${builtins.readFile ./startpage.html}";
