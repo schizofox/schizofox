@@ -73,6 +73,13 @@ in {
       simplefox.enable = mkEnableOption ''
         A Userstyle theme for Firefox minimalist and Keyboard centered.
       '';
+      darkreader = {
+        enable = mkEnableOption ''
+          Dark mode on all sites (patched to match overall theme)
+        '';
+        # TODO: patchDefaultColors bool option
+      };
+
       extraCss = mkOption {
         type = types.str;
         example = ''

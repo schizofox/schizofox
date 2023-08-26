@@ -12,7 +12,6 @@
   };
 in
   mkForceInstalled {
-    "addon@darkreader.org".install_url = "file://${reader}/release/darkreader-firefox.xpi";
     "uBlock0@raymondhill.net".install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
     "{36bdf805-c6f2-4f41-94d2-9b646342c1dc}".install_url = "https://addons.mozilla.org/firefox/downloads/latest/export-cookies-txt/latest.xpi";
     "{74145f27-f039-47ce-a470-a662b129930a}".install_url = "https://addons.mozilla.org/firefox/downloads/latest/clearurls/latest.xpi";
@@ -24,4 +23,5 @@ in
     "smart-referer@meh.paranoid.pk".install_url = "https://addons.mozilla.org/firefox/downloads/latest/smart-referer/latest.xpi";
     "7esoorv3@alefvanoon.anonaddy.me".install_url = "https://addons.mozilla.org/firefox/downloads/latest/libredirect/latest.xpi";
   }
+  // lib.optionalAttrs cfg.theme.darkreader.enable {"addon@darkreader.org".install_url = "file://${reader}/release/darkreader-firefox.xpi";}
   // lib.optionalAttrs (cfg.extensions.extraExtensions != {}) cfg.extensions.extraExtensions
