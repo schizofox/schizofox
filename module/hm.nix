@@ -194,6 +194,13 @@ in {
         description = "netflix no worky (just use torrents lmao)";
       };
 
+      defaultProfile = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Set schizofox as default firefox profile";
+      };
+
       disableWebgl = mkOption {
         type = types.bool;
         default = false;
@@ -229,25 +236,27 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.file = {
-      # profile config
-      "${firefoxConfigPath}/profiles.ini".text = ''
-        [Profile0]
-        Name=default
-        IsRelative=1
-        Path=schizo.default
-        Default=1
+    home.file =
+      {
+        # userChrome content
+        "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme lib cfg;};
 
-        [General]
-        StartWithLastProfile=1
-        Version=2
-      '';
-      # userChrome content
-      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme lib cfg;};
+        # userContent
+        "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};
+      }
+      // lib.optionalAttrs cfg.misc.defaultProfile {
+        "${firefoxConfigPath}/profiles.ini".text = lib.mkIf cfg.misc.defaultProfile ''
+          [Profile0]
+          Name=default
+          IsRelative=1
+          Path=schizo.default
+          Default=1
 
-      # userContent
-      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};
-    };
+          [General]
+          StartWithLastProfile=1
+          Version=2
+        '';
+      };
 
     home.packages = let
       pkg = import ./firefox {inherit pkgs cfg lib self;};
@@ -359,5 +368,17 @@ in {
         .env
       ]
       else [pkg];
+
+    xdg.desktopEntries = {
+      firefox = {
+        name = "Schizofox";
+        genericName = "Web Browser";
+        exec = "firefox -Profile ${profilesPath}/schizo.default %U";
+        icon = "${../assets/logo.png}";
+        terminal = false;
+        categories = ["Application" "Network" "WebBrowser"];
+        mimeType = ["text/html" "text/xml"];
+      };
+    };
   };
 }
