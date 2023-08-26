@@ -70,6 +70,9 @@ in {
         description = "Dark reader text color";
       };
 
+      simplefox.enable = mkEnableOption ''
+        A Userstyle theme for Firefox minimalist and Keyboard centered.
+      '';
       extraCss = mkOption {
         type = types.str;
         example = ''
@@ -236,7 +239,7 @@ in {
         Version=2
       '';
       # userChrome content
-      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme cfg;};
+      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme lib cfg;};
 
       # userContent
       "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};
