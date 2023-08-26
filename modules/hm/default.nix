@@ -272,14 +272,14 @@ in {
     };
 
     home.packages = let
-      pkg = import ./firefox {inherit pkgs cfg lib self;};
+      pkg = pkgs.callPackage ./wrapper.nix {inherit pkgs cfg lib self profilesPath;};
     in
       if cfg.security.sandbox
       then [
         (mkNixPak {
           config = {sloth, ...}: rec {
             app.package = pkg;
-            app.binPath = "bin/firefox";
+            app.binPath = "bin/schizofox";
 
             flatpak.appId = "org.mozilla.Firefox";
 
@@ -385,8 +385,8 @@ in {
       firefox = {
         name = "Schizofox";
         genericName = "Web Browser";
-        exec = "firefox -Profile ${profilesPath}/schizo.default %U";
-        icon = "${../assets/logo.png}";
+        exec = "schizofox";
+        icon = "${../../assets/logo.png}";
         terminal = false;
         categories = ["Application" "Network" "WebBrowser"];
         mimeType = ["text/html" "text/xml"];
