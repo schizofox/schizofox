@@ -37,9 +37,9 @@
       };
 
       flake = {
-        homeManagerModule = self.homeManagerModules.default self;
+        homeManagerModule = self.homeManagerModules.default; # an alias to the default module
         homeManagerModules = rec {
-          schizofox = import ./module/hm.nix;
+          schizofox = import ./modules/hm self;
           default = schizofox;
         };
       };

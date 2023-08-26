@@ -73,9 +73,11 @@ in {
       '';
 
       # TODO: patchDefaultColors bool option
-      darkreader.enable = mkEnableOption ''
-        Dark mode on all sites (patched to match overall theme)
-      '';
+      darkreader.enable =
+        mkEnableOption ''
+          Dark mode on all sites (patched to match overall theme)
+        ''
+        // {default = true;}; # no escape
 
       extraCss = mkOption {
         type = types.str;
@@ -158,14 +160,13 @@ in {
         type = types.str;
         default = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0";
         description = "Spoof user agent";
-        example = literalExpression "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0";
-
-        /*
-        Some other user agents
-        Mozilla/5.0 (X11; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
-        Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
-        Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
-        */
+        example = ''
+          **Some other user agents**
+          Mozilla/5.0 (X11; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
+          Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
+          Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
+          Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0
+        '';
       };
 
       sanitizeOnShutdown = mkOption {
@@ -208,7 +209,7 @@ in {
         type = with types; nullOr str;
         default = null;
         example = literalExpression ''
-          "file://${builtins.readFile ./startpage.html}"
+          "file://${relative/path/to/startpage.html}"
         '';
         description = "An URL or an absolute path to your Firefox startpage";
       };
