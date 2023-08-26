@@ -9,8 +9,6 @@ self: {
 
   cfg = config.programs.schizofox;
 
-  inherit (self.packages.${pkgs.system}) darkreader;
-
   mkNixPak = self.inputs.nixpak.lib.nixpak {
     inherit (pkgs) lib;
     inherit pkgs;
@@ -69,6 +67,15 @@ in {
         default = "cdd6f4";
         description = "Dark reader text color";
       };
+
+      simplefox.enable = mkEnableOption ''
+        A Userstyle theme for Firefox minimalist and Keyboard centered.
+      '';
+
+      # TODO: patchDefaultColors bool option
+      darkreader.enable = mkEnableOption ''
+        Dark mode on all sites (patched to match overall theme)
+      '';
 
       extraCss = mkOption {
         type = types.str;
@@ -236,55 +243,14 @@ in {
         Version=2
       '';
       # userChrome content
-      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme cfg;};
+      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme lib cfg;};
 
       # userContent
       "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};
     };
 
     home.packages = let
-      pkg = pkgs.wrapFirefox cfg.package {
-        # see https://github.com/mozilla/policy-templates/blob/master/README.md
-        extraPolicies = {
-          CaptivePortal = false;
-          DisableFirefoxStudies = true;
-          DisablePocket = true;
-          DisableTelemetry = true;
-          DisableFirefoxAccounts = true;
-          DisableFormHistory = true;
-          DisplayBookmarksToolbar = false;
-          DontCheckDefaultBrowser = true;
-
-          # FIXME: im gonna kms, it hurts my eyes
-          ExtensionSettings = import ./extensions {inherit cfg darkreader pkgs lib;};
-          SearchEngines = import ./config/engines.nix {inherit cfg;};
-          Bookmarks = lib.optionalAttrs (cfg.bookmarks != {}) cfg.bookmarks;
-
-          FirefoxHome = {
-            Pocket = false;
-            Snippets = false;
-          };
-
-          PasswordManagerEnabled = false;
-          PromptForDownloadLocation = true;
-
-          UserMessaging = {
-            ExtensionRecommendations = false;
-            SkipOnboarding = true;
-          };
-
-          DisableSetDesktopBackground = true;
-          SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
-
-          Cookies = {
-            Behavior = "accept";
-            ExpireAtSessionEnd = false;
-            Locked = false;
-          };
-
-          Preferences = import ./config/preferences.nix {inherit cfg;};
-        };
-      };
+      pkg = import ./firefox {inherit pkgs cfg lib self;};
     in
       if cfg.security.sandbox
       then [

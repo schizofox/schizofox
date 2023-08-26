@@ -35,6 +35,8 @@ programs.schizofox = {
     background = "1e1e2e";
     foreground = "cdd6f4";
     font = "Lexend";
+    simplefox.enable = true;
+    darkreader.enable = true;
     extraCss = ''
       body {
         color: red !important;
