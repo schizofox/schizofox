@@ -7,7 +7,7 @@
   inherit (theme) background-darker background foreground font;
 in ''
   ${
-    optionalString (cfg.theme.simplefox.enable) ''
+    optionalString cfg.theme.simplefox.enable ''
       /*
       ┌─┐┬┌┬┐┌─┐┬  ┌─┐
       └─┐││││├─┘│  ├┤

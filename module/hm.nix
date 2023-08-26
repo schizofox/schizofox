@@ -9,8 +9,6 @@ self: {
 
   cfg = config.programs.schizofox;
 
-  inherit (self.packages.${pkgs.system}) darkreader;
-
   mkNixPak = self.inputs.nixpak.lib.nixpak {
     inherit (pkgs) lib;
     inherit pkgs;
@@ -73,12 +71,11 @@ in {
       simplefox.enable = mkEnableOption ''
         A Userstyle theme for Firefox minimalist and Keyboard centered.
       '';
-      darkreader = {
-        enable = mkEnableOption ''
-          Dark mode on all sites (patched to match overall theme)
-        '';
-        # TODO: patchDefaultColors bool option
-      };
+
+      # TODO: patchDefaultColors bool option
+      darkreader.enable = mkEnableOption ''
+        Dark mode on all sites (patched to match overall theme)
+      '';
 
       extraCss = mkOption {
         type = types.str;
@@ -266,7 +263,7 @@ in {
           DontCheckDefaultBrowser = true;
 
           # FIXME: im gonna kms, it hurts my eyes
-          ExtensionSettings = import ./extensions {inherit cfg darkreader pkgs lib;};
+          ExtensionSettings = import ./extensions {inherit cfg self pkgs lib;};
           SearchEngines = import ./config/engines.nix {inherit cfg;};
           Bookmarks = lib.optionalAttrs (cfg.bookmarks != {}) cfg.bookmarks;
 
