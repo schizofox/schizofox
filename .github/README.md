@@ -1,5 +1,5 @@
 <p align="center">
-<img src="../assets/logo.png" alt="screenshot" width="200" align="center" />  
+<img src="https://github.com/schizofox/assets/blob/main/demo/ss.png" alt="screenshot" width="200" align="center" />  
 </p>
 
 # Schizofox
@@ -8,21 +8,30 @@ _our goal is to get on the CIA watchlist_
 
 ## About
 
-Hey, so this configuration started as a part of my [dotfiles repo](https://github.com/sioodmy/dotfiles), but apparently people actually used it, so I decided to move it into its own flake.
-Compared to other browsers/configuration I would say its pretty schizophrenic, but I use it as my daily driver, so I had to keep some sane defaults (if you really need to, just use Tor Browser).
-Keep in mind that any "super ultra privacy friendly firefox config" will make you stick out and won't protect you from fingerprinting, sadly there is no escape from that.
+Schizofox started as a part of [Sioodmy's dotfiles](https://github.com/sioodmy/dotfiles) and were adapted by [NotAShelf](https://github.com/notashelf/nyx) for future use. As such, it has been moved into its sown standalone flake and eventually an organization.
 
-Another cool thing is declarative theming. Just specify 3 colors and your font of choice and nix will do the rest (userChrome.css and darkreader config).
+Compared to other browsers/configuration I would say its pretty _schizophrenic_, but it is also daily driveable so some compromises were made. Keep in mind that any "super ultra privacy friendly firefox config" will make you stick out and won't protect you from fingerprinting, sadly there is no escape from that. If you are really looking for security, look into the Tor browser.
 
-Make sure to submit an issue in case anything brakes (or contribute if you know how to fix it)
+Fun fact: clearing cookies is just a waste of time with cookie isolation enabled (just use temporary containers if you need to)
 
-funfact: clearing cookies is just a waste of time with cookie isolation enabled (just use temporary containers if you need to)
+### Notable Features
+
+- Declarative theming. Just specify 3 colors and your font of choice and nix will do the rest (userChrome.css and darkreader config)
+- Declarative extension installation with the home-manager module
+- NixPak wrapped package
+- Extensive & modular configuration
+
+### Contributing
+
+Schizofox is still beta software, and breaking changes are to be expected.
+
+Make sure to submit an issue in case anything breaks, or make a PR if you know how to fix said issue.
 
 ## 💛 Donate
 
-If you would like to support me you can sponsor me via ko-fi
+If you would like to support us, you may use Liberapay to do so:
 
-<a href="https://ko-fi.com/sioodmy"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on kofi" /> </a>
+<a href="https://liberapay.com/schizofox/donate"><img src="https://img.shields.io/liberapay/patrons/notashelf.svg?logo=liberapay?color=e5c890&labelColor=303446&style=for-the-badge"></a>
 
 ## Configuration
 
@@ -91,6 +100,7 @@ programs.schizofox = {
 
 ## Credits <3
 
-- [NotAShelf](https://github.com/NotAShelf)
+Thanks to the awesome people below:
+
 - [hnhx](https://github.com/hnhx)
 - [neoney](https://github.com/n3oney)
