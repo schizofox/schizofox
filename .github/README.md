@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/schizofox/assets/blob/main/demo/ss.png" alt="screenshot" width="200" align="center" />  
+<img src="https://github.com/schizofox/assets/blob/main/logo/logo.png" alt="screenshot" width="200" align="center" />  
 </p>
 
 # Schizofox
