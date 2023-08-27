@@ -382,11 +382,16 @@ in {
       ]
       else [pkg];
     xdg.desktopEntries = {
-      firefox = {
+      firefox = let
+        logo = builtins.fetchurl {
+          url = "https://github.com/schizofox/assets/blob/main/logo/logo.png";
+          sha256 = "103krz3yy0qwss73l5w8326xkqkai6h1x1h37ww2ybaqr2is1bh1";
+        };
+      in {
         name = "Schizofox";
         genericName = "Web Browser";
         exec = "firefox -Profile ${profilesPath}/schizo.default %U";
-        icon = "${../../assets/logo.png}";
+        icon = "${logo}";
         terminal = false;
         categories = ["Application" "Network" "WebBrowser"];
         mimeType = ["text/html" "text/xml"];
