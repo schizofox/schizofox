@@ -384,8 +384,8 @@ in {
     xdg.desktopEntries = {
       firefox = let
         logo = builtins.fetchurl {
-          url = "https://github.com/schizofox/assets/blob/main/logo/logo.png";
-          sha256 = "103krz3yy0qwss73l5w8326xkqkai6h1x1h37ww2ybaqr2is1bh1";
+          url = "https://raw.githubusercontent.com/schizofox/assets/main/logo/logo.png";
+          sha256 = "1wjzivdmppbzrwdxhza5dzzljl3z59vfgggxim9xjb2rzr0wqyyf";
         };
       in {
         name = "Schizofox";
