@@ -386,7 +386,7 @@ in {
         name = "Schizofox";
         genericName = "Web Browser";
         exec = "firefox -Profile ${profilesPath}/schizo.default %U";
-        icon = "${../assets/logo.png}";
+        icon = "${../../assets/logo.png}";
         terminal = false;
         categories = ["Application" "Network" "WebBrowser"];
         mimeType = ["text/html" "text/xml"];
