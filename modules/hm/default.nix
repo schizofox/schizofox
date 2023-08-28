@@ -352,8 +352,9 @@ in {
 
                 "/sys/bus/pci"
 
+                # https://github.com/schizofox/schizofox/issues/24
                 "${
-                  config.home.pointerCursor.package
+                  config.home.pointerCursor.package or pkgs.bibata-cursors
                 }"
 
                 [
