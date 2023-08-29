@@ -24,7 +24,10 @@
     ...
   } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [./pkgs];
+      imports = [
+        ./pkgs
+        ./tests
+      ];
 
       systems = [
         "x86_64-linux"
