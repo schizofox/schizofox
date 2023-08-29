@@ -29,6 +29,18 @@ self: {
     then "${firefoxConfigPath}/Profiles"
     else firefoxConfigPath;
 
+  maybeTheme = opt: lib.findFirst builtins.isNull opt.package [opt opt.package];
+
+  just' = v: inner: lib.optional (v != null) inner;
+
+  just = v: just' v v;
+
+  gtkTheme = maybeTheme config.gtk.theme;
+
+  iconTheme = maybeTheme config.gtk.iconTheme;
+
+  cursorTheme = maybeTheme config.home.pointerCursor;
+
   defaultProfile = "${profilesPath}/schizo.default";
 in {
   meta.maintainers = with maintainers; [sioodmy NotAShelf];
@@ -341,38 +353,36 @@ in {
                 (sloth.concat [sloth.homeDir "/.mozilla"])
               ];
 
-              bind.ro = [
-                "/etc/resolv.conf"
-
-                (sloth.concat' sloth.xdgConfigHome "/gtk-2.0")
-                (sloth.concat' sloth.xdgConfigHome "/gtk-3.0")
-                (sloth.concat' sloth.xdgConfigHome "/gtk-4.0")
-                (sloth.concat' sloth.xdgConfigHome "/dconf")
-                "/etc/localtime"
-
-                "/sys/bus/pci"
-
-                "${
-                  config.home.pointerCursor.package
-                }"
-
+              bind.ro =
                 [
-                  "${pkg}/lib/firefox"
-                  "/app/etc/firefox"
+                  "/etc/resolv.conf"
+
+                  (sloth.concat' sloth.xdgConfigHome "/gtk-2.0")
+                  (sloth.concat' sloth.xdgConfigHome "/gtk-3.0")
+                  (sloth.concat' sloth.xdgConfigHome "/gtk-4.0")
+                  (sloth.concat' sloth.xdgConfigHome "/dconf")
+                  "/etc/localtime"
+
+                  "/sys/bus/pci"
+
+                  [
+                    "${pkg}/lib/firefox"
+                    "/app/etc/firefox"
+                  ]
                 ]
-              ];
+                ++ just' cursorTheme "${cursorTheme}";
 
               env = {
-                XDG_DATA_DIRS = lib.makeSearchPath "share" [
-                  config.gtk.iconTheme.package
-                  config.gtk.theme.package
-                  config.home.pointerCursor.package
-                  pkgs.shared-mime-info
-                ];
-                XCURSOR_PATH = lib.concatStringsSep ":" [
-                  "${config.home.pointerCursor.package}/share/icons"
-                  "${config.home.pointerCursor.package}/share/pixmaps"
-                ];
+                XDG_DATA_DIRS = lib.makeSearchPath "share" ([
+                    pkgs.shared-mime-info
+                  ]
+                  ++ just iconTheme
+                  ++ just gtkTheme
+                  ++ just cursorTheme);
+                XCURSOR_PATH = lib.mkIf (cursorTheme != null) (lib.concatStringsSep ":" [
+                  "${cursorTheme}/share/icons"
+                  "${cursorTheme}/share/pixmaps"
+                ]);
               };
             };
           };
