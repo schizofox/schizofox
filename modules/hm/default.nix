@@ -314,15 +314,18 @@ in {
       if cfg.security.sandbox
       then [
         (mkNixPak {
-          config = {sloth, ...}: rec {
+          config = {sloth, ...}: let
+            appId = "org.mozilla.Firefox";
+          in {
+            flatpak = {
+              inherit appId;
+            };
             app.package = pkg;
             app.binPath = "bin/firefox";
 
-            flatpak.appId = "org.mozilla.Firefox";
-
             dbus.policies = {
-              "${flatpak.appId}" = "own";
-              "${flatpak.appId}.*" = "own";
+              "${appId}" = "own";
+              "${appId}.*" = "own";
               "org.a11y.Bus" = "talk";
               "org.gnome.SessionManager" = "talk";
               "org.freedesktop.ScreenSaver" = "talk";
