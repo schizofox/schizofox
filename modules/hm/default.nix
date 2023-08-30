@@ -31,7 +31,7 @@ self: {
 
   maybeTheme = opt: lib.findFirst builtins.isNull opt.package [opt opt.package];
 
-  just' = v: inner: lib.optional (v != null) inner;
+  just' = v: lib.optional (v != null);
 
   just = v: just' v v;
 

@@ -1,5 +1,9 @@
-{ nixosTest, inputs, homeManagerModules, ... }:
-
+{
+  nixosTest,
+  inputs,
+  homeManagerModules,
+  ...
+}:
 nixosTest {
   name = "basic";
 

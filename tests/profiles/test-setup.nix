@@ -3,7 +3,7 @@
   virtualisation = {
     cores = 4;
     memorySize = 4096;
-    qemu.options = [ "-vga none -enable-kvm -device virtio-gpu-pci,xres=720,yres=1440" ];
+    qemu.options = ["-vga none -enable-kvm -device virtio-gpu-pci,xres=720,yres=1440"];
   };
 
   users.users.test = {
@@ -12,7 +12,7 @@
   };
 
   home-manager.sharedModules = [
-    { home.stateVersion = "23.05"; }
+    {home.stateVersion = "23.05";}
   ];
 
   services.xserver = {
