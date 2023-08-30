@@ -8,9 +8,9 @@ _our goal is to get on the CIA watchlist_
 
 ## About
 
-Schizofox started as a part of [Sioodmy's dotfiles](https://github.com/sioodmy/dotfiles) and were adapted by [NotAShelf](https://github.com/notashelf/nyx) for future use. As such, it has been moved into its sown standalone flake and eventually an organization.
+Schizofox started as a part of [Sioodmy's dotfiles](https://github.com/sioodmy/dotfiles) and was adapted by [NotAShelf](https://github.com/notashelf/nyx) for future use. As such, it has been moved into its own standalone flake and eventually an organization.
 
-Compared to other browsers/configuration I would say its pretty _schizophrenic_, but it is also daily driveable so some compromises were made. Keep in mind that any "super ultra privacy friendly firefox config" will make you stick out and won't protect you from fingerprinting, sadly there is no escape from that. If you are really looking for security, look into the Tor browser.
+Compared to other browsers/configurations, I would say it's pretty _schizophrenic_, but it is also daily driveable so some compromises were made. Keep in mind that any "super ultra privacy friendly firefox config" will make you stick out and won't protect you from fingerprinting; sadly there is no escape from that. If you are really looking for security, look into the Tor browser.
 
 Fun fact: clearing cookies is just a waste of time with cookie isolation enabled (just use temporary containers if you need to)
 
