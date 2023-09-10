@@ -285,21 +285,22 @@ in {
 
     home.packages = let
       _pkg = import ./firefox {inherit pkgs cfg lib self;};
-        logo = builtins.fetchurl {
-          url = "https://raw.githubusercontent.com/schizofox/assets/main/logo/logo.png";
-          sha256 = "1wjzivdmppbzrwdxhza5dzzljl3z59vfgggxim9xjb2rzr0wqyyf";
-        };
-    desktopItem = pkgs.makeDesktopItem
-      {
-        name = "Schizofox";
-        desktopName = "Schizofox";
-        genericName = "Web Browser";
-        exec = "schizofox %U";
-        icon = "${logo}";
-        terminal = false;
-        categories = ["Application" "Network" "WebBrowser"];
-        mimeTypes = ["text/html" "text/xml"];
+      logo = builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/schizofox/assets/main/logo/logo.png";
+        sha256 = "1wjzivdmppbzrwdxhza5dzzljl3z59vfgggxim9xjb2rzr0wqyyf";
       };
+      desktopItem =
+        pkgs.makeDesktopItem
+        {
+          name = "Schizofox";
+          desktopName = "Schizofox";
+          genericName = "Web Browser";
+          exec = "schizofox %U";
+          icon = "${logo}";
+          terminal = false;
+          categories = ["Application" "Network" "WebBrowser"];
+          mimeTypes = ["text/html" "text/xml"];
+        };
       pkg = pkgs.symlinkJoin {
         name = "Schizofox";
         paths = [_pkg desktopItem];
