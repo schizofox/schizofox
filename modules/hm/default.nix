@@ -229,7 +229,6 @@ in {
 
     extensions = {
       defaultExtensions = mkOption {
-        readOnly = true; # don't let the user change this value, it's only for documentation purposest
         type = with types; attrs;
         default = {
           "uBlock0@raymondhill.net".install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
@@ -245,7 +244,7 @@ in {
         };
 
         description = ''
-          The addons that will be installed no matter what.
+          Default set of addons that will be installed by default.
         '';
       };
 
