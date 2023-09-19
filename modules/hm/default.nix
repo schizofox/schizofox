@@ -288,6 +288,7 @@ in {
         url = "https://raw.githubusercontent.com/schizofox/assets/main/logo/logo.png";
         sha256 = "1wjzivdmppbzrwdxhza5dzzljl3z59vfgggxim9xjb2rzr0wqyyf";
       };
+
       desktopItem =
         pkgs.makeDesktopItem
         {
@@ -300,6 +301,7 @@ in {
           categories = ["Application" "Network" "WebBrowser"];
           mimeTypes = ["text/html" "text/xml"];
         };
+
       pkg = pkgs.symlinkJoin {
         name = "Schizofox";
         paths = [_pkg desktopItem];
@@ -320,7 +322,7 @@ in {
             flatpak = {
               inherit appId;
             };
-            app.package = pkg;
+            app.package = _pkg;
             app.binPath = "bin/firefox";
 
             dbus.policies = {
