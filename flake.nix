@@ -24,6 +24,11 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
+
+    nmd = {
+      url = "sourcehut:~rycee/nmd";
+      flake = false;
+    };
   };
 
   outputs = {
