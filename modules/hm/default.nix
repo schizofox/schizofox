@@ -309,7 +309,7 @@ in {
         postBuild = ''
           makeWrapper $out/bin/firefox $out/bin/schizofox \
             --add-flags '-Profile ${profilesPath}/schizo.default'
-          find $out/share/applications ! -name 'Schizofox.desktop' -delete
+          find $out/share/applications -type f ! -name 'Schizofox.desktop' -delete
         '';
       };
     in
