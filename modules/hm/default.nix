@@ -244,7 +244,7 @@ in {
         };
 
         description = ''
-          Default set of addons that will be installed by default.
+          A set of addons that will be installed by default.
         '';
       };
 
@@ -309,7 +309,7 @@ in {
         postBuild = ''
           makeWrapper $out/bin/firefox $out/bin/schizofox \
             --add-flags '-Profile ${profilesPath}/schizo.default'
-          find $out/share/applications -type l ! -name 'Schizofox.desktop' -delete
+          find $out/share/applications ! -name 'Schizofox.desktop' -delete
         '';
       };
     in
@@ -322,8 +322,8 @@ in {
             flatpak = {
               inherit appId;
             };
-            app.package = _pkg;
-            app.binPath = "bin/firefox";
+            app.package = pkg;
+            app.binPath = "bin/schizofox";
 
             dbus.policies = {
               "${appId}" = "own";
