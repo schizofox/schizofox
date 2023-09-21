@@ -244,7 +244,7 @@ in {
         };
 
         description = ''
-          Default set of addons that will be installed by default.
+          A set of addons that will be installed by default.
         '';
       };
 
@@ -295,7 +295,7 @@ in {
               inherit appId;
             };
             app.package = pkg;
-            app.binPath = "bin/firefox";
+            app.binPath = "bin/schizofox";
 
             dbus.policies = {
               "${appId}" = "own";
