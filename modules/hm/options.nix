@@ -113,7 +113,7 @@ in {
         type = with types; listOf str;
         default = ["Google" "Bing" "Amazon.com" "eBay" "Twitter" "Wikipedia"];
         description = "List of default search engines to remove";
-        example = literalExpression ["Google"];
+        example = literalExpression ''["Google"]'';
       };
 
       searxUrl = mkOption {
@@ -184,9 +184,7 @@ in {
       startPageURL = mkOption {
         type = with types; nullOr str;
         default = null;
-        example = literalExpression ''
-          "file://${relative/path/to/startpage.html}"
-        '';
+        example = literalExpression "file://$${relative/path/to/startpage.html}";
         description = "An URL or an absolute path to your Firefox startpage";
       };
     };
