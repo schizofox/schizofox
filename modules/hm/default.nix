@@ -47,7 +47,7 @@ in {
 
   options.programs.schizofox = {
     enable = mkEnableOption (mdDoc "Schizophrenic Firefox ESR setup for the delusional");
-    package = mkPackageOption pkgs "firefox-esr-102-unwrapped" {
+    package = mkPackageOption pkgs "firefox-esr-115-unwrapped" {
       example = "firefox-esr-115-unwrapped";
     };
 
@@ -280,36 +280,11 @@ in {
       "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme lib cfg;};
 
       # userContent
-      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {};
+      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix;
     };
 
     home.packages = let
-      _pkg = import ./firefox {inherit pkgs cfg lib self;};
-        logo = builtins.fetchurl {
-          url = "https://raw.githubusercontent.com/schizofox/assets/main/logo/logo.png";
-          sha256 = "1wjzivdmppbzrwdxhza5dzzljl3z59vfgggxim9xjb2rzr0wqyyf";
-        };
-    desktopItem = pkgs.makeDesktopItem
-      {
-        name = "Schizofox";
-        desktopName = "Schizofox";
-        genericName = "Web Browser";
-        exec = "schizofox %U";
-        icon = "${logo}";
-        terminal = false;
-        categories = ["Application" "Network" "WebBrowser"];
-        mimeTypes = ["text/html" "text/xml"];
-      };
-      pkg = pkgs.symlinkJoin {
-        name = "Schizofox";
-        paths = [_pkg desktopItem];
-        nativeBuildInputs = [pkgs.makeBinaryWrapper];
-        postBuild = ''
-          makeWrapper $out/bin/firefox $out/bin/schizofox \
-            --add-flags '-Profile ${profilesPath}/schizo.default'
-          find $out/share/applications -type l ! -name 'Schizofox.desktop' -delete
-        '';
-      };
+      pkg = pkgs.callPackage ./firefox {inherit profilesPath cfg self;};
     in
       if cfg.security.sandbox
       then [
@@ -369,8 +344,10 @@ in {
                 (sloth.concat [
                   (sloth.env "XDG_RUNTIME_DIR")
                   "/"
-                  (sloth.env "WAYLAND_DISPLAY")
+                  (sloth.envOr "WAYLAND_DISPLAY" "no")
                 ])
+                "/tmp/.X11-unix"
+                (sloth.envOr "XAUTHORITY" "/no-xauth")
 
                 (envSuffix "XDG_RUNTIME_DIR" "/at-spi/bus")
                 (envSuffix "XDG_RUNTIME_DIR" "/gvfsd")
