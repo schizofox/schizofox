@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
+  pkgs,
   self,
   cfg,
   ...
 }: let
   ext = cfg.extensions;
-  inherit (self.packages.${stdenv.hostPlatform.system}) darkreader;
+  inherit (self.packages.${pkgs.system}) darkreader;
   reader = darkreader.override {
     inherit (cfg.theme) background;
     inherit (cfg.theme) foreground;
