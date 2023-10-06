@@ -15,6 +15,7 @@ in {
       example = "firefox-esr-unwrapped";
     };
 
+    # theme options
     theme = {
       font = mkOption {
         type = types.str;
@@ -44,9 +45,16 @@ in {
         description = "Dark reader text color";
       };
 
-      simplefox.enable = mkEnableOption ''
-        A Userstyle theme for Firefox minimalist and Keyboard centered.
-      '';
+      # simple fox options
+      simplefox = {
+        enable = mkEnableOption ''
+          A Userstyle theme for Firefox minimalist and Keyboard centered.
+        '';
+
+        showUrlBar = mkEnableOption ''
+          Show the URL bar on hover.
+        '';
+      };
 
       # TODO: patchDefaultColors bool option
       darkreader.enable =
@@ -168,7 +176,10 @@ in {
         type = types.bool;
         default = false;
         example = true;
-        description = "netflix no worky (just use torrents lmao)";
+        description = ''
+          Enable DRM for websites that require it, such as Netflix and Spotify.
+          We *always* recommend legally obtaining content those platforms provide.
+        '';
       };
 
       disableWebgl = mkOption {
@@ -186,6 +197,19 @@ in {
         default = null;
         example = literalExpression "file://$${relative/path/to/startpage.html}";
         description = "An URL or an absolute path to your Firefox startpage";
+      };
+
+      extraUserContent = mkOption {
+        type = types.str;
+        default = "";
+        example = ''
+          @-moz-document domain("example.com") {
+            body {
+              background-color: red;
+            }
+          }
+        '';
+        description = "Extra css for userContent.css";
       };
     };
 
@@ -205,15 +229,21 @@ in {
           "7esoorv3@alefvanoon.anonaddy.me".install_url = "https://addons.mozilla.org/firefox/downloads/latest/libredirect/latest.xpi";
         };
 
+        example = literalExpression "{}";
+
         description = ''
-          A set of addons that will be installed by default.
+          A set of addons that will be installed by default. Can be set to `{}` to avoid installing
+          any of the default addons.
         '';
       };
 
       extraExtensions = mkOption {
         type = types.attrs;
         default = {};
-        description = "Extra extensions to be installed";
+        description = ''
+          Extra extensions that will be installed in addition to default extensions. Will be merged
+          with the attribute set provided by `defaultExtensions`.
+        '';
         example = literalExpression ''
           {
             "webextension@metamask.io".install_url = "https://addons.mozilla.org/firefox/downloads/latest/ether-metamask/latest.xpi";
