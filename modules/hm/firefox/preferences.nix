@@ -1,4 +1,4 @@
-cfg: {
+{cfg, ...}: {
   # Quality of life stuff
   "browser.download.useDownloadDir" = false;
   "browser.aboutConfig.showWarning" = false;
