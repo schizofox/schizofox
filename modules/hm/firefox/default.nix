@@ -67,7 +67,7 @@ in
         Locked = false;
       };
 
-      Preferences = import ./preferences.nix cfg;
+      Preferences = import ./preferences.nix {inherit cfg;};
     };
   })
   .overrideAttrs (old: {
