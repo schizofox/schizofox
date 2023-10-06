@@ -7,8 +7,11 @@
   ...
 }:
 wrapFirefox cfg.package {
-  # see https://github.com/mozilla/policy-templates/blob/master/README.md
+  # for a list of avialable policies, see:
+  #  https://github.com/mozilla/policy-templates/blob/master/README.md
+  #  https://mozilla.github.io/policy-templates/
   extraPolicies = {
+    AppAutoUpdate = false;
     CaptivePortal = false;
     DisableFirefoxStudies = true;
     DisablePocket = true;
@@ -17,37 +20,32 @@ wrapFirefox cfg.package {
     DisableFormHistory = true;
     DisplayBookmarksToolbar = false;
     DontCheckDefaultBrowser = true;
-
-    ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
-
-    SearchEngines = {
-      Add = cfg.search.addEngines;
-      Default = cfg.search.defaultSearchEngine;
-      Remove = cfg.search.removeEngines;
-    };
-    Bookmarks = cfg.bookmarks;
+    DisableSetDesktopBackground = true;
+    PasswordManagerEnabled = false;
+    PromptForDownloadLocation = true;
+    SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
 
     FirefoxHome = {
       Pocket = false;
       Snippets = false;
     };
 
-    PasswordManagerEnabled = false;
-    PromptForDownloadLocation = true;
-
     UserMessaging = {
       ExtensionRecommendations = false;
       SkipOnboarding = true;
     };
-
-    DisableSetDesktopBackground = true;
-    SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
 
     Cookies = {
       Behavior = "accept";
       ExpireAtSessionEnd = false;
       Locked = false;
     };
+
+    SearchEngines = {inherit (cfg.search) addEngines defaultSearchEngine removeEngines;};
+
+    Bookmarks = cfg.bookmarks;
+
+    ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
 
     Preferences = import ./preferences.nix {inherit cfg;};
   };
