@@ -16,7 +16,8 @@
       });
   in {
     checks = {
-      basic = callPackage ./basic.nix {};
+      basic = callPackage ./checks/basic.nix {};
+      nixpak = callPackage ./checks/nixpak.nix {};
     };
     packages.test = self'.checks.basic.driverInteractive;
   };

@@ -3,6 +3,7 @@ _: {
 
   perSystem = {pkgs, ...}: {
     packages = {
+      # Extensions
       darkreader = pkgs.callPackage ./darkreader.nix {};
     };
   };
