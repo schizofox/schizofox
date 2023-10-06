@@ -121,7 +121,7 @@ in {
         type = with types; listOf str;
         default = ["Google" "Bing" "Amazon.com" "eBay" "Twitter" "Wikipedia"];
         description = "List of default search engines to remove";
-        example = literalExpression ''["Google"]'';
+        example = literalExpression ''["LibRedirect"]'';
       };
 
       searxUrl = mkOption {
