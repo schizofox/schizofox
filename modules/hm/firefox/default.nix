@@ -62,7 +62,11 @@
           Locked = false;
         };
 
-        SearchEngines = {inherit (cfg.search) addEngines defaultSearchEngine removeEngines;};
+        SearchEngines = {
+          Add = cfg.search.addEngines;
+          Default = cfg.search.defaultSearchEngine;
+          Remove = cfg.search.removeEngines;
+        };
 
         Bookmarks = cfg.bookmarks;
 

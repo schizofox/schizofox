@@ -49,4 +49,11 @@ cfg: [
     Method = "GET";
     URLTemplate = cfg.search.searxQuery;
   }
+  {
+    Name = "Phind";
+    Description = "Phind AI search";
+    Alias = "!pd";
+    Method = "GET";
+    URLTemplate = "https://www.phind.com/search?q={searchTerms}&source=searchbox";
+  }
 ]
