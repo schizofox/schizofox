@@ -32,12 +32,13 @@
       #  https://github.com/mozilla/policy-templates/blob/master/README.md
       #  https://mozilla.github.io/policy-templates/
       extraPolicies = {
+        OverrideFirstRunPage = "";
+        DisableTelemetry = true;
         AppAutoUpdate = false;
         CaptivePortal = false;
         DisableFirefoxStudies = true;
-        DisablePocket = true;
-        DisableTelemetry = true;
         DisableFirefoxAccounts = true;
+        DisablePocket = true;
         DisableFormHistory = true;
         DisplayBookmarksToolbar = false;
         DontCheckDefaultBrowser = true;
@@ -46,9 +47,22 @@
         PromptForDownloadLocation = true;
         SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
 
+        NoDefaultBookmarks = true;
+        OfferToSaveLogins = false;
+
+        EnableTrackingProtection = {
+          Cryptomining = true;
+          Fingerprinting = true;
+          Locked = true;
+          Value = true;
+        };
+
         FirefoxHome = {
+          Search = true;
           Pocket = false;
           Snippets = false;
+          TopSites = false;
+          Highlights = false;
         };
 
         UserMessaging = {
