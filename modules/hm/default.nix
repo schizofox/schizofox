@@ -1,6 +1,6 @@
 self: {
   config,
-  lib ? import ../../lib/extended-lib.nix pkgs.lib,
+  lib,
   pkgs,
   ...
 }: let
@@ -46,7 +46,7 @@ in {
   meta.maintainers = with maintainers; [sioodmy NotAShelf];
 
   imports = [
-    ./options.nix
+    ./options
   ];
 
   config = mkIf cfg.enable {
