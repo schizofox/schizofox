@@ -1,3 +1,3 @@
 {lib, ...}: {
-  schizofox = import ./schizofox {inherit lib;};
+  extensions = import ./extensions {inherit lib;};
 }

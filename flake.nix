@@ -34,6 +34,7 @@
   outputs = {
     flake-parts,
     self,
+    nixpkgs,
     ...
   } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} {
@@ -62,7 +63,11 @@
       };
 
       flake = {
-        homeManagerModule = self.homeManagerModules.schizofox; # an alias to the default module (which is technically deprecated)
+        lib = {
+          inherit (import ./lib/extended-lib.nix nixpkgs.lib) schizofox;
+        };
+
+        homeManagerModule = self.homeManagerModules.schizofox; # an alias to the default module
         homeManagerModules = {
           schizofox = import ./modules/hm self;
           default = self.homeManagerModules.schizofox;
