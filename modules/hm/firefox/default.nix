@@ -6,7 +6,6 @@
   cfg,
   self,
   pkgs,
-  callPackage,
   lib,
   ...
 }: let
@@ -82,7 +81,7 @@
           Remove = cfg.search.removeEngines;
         };
 
-        Bookmarks = cfg.bookmarks;
+        Bookmarks = cfg.misc.bookmarks;
 
         ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
 
