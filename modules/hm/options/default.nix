@@ -1,4 +1,4 @@
-_: {
+{
   imports = [
     ./general.nix
     ./theme.nix
