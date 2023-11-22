@@ -219,7 +219,25 @@
         "home-manager": "home-manager",
         "nixpak": "nixpak",
         "nixpkgs": "nixpkgs_2",
-        "nmd": "nmd"
+        "nmd": "nmd",
+        "wavefox": "wavefox"
+      }
+    },
+    "wavefox": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1687528173,
+        "narHash": "sha256-bbc8OJPOL2hJ4+AWDNxS2vltHHGLAV7Gys1P3v8wTGQ=",
+        "owner": "QNetITQ",
+        "repo": "WaveFox",
+        "rev": "428876ddc5b1685e4346640323849dd849bf2b9c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "QNetITQ",
+        "ref": "v1.6.115",
+        "repo": "WaveFox",
+        "type": "github"
       }
     }
   },

@@ -73,5 +73,10 @@
       url = "sourcehut:~rycee/nmd";
       flake = false;
     };
+
+    wavefox = {
+      url = "github:QNetITQ/WaveFox/v1.6.115";
+      flake = false;
+    };
   };
 }

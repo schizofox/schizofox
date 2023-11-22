@@ -85,7 +85,7 @@
 
         ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
 
-        Preferences = import ./preferences {inherit cfg;};
+        Preferences = import ./preferences {inherit cfg lib;};
       };
     })
     .overrideAttrs (old: {

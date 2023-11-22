@@ -50,25 +50,32 @@ in {
   ];
 
   config = mkIf cfg.enable {
-    home.file = {
-      # profile config
-      "${firefoxConfigPath}/profiles.ini".text = ''
-        [Profile0]
-        Name=default
-        IsRelative=1
-        Path=schizo.default
-        Default=1
+    home.file = let
+      chrome = "${defaultProfile}/chrome";
+      src = "${self.inputs.wavefox}/chrome";
+    in
+      {
+        # profile config
+        "${firefoxConfigPath}/profiles.ini".text = ''
+          [Profile0]
+          Name=default
+          IsRelative=1
+          Path=schizo.default
+          Default=1
 
-        [General]
-        StartWithLastProfile=1
-        Version=2
-      '';
-      # userChrome content
-      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme lib cfg;};
+          [General]
+          StartWithLastProfile=1
+          Version=2
+        '';
+      }
+      // lib.optionalAttrs cfg.theme.wavefox.enable {
+        # userChrome content
+        "${chrome}/userChrome.css".source = src + "/userChrome.css";
+        "${chrome}/third_party_custom_styles.css".text = cfg.theme.extraCss;
 
-      # userContent
-      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix;
-    };
+        "${chrome}/icons".source = src + "/icons";
+        "${chrome}/special".source = src + "/special";
+      };
 
     home.packages = let
       pkg = pkgs.callPackage ./firefox {inherit profilesPath cfg self pkgs lib;};
