@@ -2,17 +2,29 @@
   cfg,
   lib,
   ...
-}: let
-  inherit (lib) mkIf;
+}: with lib; let
   # Makes the given value unless the given predicate is true.
   mkUnless = pred: val: (mkIf (! pred) val);
+  recursiveMerge = attrList:
+  let f = attrPath:
+    zipAttrsWith (n: values:
+      if tail values == []
+        then head values
+      else if all isList values
+        then unique (concatLists values)
+      else if all isAttrs values
+        then f (attrPath ++ [n]) values
+      else last values
+    );
+  in f [] attrList;
+
   wavefox = cfg.theme.wavefox;
   mode =
     if cfg.theme.darkTheme
     then "DarkTheme"
     else "LightTheme";
 in
-  lib.mkMerge [
+  recursiveMerge [
     {
       "browser.tabs.inTitlebar" = lib.mkDefault 1;
       "layout.css.has-selector.enabled" = true;
