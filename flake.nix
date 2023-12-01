@@ -66,6 +66,7 @@
 
     searx-randomizer = {
       url = "github:schizofox/searx-randomizer";
+      inputs.flake-parts.follows = "flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
