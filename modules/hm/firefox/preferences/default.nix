@@ -2,21 +2,24 @@
   cfg,
   lib,
   ...
-}: with lib; let
+}:
+with lib; let
   # Makes the given value unless the given predicate is true.
   mkUnless = pred: val: (mkIf (! pred) val);
-  recursiveMerge = attrList:
-  let f = attrPath:
-    zipAttrsWith (n: values:
-      if tail values == []
-        then head values
-      else if all isList values
-        then unique (concatLists values)
-      else if all isAttrs values
-        then f (attrPath ++ [n]) values
-      else last values
-    );
-  in f [] attrList;
+  recursiveMerge = attrList: let
+    f = attrPath:
+      zipAttrsWith (
+        n: values:
+          if tail values == []
+          then head values
+          else if all isList values
+          then unique (concatLists values)
+          else if all isAttrs values
+          then f (attrPath ++ [n]) values
+          else last values
+      );
+  in
+    f [] attrList;
 
   wavefox = cfg.theme.wavefox;
   mode =
@@ -55,11 +58,11 @@ in
     }
 
     (mkUnless (wavefox.transparency == "None") {
-        "userChrome.Linux.Transparency.${wavefox.transparency}.Enabled" = true;
-      })
+      "userChrome.Linux.Transparency.${wavefox.transparency}.Enabled" = true;
+    })
     (mkUnless (wavefox.tabs.oneline == "Disable") {
-        "userChrome.OneLine.${wavefox.tabs.oneline}.Enabled" = true;
-      })
+      "userChrome.OneLine.${wavefox.tabs.oneline}.Enabled" = true;
+    })
     (mkIf wavefox.tabs.bottom {
       # required for bottom tab layout
       "browser.tabs.inTitlebar" = lib.mkForce 0;

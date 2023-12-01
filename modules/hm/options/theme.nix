@@ -4,7 +4,6 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkOption mkPackageOption mdDoc types literalExpression;
-
 in {
   options.programs.schizofox.theme = {
     font = mkOption {
