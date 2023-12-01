@@ -11,7 +11,7 @@ in {
     defaultSearchEngine = mkOption {
       type = types.str;
       example = "DuckDuckGo";
-      default = "Brave";
+      default = "Searx";
       description = "Default search engine";
     };
 

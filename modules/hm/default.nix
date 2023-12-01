@@ -224,6 +224,7 @@ in {
           engines = builtins.toJSON cfg.search.searx-randomizer.instances;
         in ["SEARX_INSTANCES=${pkgs.writeText "engines.json" engines}"];
         ExecStart = "${self.inputs.searx-randomizer.packages.${pkgs.system}.default}/bin/searx-randomizer";
+        WorkingDirectory = "/";
         Restart = "always";
         RestartSec = 12;
       };
