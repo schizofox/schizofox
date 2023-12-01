@@ -76,7 +76,17 @@
         };
 
         SearchEngines = {
-          Add = cfg.search.addEngines;
+          Add =
+            cfg.search.addEngines
+            ++ [
+              {
+                Name = "Searx";
+                Description = "Searx";
+                Alias = "!sx";
+                Method = "GET";
+                URLTemplate = "http://127.0.0.1:8000/search?q={searchTerms}";
+              }
+            ];
           Default = cfg.search.defaultSearchEngine;
           Remove = cfg.search.removeEngines;
         };

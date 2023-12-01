@@ -43,13 +43,6 @@ cfg: [
     URLTemplate = "https://search.nixos.org/packages?&query={searchTerms}";
   }
   {
-    Name = "Searx";
-    Description = "Searx";
-    Alias = "!sx";
-    Method = "GET";
-    URLTemplate = "http://127.0.0.1:8000/search?q={searchTerms}";
-  }
-  {
     Name = "Phind";
     Description = "Phind AI search";
     Alias = "!pd";
