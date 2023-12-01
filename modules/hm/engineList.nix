@@ -12,7 +12,7 @@ cfg: [
     # feds go away
     Alias = "!torrent";
     Method = "GET";
-    URLTemplate = "https://librex.beparanoid.de/search.php?q={searchTerms}&t=3&p=0";
+    URLTemplate = "https://librex.antopie.org/search.php?q={searchTerms}&t=3&p=0";
   }
   {
     Name = "Stackoverflow";
