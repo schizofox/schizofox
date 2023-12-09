@@ -148,7 +148,9 @@
   "browser.selfsupport.url" = "";
 
   # Don't download ads for the newtab page
-  "browser.newtabpage.directory.source" = "";
+  "browser.newtabpage.enhanced" = false;
+  "browser.newtab.preload" = false;
+  "browser.newtabpage.directory.source" = "data:text/plain,{}";
   "browser.newtabpage.directory.ping" = "";
   "browser.newtabpage.introShown" = true;
 
@@ -309,4 +311,27 @@
   "browser.contentblocking.report.vpn-android.url" = "";
   "browser.contentblocking.report.vpn-ios.url" = "";
   "browser.privatebrowsing.promoEnabled" = false;
+
+  # Disable "beacon" asynchronous HTTP transfers (used for analytics)
+  # https://developer.mozilla.org/en-US/docs/Web/API/navigator.sendBeacon
+  "beacon.enabled" = false;
+
+  # Disable pinging URIs specified in HTML <a> ping= attributes
+  # http://kb.mozillazine.org/Browser.send_pings
+  "browser.send_pings" = false;
+
+  # Prevent sites from taking over copy/paste
+  "dom.event.clipboardevents.enabled" = false;
+  # Prevent sites from taking over right click
+  "dom.event.contextmenu.enabled" = false;
+
+  # Disable gamepad API to prevent USB device enumeration
+  # https://www.w3.org/TR/gamepad/
+  # https://trac.torproject.org/projects/tor/ticket/13023
+  "dom.gamepad.enabled" = false;
+
+  # Not-so-useful features
+  # https://wiki.mozilla.org/Firefox/Normandy/PreferenceRollout
+  "app.normandy.enabled" = false;
+  "app.normandy.api_url" = "";
 }
