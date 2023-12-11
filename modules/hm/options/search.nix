@@ -39,7 +39,7 @@ in {
       example = literalExpression ''["LibRedirect"]'';
     };
 
-    searx-randomizer = {
+    searxRandomizer = {
       enable = mkEnableOption "Randomize searx instances";
       instances = mkOption {
         type = with types; listOf str;
