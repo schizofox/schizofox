@@ -211,7 +211,7 @@ in {
       ]
       else [pkg];
 
-    systemd.user.services.searx-randomizer = lib.mkIf cfg.search.searx-randomizer.enable {
+    systemd.user.services.searxRandomizer = lib.mkIf cfg.search.searxRandomizer.enable {
       Unit = {
         Description = "Searx instance randomizer";
         Documentation = "https://github.com/schizofox/searx-randomizer";

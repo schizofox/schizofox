@@ -54,11 +54,16 @@ in {
         description = "Use Windows Accent Color";
       };
 
-      transparency = mkOption {
+      transparency = {
+        enable = mkEnableOption "transparency";
+
+      
+      strength = mkOption {
         type = types.enum ["Default" "Low" "Medium" "High" "VeryHigh"];
         example = "High";
         default = "Default";
         description = "Set firefox transparency";
+      };
       };
 
       tabs = {
@@ -99,11 +104,14 @@ in {
           description = "Use bottom tabs layout";
         };
 
-        oneline = mkOption {
-          type = types.enum ["Disable" "TabBarFirst" "NavBarFirst"];
-          example = "TabBarFirst";
-          default = "Disable";
-          description = "Oneline layout options";
+        oneline =  {
+          enable = mkEnableOption "oneline";
+          style = mkOption {
+            type = types.enum [ "TabBarFirst" "NavBarFirst"];
+            example = "TabBarFirst";
+            default = "NavBarFirst";
+            description = "Oneline layout options";
+          };
         };
 
         shadowSaturation = mkOption {

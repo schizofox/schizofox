@@ -50,6 +50,8 @@ in
       "userChrome.Menu.Icons.${wavefox.menu.icons}.Enabled" = true;
       "userChrome.Tabs.Pinned.Width.${wavefox.tabs.pinnedWidth}Offset.Enabled" = true;
       "userChrome.Tabs.SelectedTabIndicator.Enabled" = wavefox.tabs.selectedIndicator;
+      "userChrome.OneLine.${wavefox.tabs.oneline.style}.Enabled" = wavefox.tabs.oneline.enable;
+      "userChrome.Linux.Transparency.${wavefox.transparency.strength}.Enabled" = wavefox.transparency.enable;
 
       "browser.startup.homepage" =
         if cfg.misc.startPageURL != null
@@ -57,15 +59,8 @@ in
         else "";
     }
 
-    (mkUnless (wavefox.transparency == "None") {
-      "userChrome.Linux.Transparency.${wavefox.transparency}.Enabled" = true;
-    })
-    (mkUnless (wavefox.tabs.oneline == "Disable") {
-      "userChrome.OneLine.${wavefox.tabs.oneline}.Enabled" = true;
-    })
     (mkIf wavefox.tabs.bottom {
       # required for bottom tab layout
-      "browser.tabs.inTitlebar" = lib.mkForce 0;
       "userChrome.Tabs.TabsOnBottom.Enabled" = true;
     })
 
