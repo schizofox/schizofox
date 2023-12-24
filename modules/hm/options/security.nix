@@ -25,6 +25,16 @@ in {
       '';
     };
 
+    wrapWithProxychains = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Wrap schizofox desktop entry with proxychains-ng.
+        See https://github.com/rofl0r/proxychains-ng for more details.
+      '';
+    };
+
     sandbox = mkOption {
       type = types.bool;
       default = true;

@@ -18,7 +18,10 @@
     name = "Schizofox";
     desktopName = "Schizofox";
     genericName = "Web Browser";
-    exec = "schizofox %U";
+    exec =
+      if cfg.security.wrapWithProxychains
+      then "proxychains4 schizofox %U"
+      else "schizofox %U";
     icon = "${logo}";
     terminal = false;
     categories = ["Application" "Network" "WebBrowser"];
