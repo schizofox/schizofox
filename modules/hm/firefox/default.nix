@@ -84,8 +84,6 @@
         Bookmarks = cfg.misc.bookmarks;
 
         ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
-
-        Preferences = import ./preferences {inherit cfg;};
       };
     })
     .overrideAttrs (old: {
