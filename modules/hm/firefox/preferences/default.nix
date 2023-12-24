@@ -38,14 +38,33 @@
   "network.http.pipelining.maxrequests" = 10;
   "nglayout.initialpaint.delay" = 0;
 
+  # disable caching
+  "browser.cache.disk.enable" = false;
+  # fix for video playback
+  "browser.privatebrowsing.forceMediaMemoryCache" = true;
+  "media.memory_cache_max_size" = 65536;
+  "browser.helperApps.deleteTempFileOnExit" = true;
+  "browser.shell.shortcutFavicons" = false;
+
+  # query stripping
+  "privacy.query_stripping.strip_list" = "__hsfp __hssc __hstc __s _hsenc _openstat dclid fbclid gbraid gclid hsCtaTracking igshid mc_eid ml_subscriber ml_subscriber_hash msclkid oft_c oft_ck oft_d oft_id oft_ids oft_k oft_lk oft_sk oly_anon_id oly_enc_id rb_clickid s_cid twclid vero_conv vero_id wbraid wickedid yclid";
+
+  # prevent websites from storing session data like cookies and forms
+  "browser.formfill.enable" = false;
+  "browser.sessionstore.privacy_level" = 2;
   # Isolate cookies, you don't have to delete them every time, duh
   "privacy.firstparty.isolate" = true;
 
   # Extensions cannot be updated without permission
   "extensions.update.enabled" = false;
 
-  # Use LANG environment variable to choose locale
-  "intl.locale.matchOS" = true;
+  "media.autoplay.default" = 5;
+
+  "javascript.use_us_english_locale" = true;  
+  "intl.accept_languages" = "en-US, en";
+
+  # prevent mouse middle click on new tab button to trigger searches or page loads
+  "browser.tabs.searchclipboardfor.middleclick" = false;
 
   # Allow unsigned langpacks
   "extensions.langpacks.signatures.required" = false;
@@ -95,6 +114,11 @@
   "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
   "browser.urlbar.suggest.engines" = false;
   "browser.urlbar.suggest.topsites" = false;
+  "browser.urlbar.trending.featureGate" = false;
+  "browser.urlbar.mdn.featureGate" = false;
+  "browser.urlbar.weather.featureGate" = false;
+  "browser.download.start_downloads_in_tmp_dir" = true;
+  "browser.shopping.experience2023.enabled" = false; 
   "security.OCSP.enabled" = 0;
   "security.OCSP.require" = false;
   "browser.discovery.containers.enabled" = false;
@@ -102,6 +126,7 @@
   "browser.discovery.sites" = "http://127.0.0.1/";
   "services.sync.prefs.sync.browser.startup.homepage" = false;
   "browser.contentblocking.report.monitor.home_page_url" = "http://127.0.0.1/";
+  "browser.contentblocking.category" = "strict";
   "dom.ipc.plugins.flash.subprocess.crashreporter.enabled" = false;
   "browser.safebrowsing.enabled" = false;
   "browser.safebrowsing.downloads.remote.enabled" = false;
@@ -126,16 +151,33 @@
   "network.http.sendRefererHeader" = 2;
   "network.http.referer.spoofSource" = true;
 
+  # APS
+  "privacy.partition.always_partition_third_party_non_cookie_storage" = true;
+  "privacy.partition.always_partition_third_party_non_cookie_storage.exempt_sessionstorage" = false;
+
+  "privacy.userContext.enabled" = true;
+  "privacy.userContext.ui.enabled" = true;
+
+  "devtools.debugger.remote-enabled" = false;
+  "devtools.selfxss.count" = 0;
+
+  "webchannel.allowObject.urlWhitelist" = "";
   # We don't want to send the Origin header
   "network.http.originextension" = false;
   "network.user_prefetch-next" = false;
   "network.dns.disablePrefetch" = true;
+  "network.prefetch-next" = false;
+  "network.predictor.enabled" = false;
   "network.http.sendSecureXSiteReferrer" = false;
   "toolkit.telemetry.enabled" = false;
+  "app.normandy.api_url" = "";
+  "app.normandy.enabled" = false;
   "toolkit.telemetry.server" = "";
   "experiments.manifest.uri" = "";
   "toolkit.telemetry.unified" = false;
 
+  "browser.tabs.crashReporting.sendReport" = false;
+  "breakpad.reportURL" = "";
   # Make sure updater telemetry is disabled; see <https://trac.torproject.org/25909>.
   "toolkit.telemetry.updatePing.enabled" = false;
 
@@ -144,12 +186,33 @@
   "plugin.state.flash" = 0;
   "browser.search.update" = false;
 
+  # only allow https in all windows, including private browsing
+  "dom.security.https_only_mode" = true;
+
+  # block HTTP authentication credential dialogs
+  "network.auth.subresource-http-auth-allow" = 1;
+
+  "network.http.referer.XOriginTrimmingPolicy" = 2;
+
+  # disable gio as it could bypass proxy
+  "network.gio.supported-protocols" = "";
+
+  # hidden, disable using uniform naming convention to prevent proxy bypass
+  "network.file.disable_unc_paths" = true;
+
+  # force webrtc inside proxy when one is used
+  "media.peerconnection.ice.proxy_only_if_behind_proxy" = true;
+
+  # forces dns query through the proxy when using one
+  "network.proxy.socks_remote_dns" = true;
+
   # Disable sensors
   "dom.battery.enabled" = false;
   "device.sensors.enabled" = false;
   "camera.control.face_detection.enabled" = false;
   "camera.control.autofocus_moving_callback.enabled" = false;
   "network.http.speculative-parallel-limit" = 0;
+  "browser.urlbar.speculativeConnect.enabled" = false;
 
   # No search suggestions
   "browser.urlbar.userMadeSearchSuggestionsChoice" = true;
@@ -187,6 +250,9 @@
   "privacy.resistFingerprinting" = true;
   "webgl.disabled" = cfg.misc.disableWebgl;
   "privacy.trackingprotection.cryptomining.enabled" = true;
+  # prevents rfp from breaking AMO
+  "privacy.resistFingerprinting.block_mozAddonManager" = true;
+  "browser.display.use_system_colors" = false;
   "privacy.trackingprotection.fingerprinting.enabled" = true;
 
   # Services
@@ -258,9 +324,22 @@
   "security.tls.unrestricted_rc4_fallback" = false;
   "security.tls.insecure_fallback_hosts.use_static_list" = false;
   "security.tls.version.min" = 1;
+  "security.cert_pinning.enforcement_level" =2;
+  "security.remote_settings.crlite_filters.enabled" = true;
   "security.ssl.require_safe_negotiation" = false;
   "security.ssl.treat_unsafe_negotiation_as_broken" = true;
   "security.ssl3.rsa_seed_sha" = true;
+
+  # disable 0 RTT to improve tls 1.3 security
+  "security.tls.enable_0rtt_data" = false;
+  "security.tls.version.enable-deprecated" = false;
+  "browser.xul.error_pages.expert_bad_cert" = true;
+
+  # force permission request to show real origin
+  "permissions.delegation.enabled" = true;
+
+  # revoke special permissions for some mozilla domains
+  "permissions.manager.defaultsUrl" = "";
 
   # Avoid logjam attack
   "security.ssl3.dhe_rsa_aes_128_sha" = false;
@@ -316,6 +395,7 @@
   # Disable use of WiFi region/location information
   "browser.region.network.scan" = false;
   "browser.region.network.url" = "";
+  "browser.region.update.enabled" = false;
 
   # Disable VPN/mobile promos
   "browser.contentblocking.report.hide_vpn_banner" = true;
