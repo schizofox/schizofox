@@ -7,14 +7,6 @@ cfg: [
     URLTemplate = "https://sourcegraph.com/search?q=context:global+file:.nix%24+{searchTerms}&patternType=literal";
   }
   {
-    Name = "Torrent search";
-    Description = "Searching for legal linux isos ";
-    # feds go away
-    Alias = "!torrent";
-    Method = "GET";
-    URLTemplate = "https://librex.beparanoid.de/search.php?q={searchTerms}&t=3&p=0";
-  }
-  {
     Name = "Stackoverflow";
     Description = "Stealing code";
     Alias = "!so";
@@ -41,13 +33,6 @@ cfg: [
     Alias = "!nix";
     Method = "GET";
     URLTemplate = "https://search.nixos.org/packages?&query={searchTerms}";
-  }
-  {
-    Name = "Searx";
-    Description = "Searx";
-    Alias = "!sx";
-    Method = "GET";
-    URLTemplate = cfg.search.searxQuery;
   }
   {
     Name = "Phind";

@@ -204,5 +204,22 @@ in {
         .env
       ]
       else [pkg];
+    systemd.user.services.searx-randomizer = lib.mkIf cfg.search.searxRandomizer.enable {
+      Unit = {
+        Description = "Searx instance randomizer";
+        Documentation = "https://github.com/schizofox/searx-randomizer";
+      };
+
+      Install = {WantedBy = ["graphical-session.target"];};
+
+      Service = {
+        Environment = let
+          engines = builtins.toJSON cfg.search.searxRandomizer.instances;
+        in ["SEARX_INSTANCES=${pkgs.writeText "engines.json" engines}"];
+        ExecStart = "${self.inputs.searx-randomizer.packages.${pkgs.system}.default}/bin/searx-randomizer";
+        Restart = "always";
+        RestartSec = 12;
+      };
+    };
   };
 }
