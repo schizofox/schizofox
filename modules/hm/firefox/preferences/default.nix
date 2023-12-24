@@ -60,7 +60,7 @@
 
   "media.autoplay.default" = 5;
 
-  "javascript.use_us_english_locale" = true;  
+  "javascript.use_us_english_locale" = true;
   "intl.accept_languages" = "en-US, en";
 
   # prevent mouse middle click on new tab button to trigger searches or page loads
@@ -118,7 +118,7 @@
   "browser.urlbar.mdn.featureGate" = false;
   "browser.urlbar.weather.featureGate" = false;
   "browser.download.start_downloads_in_tmp_dir" = true;
-  "browser.shopping.experience2023.enabled" = false; 
+  "browser.shopping.experience2023.enabled" = false;
   "security.OCSP.enabled" = 0;
   "security.OCSP.require" = false;
   "browser.discovery.containers.enabled" = false;
@@ -324,7 +324,7 @@
   "security.tls.unrestricted_rc4_fallback" = false;
   "security.tls.insecure_fallback_hosts.use_static_list" = false;
   "security.tls.version.min" = 1;
-  "security.cert_pinning.enforcement_level" =2;
+  "security.cert_pinning.enforcement_level" = 2;
   "security.remote_settings.crlite_filters.enabled" = true;
   "security.ssl.require_safe_negotiation" = false;
   "security.ssl.treat_unsafe_negotiation_as_broken" = true;
