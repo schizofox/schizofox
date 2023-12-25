@@ -1,4 +1,4 @@
-''
+{ cfg }: ''
   /*
   ┌─┐┬┌┬┐┌─┐┬  ┌─┐
   └─┐││││├─┘│  ├┤
@@ -20,4 +20,6 @@
       scrollbar-width: none !important;
     }
   }
+
+  ${cfg.theme.extraContentCss}
 ''
