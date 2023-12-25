@@ -85,7 +85,7 @@ in {
       "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme lib cfg;};
 
       # userContent
-      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix;
+      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {inherit cfg;};
 
       # user.js
       "${defaultProfile}/user.js".text = mkUserJs (import ./firefox/preferences {inherit cfg lib;}) cfg.settings;

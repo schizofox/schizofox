@@ -1,4 +1,4 @@
-''
+{ cfg }: ''
   /*
   ┌─┐┬┌┬┐┌─┐┬  ┌─┐
   └─┐││││├─┘│  ├┤
@@ -19,5 +19,9 @@
     :root {
       scrollbar-width: none !important;
     }
+  }
+
+  * {
+    font-family: "${cfg.theme.font}" !important;
   }
 ''
