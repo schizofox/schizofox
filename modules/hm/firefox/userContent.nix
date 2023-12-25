@@ -1,4 +1,4 @@
-{ cfg }: ''
+{cfg}: ''
   /*
   ┌─┐┬┌┬┐┌─┐┬  ┌─┐
   └─┐││││├─┘│  ├┤
@@ -26,5 +26,5 @@
     font-family: "${cfg.theme.font}" !important;
   }
 
-  ${cfg.theme.extraContentCss}
+  ${cfg.theme.extraUserContent}
 ''

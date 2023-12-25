@@ -9,8 +9,13 @@ jobs:
         command:
           - nix flake check --accept-flake-config
           - nix run nixpkgs#alejandra -- -c .
+        platform:
+          - ubuntu
+          - macos
 
-    uses: ./.github/workflows/prelude.yml
-    secrets: inherit
+    uses: ./.github/workflows/nix.yml
+    secrets:
+      GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     with:
-      command: ${{ matrix.command }}
+      command: "${{ matrix.command }}"
+      platform: "${{ matrix.platform }}"
