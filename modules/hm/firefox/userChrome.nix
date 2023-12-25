@@ -233,7 +233,9 @@ in ''
         display: none !important;
       }
 
-
+      * {
+        font-family: "${font}" !important;
+      }
     ''
   }
     ${extraUserChrome}

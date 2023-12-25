@@ -41,6 +41,9 @@
   "network.http.proxy.pipelining" = true;
   "network.http.pipelining.maxrequests" = 10;
   "nglayout.initialpaint.delay" = 0;
+  "nglayout.initialpaint.delay_in_oopif" = 0;
+  "browser.startup.preXulSkeletonUI" = false;
+  "content.notify.interval" = 100000;
 
   # disable caching
   "browser.cache.disk.enable" = false;

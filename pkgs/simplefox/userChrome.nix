@@ -31,7 +31,7 @@ in
       sed -i 's/19171a/${backgroundDarker}/g' userChrome.css
       sed -i 's/201e21/${background}/g' userChrome.css
       sed -i 's/Lato/${font}/g' userChrome.css
-      # TODO: fonts
+      echo '* { font-family: "${font}" !important; }' >> userChrome.css
     '';
 
     installPhase = ''
