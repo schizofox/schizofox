@@ -21,7 +21,10 @@
     }
   }
 
+
   * {
     font-family: "${cfg.theme.font}" !important;
   }
+
+  ${cfg.theme.extraContentCss}
 ''

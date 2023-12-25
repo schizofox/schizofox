@@ -65,5 +65,16 @@ in {
       default = "";
       description = "Extra css for userChrome.css";
     };
+
+    extraContentCss = mkOption {
+      type = types.str;
+      example = ''
+        body {
+          background-color: red;
+        }
+      '';
+      default = "";
+      description = "Extra css for userContent.css";
+    };
   };
 }
