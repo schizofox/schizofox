@@ -1,6 +1,7 @@
 name: Checks
-
 on: [push, pull_request, workflow_dispatch, workflow_call]
+env:
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   check:
@@ -11,6 +12,7 @@ jobs:
           - nix run nixpkgs#alejandra -- -c .
 
     uses: ./.github/workflows/nix.yml
-    secrets: inherit
     with:
       command: ${{ matrix.command }}
+    secrets:
+      GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
