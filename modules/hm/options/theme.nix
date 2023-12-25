@@ -55,7 +55,7 @@ in {
       ''
       // {default = true;}; # no escape
 
-    extraCss = mkOption {
+    extraUserChrome = mkOption {
       type = types.str;
       example = ''
          body {
@@ -66,7 +66,7 @@ in {
       description = "Extra css for userChrome.css";
     };
 
-    extraContentCss = mkOption {
+    extraUserContent = mkOption {
       type = types.str;
       example = ''
         body {

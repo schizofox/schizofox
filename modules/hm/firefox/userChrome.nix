@@ -4,7 +4,7 @@
   lib,
 }: let
   inherit (lib) optionalString;
-  inherit (theme) background-darker background foreground font;
+  inherit (theme) background-darker background foreground font extraUserChrome;
 in ''
   ${
     optionalString cfg.theme.simplefox.enable ''
@@ -236,6 +236,5 @@ in ''
 
     ''
   }
-    ${cfg.theme.extraCss}
-
+    ${extraUserChrome}
 ''

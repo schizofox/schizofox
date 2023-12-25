@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/schizofox/assets/blob/main/logo/logo.png" alt="screenshot" width="200" align="center" />  
+<img src="https://github.com/schizofox/assets/blob/main/logo/logo.png" alt="screenshot" width="200" align="center" />
 </p>
 
 # Schizofox
@@ -46,7 +46,7 @@ programs.schizofox = {
     font = "Lexend";
     simplefox.enable = true;
     darkreader.enable = true;
-    extraCss = ''
+    extraUserChrome = ''
       body {
         color: red !important;
       }
