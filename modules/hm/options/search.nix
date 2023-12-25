@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  inherit (lib) mkOption types literalExpression;
+  inherit (lib) mkOption mkEnableOption types literalExpression;
 
   cfg = config.programs.schizofox;
 in {
@@ -51,6 +51,16 @@ in {
       default = "${cfg.search.searxUrl}/search?q={searchTerms}&categories=general";
       description = "Search query for searx (or any other schizo search engine)";
       example = literalExpression "https://searx.be/search?q={searchTerms}&categories=general";
+    };
+
+    searxRandomizer = {
+      enable = mkEnableOption "Randomize searx instances";
+      instances = mkOption {
+        type = with types; listOf str;
+        default = ["searx.be" "search.notashelf.dev"];
+        example = ["searx.be" "search.notashelf.dev"];
+        description = "Instances for searx randomizer";
+      };
     };
   };
 }

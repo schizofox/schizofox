@@ -18,7 +18,10 @@
     name = "Schizofox";
     desktopName = "Schizofox";
     genericName = "Web Browser";
-    exec = "schizofox %U";
+    exec =
+      if cfg.security.wrapWithProxychains
+      then "proxychains4 schizofox %U"
+      else "schizofox %U";
     icon = "${logo}";
     terminal = false;
     categories = ["Application" "Network" "WebBrowser"];
@@ -76,7 +79,20 @@
         };
 
         SearchEngines = {
-          Add = cfg.search.addEngines;
+          Add =
+            cfg.search.addEngines
+            ++ [
+              {
+                Name = "Searx";
+                Description = "Searx";
+                Alias = "!sx";
+                Method = "GET";
+                URLTemplate =
+                  if cfg.search.searxRandomizer.enable
+                  then "http://127.0.0.1:8000/search?q={searchTerms}"
+                  else cfg.search.searxQuery;
+              }
+            ];
           Default = cfg.search.defaultSearchEngine;
           Remove = cfg.search.removeEngines;
         };
@@ -84,8 +100,6 @@
         Bookmarks = cfg.misc.bookmarks;
 
         ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
-
-        Preferences = import ./preferences {inherit cfg;};
       };
     })
     .overrideAttrs (old: {
