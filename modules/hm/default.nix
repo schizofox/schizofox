@@ -82,10 +82,10 @@ in {
         Version=2
       '';
       # userChrome content
-      "${defaultProfile}/chrome/userChrome.css".text = with cfg; import ./firefox/userChrome.nix {inherit theme lib cfg;};
+      "${defaultProfile}/chrome/userChrome.css".text = import ./firefox/userChrome.nix {inherit pkgs lib cfg;};
 
       # userContent
-      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {inherit cfg;};
+      "${defaultProfile}/chrome/userContent.css".text = import ./firefox/userContent.nix {inherit lib cfg pkgs;};
 
       # user.js
       "${defaultProfile}/user.js".text = mkUserJs (import ./firefox/preferences {inherit cfg lib;}) cfg.settings;

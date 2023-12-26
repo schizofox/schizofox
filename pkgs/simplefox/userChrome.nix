@@ -28,9 +28,10 @@ in
     ];
 
     postPatch = ''
-      sed -i 's/19171a/${backgroundDarker}/g' userChrome.css
-      sed -i 's/201e21/${background}/g' userChrome.css
-      sed -i 's/Lato/${font}/g' userChrome.css
+      sed -i "s/19171a/${backgroundDarker}/g" userChrome.css
+      sed -i "s/201e21/${background}/g" userChrome.css
+      sed -i "s/Lato/${font}/g" userChrome.css
+      sed -i "s/rgba(0, 0, 0, 0)/${border}/g" userChrome.css
       echo '* { font-family: "${font}" !important; }' >> userChrome.css
     '';
 
