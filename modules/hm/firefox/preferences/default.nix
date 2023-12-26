@@ -1,4 +1,7 @@
-{cfg, ...}: {
+{cfg, ...}:
+let
+  inherit (cfg.theme) background-darker background foreground;
+in {
   # Quality of life stuff
   "browser.download.useDownloadDir" = false;
   "browser.aboutConfig.showWarning" = false;
@@ -438,8 +441,8 @@
   "layout.css.moz-document.content.enabled" = true;
 
   # Set default page colors
-  "browser.display.background_color.dark" = "#${cfg.theme.background}";
-  "browser.display.focus_background_color.dark" = "#${cfg.theme.background-darker}";
-  "browser.display.foreground_color.dark" = "#${cfg.theme.foreground}";
-  "browser.display.focus_text_color" = "#${cfg.theme.foreground}";
+  "browser.display.background_color.dark" = "#${background}";
+  "browser.display.focus_background_color.dark" = "#${background-darker}";
+  "browser.display.foreground_color.dark" = "#${foreground}";
+  "browser.display.focus_text_color" = "#${foreground}";
 }
