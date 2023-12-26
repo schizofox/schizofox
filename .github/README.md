@@ -36,6 +36,7 @@ If you would like to support us, you may use Liberapay to do so:
 ## Configuration
 
 ```nix
+imports = [ inputs.schizofox.homeManagerModule ];
 programs.schizofox = {
   enable = true;
 

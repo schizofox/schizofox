@@ -436,4 +436,10 @@
 
   # Enable `@-moz-document` media query
   "layout.css.moz-document.content.enabled" = true;
+
+  # Set default page colors
+  "browser.display.background_color.dark" = "#${cfg.theme.background}";
+  "browser.display.focus_background_color.dark" = "#${cfg.theme.background-darker}";
+  "browser.display.foreground_color.dark" = "#${cfg.theme.foreground}";
+  "browser.display.focus_text_color" = "#${cfg.theme.foreground}";
 }
