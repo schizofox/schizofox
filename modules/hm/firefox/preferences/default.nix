@@ -433,4 +433,10 @@
   "browser.contentblocking.report.vpn-android.url" = "";
   "browser.contentblocking.report.vpn-ios.url" = "";
   "browser.privatebrowsing.promoEnabled" = false;
+
+  # Set default page colors
+  "browser.display.background_color.dark" = "#${cfg.theme.background}";
+  "browser.display.focus_background_color.dark" = "#${cfg.theme.background-darker}";
+  "browser.display.foreground_color.dark" = "#${cfg.theme.foreground}";
+  "browser.display.focus_text_color" = "#${cfg.theme.foreground}";
 }
