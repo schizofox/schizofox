@@ -5,41 +5,39 @@
   font ? "Lato",
   border ? "rgba(0, 0, 0, 0)",
   ...
-}: let
-  version = "0.1.0";
+}:
+stdenvNoCC.mkDerivation {
   pname = "simplefox-userChrome";
-in
-  stdenvNoCC.mkDerivation {
-    inherit version pname;
+  version = "0.1.0";
 
-    src = builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/migueravila/SimpleFox/master/chrome/userChrome.css";
-      sha256 = "0jqv1fc1h1a2whgxa8rrq58znfaplrwhpkh5vrcja6hwbix1j1dh";
-    };
+  src = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/migueravila/SimpleFox/master/chrome/userChrome.css";
+    sha256 = "0jqv1fc1h1a2whgxa8rrq58znfaplrwhpkh5vrcja6hwbix1j1dh";
+  };
 
-    unpackPhase = ''
-      cp $src userChrome.css
-    '';
-    dontBuild = true;
-    dontConfigure = true;
+  unpackPhase = ''
+    cp -v $src userChrome.css
+    chmod +w userChrome.css
+  '';
 
-    patches = [
-      ./patches/0001-add-font-config.patch
-    ];
+  dontBuild = true;
+  dontConfigure = true;
 
-    postPatch = ''
-      sed -i "s/19171a/${backgroundDarker}/g" userChrome.css
-      sed -i "s/201e21/${background}/g" userChrome.css
-      sed -i "s/Lato/${font}/g" userChrome.css
-      sed -i "s/rgba(0, 0, 0, 0)/${border}/g" userChrome.css
-      echo '* { font-family: "${font}" !important; }' >> userChrome.css
-    '';
+  patches = [
+    ./patches/0001-add-font-config.patch
+  ];
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -vr userChrome.css $out
-      ls $out
-      runHook postInstall
-    '';
-  }
+  postPatch = ''
+    sed -i "s/19171a/${backgroundDarker}/g" userChrome.css
+    sed -i "s/201e21/${background}/g" userChrome.css
+    sed -i "s/Lato/${font}/g" userChrome.css
+    sed -i "s/rgba(0, 0, 0, 0)/${border}/g" userChrome.css
+    printf '\n* { font-family: "${font}" !important; }' >> userChrome.css
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    cp -v userChrome.css $out
+    runHook postInstall
+  '';
+}

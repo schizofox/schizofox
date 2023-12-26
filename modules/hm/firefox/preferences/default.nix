@@ -1,5 +1,5 @@
 {cfg, ...}: let
-  inherit (cfg.theme) background-darker background foreground;
+  inherit (cfg.theme.colors) background-darker background foreground;
 in {
   # Quality of life stuff
   "browser.download.useDownloadDir" = false;
