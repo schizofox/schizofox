@@ -1,30 +1,8 @@
-{cfg}: ''
-  /*
-  ┌─┐┬┌┬┐┌─┐┬  ┌─┐
-  └─┐││││├─┘│  ├┤
-  └─┘┴┴ ┴┴  ┴─┘└─┘
-  ┌─┐┌─┐─┐ ┬
-  ├┤ │ │┌┴┬┘
-  └  └─┘┴ └─
-
-  by Miguel Avila
-
-  */
-
-  :root {
-    scrollbar-width: none !important;
-  }
-
-  @-moz-document url(about:privatebrowsing) {
-    :root {
-      scrollbar-width: none !important;
-    }
-  }
-
-
-  * {
-    font-family: "${cfg.theme.font}" !important;
-  }
-
+{
+  lib,
+  cfg,
+  pkgs,
+}: ''
+  ${lib.optionalString cfg.extensions.simplefox.enable builtins.readfile pkgs.userContent}
   ${cfg.theme.extraUserContent}
 ''

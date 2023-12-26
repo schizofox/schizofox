@@ -1,6 +1,6 @@
 {stdenvNoCC, ...}: let
   version = "0.1.0";
-  pname = "simplefox-userChrome";
+  pname = "simplefox-userContent";
 in
   stdenvNoCC.mkDerivation {
     inherit version pname;
