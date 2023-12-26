@@ -1,5 +1,4 @@
-{cfg, ...}:
-let
+{cfg, ...}: let
   inherit (cfg.theme) background-darker background foreground;
 in {
   # Quality of life stuff
