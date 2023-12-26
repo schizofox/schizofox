@@ -434,6 +434,9 @@
   "browser.contentblocking.report.vpn-ios.url" = "";
   "browser.privatebrowsing.promoEnabled" = false;
 
+  # Enable `@-moz-document` media query
+  "layout.css.moz-document.content.enabled" = true;
+
   # Set default page colors
   "browser.display.background_color.dark" = "#${cfg.theme.background}";
   "browser.display.focus_background_color.dark" = "#${cfg.theme.background-darker}";
