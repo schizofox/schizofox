@@ -4,10 +4,11 @@
   lib,
 }: let
   inherit (lib) optionalString;
-  inherit (theme) background-darker background foreground font extraUserChrome;
+  inherit (theme.colors) background-darker background foreground;
+  inherit (theme) font extraUserChrome;
 in ''
   ${
-    optionalString cfg.theme.simplefox.enable ''
+    optionalString cfg.extensions.simplefox.enable ''
       /*
       ┌─┐┬┌┬┐┌─┐┬  ┌─┐
       └─┐││││├─┘│  ├┤
