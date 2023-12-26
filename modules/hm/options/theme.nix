@@ -27,14 +27,14 @@ in {
       type = types.str;
       example = "1e1e2e";
       default = "1e1e2e";
-      description = "Dark reader background color";
+      description = "Background color";
     };
 
     foreground = mkOption {
       type = types.str;
       example = "cdd6f4";
       default = "cdd6f4";
-      description = "Dark reader text color";
+      description = "Text color";
     };
 
     # simple fox options
