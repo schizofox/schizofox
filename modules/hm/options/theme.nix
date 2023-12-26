@@ -58,8 +58,8 @@ in {
     extraUserChrome = mkOption {
       type = types.str;
       example = ''
-         body {
-           background-color: red;
+        body {
+          background-color: red;
         }
       '';
       default = "";

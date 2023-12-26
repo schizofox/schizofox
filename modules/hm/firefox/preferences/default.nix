@@ -433,4 +433,7 @@
   "browser.contentblocking.report.vpn-android.url" = "";
   "browser.contentblocking.report.vpn-ios.url" = "";
   "browser.privatebrowsing.promoEnabled" = false;
+
+  # Enable `@-moz-document` media query
+  "layout.css.moz-document.content.enabled" = true;
 }
