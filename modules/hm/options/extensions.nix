@@ -36,11 +36,11 @@ in {
     };
 
     # TODO: patchDefaultColors bool option
-    darkreader.enable =
-      mkEnableOption ''
-        Dark mode on all sites (patched to match overall theme)
-      ''
-      // {default = true;}; # no escape
+    darkreader.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Dark mode on all sites (patched to match overall theme)";
+    };
 
     extraExtensions = mkOption {
       type = types.attrs;
