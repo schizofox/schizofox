@@ -16,7 +16,6 @@ in
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out
       cp -vr $src $out
       runHook postInstall
     '';

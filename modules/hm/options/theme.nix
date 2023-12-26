@@ -30,6 +30,20 @@ in {
         default = "cdd6f4";
         description = "Text color";
       };
+
+      primary = mkOption {
+        type = types.str;
+        example = "aaf2ff";
+        default = "aaf2ff";
+        description = "Primary accent color";
+      };
+
+      border = mkOption {
+        type = types.str;
+        example = "rgba(0, 0, 0, 0)";
+        default = "rgba(0, 0, 0, 0)";
+        description = "Border color";
+      };
     };
 
     font = mkOption {
