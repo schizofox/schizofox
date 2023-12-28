@@ -38,11 +38,11 @@ in ''
       --newtab-primary-element-text-color: #${background-darker} !important;
       --newtab-primary-action-background: #${primary} !important;
       --brand-color-accent: #${primary} !important;
-      --in-content-primary-button-text-color: #${primary} !important;
 
       --in-content-primary-button-background: #${primary} !important;
       --in-content-primary-button-background-active: #${primary} !important;
       --in-content-primary-button-background-hover: #${primary} !important;
+      --in-content-primary-button-text-color: #${background-darker} !important;
     }
   }
 
