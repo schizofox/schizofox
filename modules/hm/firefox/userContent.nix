@@ -21,6 +21,10 @@ in ''
       fill: #${foreground} !important;
     }
 
+    .checkbox-check[checked] {
+      color: #${background-darker} !important;
+    }
+
     :root {
       --in-content-page-background: #${background-darker} !important;
       --in-content-page-color: #${foreground} !important;
