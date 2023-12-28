@@ -42,6 +42,7 @@ in ''
 
       --in-content-primary-button-background: #${primary} !important;
       --in-content-primary-button-background-active: #${primary} !important;
+      --in-content-primary-button-background-hover: #${primary} !important;
     }
   }
 
