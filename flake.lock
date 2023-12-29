@@ -178,6 +178,22 @@
         "type": "github"
       }
     },
+    "nmd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1701431551,
+        "narHash": "sha256-5HPHG1u3koaWHG/TXHl5/YxYPYOuKc58104btrD8ypE=",
+        "owner": "~rycee",
+        "repo": "nmd",
+        "rev": "f18defadcc25e69e95b04493ee02682005472255",
+        "type": "sourcehut"
+      },
+      "original": {
+        "owner": "~rycee",
+        "repo": "nmd",
+        "type": "sourcehut"
+      }
+    },
     "root": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -185,6 +201,7 @@
         "home-manager": "home-manager",
         "nixpak": "nixpak",
         "nixpkgs": "nixpkgs",
+        "nmd": "nmd",
         "searx-randomizer": "searx-randomizer"
       }
     },
