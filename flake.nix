@@ -69,11 +69,6 @@
       flake = false;
     };
 
-    nmd = {
-      url = "sourcehut:~rycee/nmd";
-      flake = false;
-    };
-
     searx-randomizer = {
       url = "github:schizofox/searx-randomizer";
       inputs.nixpkgs.follows = "nixpkgs";
