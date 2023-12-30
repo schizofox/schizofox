@@ -15,6 +15,10 @@ in ''
 
   :root {
     --toolbar-bgcolor: #${background} !important;
+
+    --system-color-accent: #${primary} !important;
+    --system-color-accent-hover: #${primary} !important;
+    --system-color-accent-active: #${primary} !important;
   }
 
   #navigator-toolbox {
