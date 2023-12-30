@@ -19,6 +19,8 @@ in ''
     --system-color-accent: #${primary} !important;
     --system-color-accent-hover: #${primary} !important;
     --system-color-accent-active: #${primary} !important;
+
+    --arrowpanel-background: #${background} !important;
   }
 
   #navigator-toolbox {
@@ -45,6 +47,18 @@ in ''
 
   menubar > menu[open] {
     border-bottom-color: #${primary} !important;
+  }
+
+  .urlbarView-row[selected] {
+    background-color: #${primary} !important;
+  }
+
+  .urlbarView-row[source="bookmarks"] > .urlbarView-row-inner > .urlbarView-no-wrap > .urlbarView-favicon, #urlbar-engine-one-off-item-bookmarks {
+    fill: #${primary} !important;
+  }
+
+  html|button[autofocus], html|button[type="submit"], xul|button[default], button.primary {
+    background-color: #${primary} !important;
   }
 
   ${cfg.theme.extraUserChrome}
