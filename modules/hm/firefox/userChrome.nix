@@ -21,6 +21,9 @@ in ''
     --system-color-accent-active: #${primary} !important;
 
     --arrowpanel-background: #${background} !important;
+
+    --urlbar-box-bgcolor: #${background} !important;
+    --urlbar-box-text-color: #${foreground} !important;
   }
 
   #navigator-toolbox {
