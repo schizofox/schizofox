@@ -6,6 +6,7 @@ in {
 
     (mkRenamedOptionModule ["programs" "schizofox" "theme" "extraCss"] ["programs" "schizofox" "theme" "extraUserChrome"])
     (mkRenamedOptionModule ["programs" "schizofox" "theme" "extraCssContent"] ["programs" "schizofox" "theme" "extraUserContent"])
+    (mkRenamedOptionModule ["programs" "schizofox" "misc" "extraUserContent"] ["programs" "schizofox" "theme" "extraUserContent"])
     (mkRenamedOptionModule ["programs" "schizofox" "theme" "background-darker"] ["programs" "schizofox" "theme" "colors" "background-darker"])
     (mkRenamedOptionModule ["programs" "schizofox" "theme" "background"] ["programs" "schizofox" "theme" "colors" "background"])
     (mkRenamedOptionModule ["programs" "schizofox" "theme" "foreground"] ["programs" "schizofox" "theme" "colors" "foreground"])
