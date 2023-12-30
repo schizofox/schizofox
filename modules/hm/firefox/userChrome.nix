@@ -61,5 +61,15 @@ in ''
     background-color: #${primary} !important;
   }
 
+  menupopup {
+    --panel-background: #${background} !important;
+    --panel-color: #${foreground} !important;
+  }
+
+  /* Disable hover color */
+  menuitem {
+    color: #${foreground} !important;
+  }
+
   ${cfg.theme.extraUserChrome}
 ''
