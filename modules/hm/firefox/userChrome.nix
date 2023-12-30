@@ -24,6 +24,9 @@ in ''
 
     --urlbar-box-bgcolor: #${background} !important;
     --urlbar-box-text-color: #${foreground} !important;
+
+    --checkbox-checked-bgcolor: #${primary} !important;
+    --checkbox-checked-hover-bgcolor: #${primary} !important;
   }
 
   #navigator-toolbox {
@@ -71,6 +74,10 @@ in ''
 
   menuitem {
     color: #${foreground} !important;
+  }
+
+  #star-button[starred] {
+    fill: #${primary} !important;
   }
 
   ${cfg.theme.extraUserChrome}
