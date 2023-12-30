@@ -23,6 +23,7 @@ in ''
 
   #navigator-toolbox {
     background: #${background-darker} !important;
+    border-bottom: 1px solid #${border} !important;
   }
 
   tab {
@@ -39,6 +40,7 @@ in ''
 
   #urlbar-background {
     background: #${background-darker} !important;
+    border-color: #${border} !important;
   }
 
   menubar > menu[open] {
