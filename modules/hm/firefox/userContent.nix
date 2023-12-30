@@ -17,14 +17,6 @@ in ''
       background: #${background-darker};
     }
 
-    .search-wrapper .logo-and-wordmark .wordmark {
-      fill: #${foreground} !important;
-    }
-
-    .checkbox-check[checked] {
-      color: #${background-darker} !important;
-    }
-
     :root {
       --in-content-page-background: #${background-darker} !important;
       --in-content-page-color: #${foreground} !important;
@@ -43,6 +35,18 @@ in ''
       --in-content-primary-button-background-active: #${primary} !important;
       --in-content-primary-button-background-hover: #${primary} !important;
       --in-content-primary-button-text-color: #${background-darker} !important;
+    }
+
+    .search-wrapper .logo-and-wordmark .wordmark {
+      fill: #${foreground} !important;
+    }
+
+    .checkbox-check[checked] {
+      color: #${background-darker} !important;
+    }
+
+    button.primary {
+      background-color: #${primary} !important;
     }
   }
 

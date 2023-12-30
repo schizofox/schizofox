@@ -66,7 +66,6 @@ in ''
     --panel-color: #${foreground} !important;
   }
 
-  /* Disable hover color */
   menuitem {
     color: #${foreground} !important;
   }
