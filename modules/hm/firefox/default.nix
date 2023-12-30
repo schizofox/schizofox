@@ -113,9 +113,7 @@
         + ''
           rm -rf $out/share/applications/*
           install -D ${desktopItem}/share/applications/Schizofox.desktop $out/share/applications/Schizofox.desktop
-          makeWrapper $out/bin/firefox $out/bin/schizofox \
-            --add-flags '-Profile ${profilesPath}/schizo.default'
-
+          makeWrapper $out/bin/firefox $out/bin/schizofox
         '';
     });
 in
