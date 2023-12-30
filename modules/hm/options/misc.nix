@@ -45,18 +45,5 @@ in {
       example = literalExpression "file://$${relative/path/to/startpage.html}";
       description = "An URL or an absolute path to your Firefox startpage";
     };
-
-    extraUserContent = mkOption {
-      type = types.str;
-      default = "";
-      example = ''
-        @-moz-document domain("example.com") {
-          body {
-            background-color: red;
-          }
-        }
-      '';
-      description = "Extra css for userContent.css";
-    };
   };
 }
