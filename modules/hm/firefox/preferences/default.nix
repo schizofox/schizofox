@@ -50,6 +50,9 @@ in {
   "browser.startup.preXulSkeletonUI" = false;
   "content.notify.interval" = 100000;
 
+  # Disable session restore
+  "browser.sessionstore.resume_from_crash" = false;
+
   # disable caching
   "browser.cache.disk.enable" = false;
   # fix for video playback
