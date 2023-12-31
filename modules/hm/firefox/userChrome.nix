@@ -5,10 +5,11 @@
   self,
 }: let
   inherit (cfg.theme.colors) background-darker background foreground primary border;
+  inherit (cfg.theme) font;
+
   userChrome = self.packages.${pkgs.stdenv.hostPlatform.system}.userChrome.override {
     backgroundDarker = background-darker;
-    inherit background border;
-    inherit (cfg.theme) font;
+    inherit background border font;
   };
 in ''
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userChrome)}
@@ -70,6 +71,7 @@ in ''
   menupopup {
     --panel-background: #${background} !important;
     --panel-color: #${foreground} !important;
+    font-family: "${font}" !important;
   }
 
   menuitem {
