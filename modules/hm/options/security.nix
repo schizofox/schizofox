@@ -25,6 +25,16 @@ in {
       '';
     };
 
+    noSessionRestore = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Disable session restore on startup. This will will get rid of the
+        "Restore tabs" button on startup if Firefox has exited unexpectedly.
+      '';
+    };
+
     wrapWithProxychains = mkOption {
       type = types.bool;
       default = false;
