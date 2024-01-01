@@ -21,6 +21,8 @@ in ''
       --in-content-page-background: #${background-darker} !important;
       --in-content-page-color: #${foreground} !important;
 
+      --in-content-text-color: #${foreground} !important;
+
       --in-content-box-background: #${background} !important;
       --in-content-box-info-background: #${background} !important;
       --in-content-box-border-color: #${border} !important;
@@ -76,12 +78,16 @@ in ''
     }
 
     .dialogBox {
-      background-color: #${background} !important;
+      background-color: #${background-darker} !important;
     }
 
     dialog {
-      background-color: #${background} !important;
+      background-color: #${background-darker} !important;
       color: #${foreground} !important;
+    }
+
+    .privacy-detailedoption {
+      background-color: #${background} !important;
     }
   }
 
