@@ -57,6 +57,11 @@ in ''
     panel-list {
       background: #${background} !important;
     }
+
+    input[type="checkbox"]:enabled:checked,
+    input[type="checkbox"]:enabled:checked:hover {
+      background-color: #${primary} !important;
+    }
   }
 
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userContent)}
