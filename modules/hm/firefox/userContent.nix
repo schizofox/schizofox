@@ -5,7 +5,7 @@
   pkgs,
 }: let
   inherit (cfg.theme) font extraUserContent;
-  inherit (cfg.theme.colors) background background-darker foreground primary;
+  inherit (cfg.theme.colors) background background-darker foreground primary border;
   inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) userContent;
 in ''
   @-moz-document url-prefix("about:") {
@@ -22,6 +22,9 @@ in ''
       --in-content-page-color: #${foreground} !important;
 
       --in-content-box-background: #${background} !important;
+      --in-content-box-info-background: #${background} !important;
+      --in-content-box-border-color: #${border} !important;
+
       --in-content-table-background: #${background} !important;
 
       --newtab-background-color: #${background-darker} !important;
@@ -35,8 +38,6 @@ in ''
       --in-content-primary-button-background-active: #${primary} !important;
       --in-content-primary-button-background-hover: #${primary} !important;
       --in-content-primary-button-text-color: #${background-darker} !important;
-
-      --in-content-box-info-background: #${background} !important;
     }
 
     .search-wrapper .logo-and-wordmark .wordmark {
