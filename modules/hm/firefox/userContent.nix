@@ -53,7 +53,7 @@ in ''
       color: #${background-darker} !important;
     }
 
-    button.primary {
+    html|button[autofocus], html|button[type="submit"], xul|button[default], button.primary {
       background-color: #${primary} !important;
     }
 
@@ -73,6 +73,15 @@ in ''
 
     #trackingProtectionShield {
       color: #${primary} !important;
+    }
+
+    .dialogBox {
+      background-color: #${background} !important;
+    }
+
+    dialog {
+      background-color: #${background} !important;
+      color: #${foreground} !important;
     }
   }
 
