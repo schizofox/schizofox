@@ -70,6 +70,10 @@ in ''
     input[type="checkbox"]:enabled:checked:hover {
       background-color: #${primary} !important;
     }
+
+    #trackingProtectionShield {
+      color: #${primary} !important;
+    }
   }
 
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userContent)}
