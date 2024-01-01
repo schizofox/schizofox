@@ -35,6 +35,8 @@ in ''
       --in-content-primary-button-background-active: #${primary} !important;
       --in-content-primary-button-background-hover: #${primary} !important;
       --in-content-primary-button-text-color: #${background-darker} !important;
+
+      --in-content-box-info-background: #${background} !important;
     }
 
     .search-wrapper .logo-and-wordmark .wordmark {
