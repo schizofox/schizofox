@@ -48,6 +48,15 @@ in ''
     button.primary {
       background-color: #${primary} !important;
     }
+
+    panel {
+      --panel-background: #${background} !important;
+      --panel-color: #${foreground} !important;
+    }
+
+    panel-list {
+      background: #${background} !important;
+    }
   }
 
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userContent)}
