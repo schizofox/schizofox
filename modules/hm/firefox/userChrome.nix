@@ -28,6 +28,11 @@ in ''
 
     --checkbox-checked-bgcolor: #${primary} !important;
     --checkbox-checked-hover-bgcolor: #${primary} !important;
+
+    --button-primary-bgcolor: #${primary} !important;
+    --button-primary-hover-bgcolor: #${primary} !important;
+    --button-primary-active-bgcolor: #${primary} !important;
+    --button-primary-color: #${background-darker} !important;
   }
 
   #navigator-toolbox {
