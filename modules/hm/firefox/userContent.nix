@@ -41,6 +41,8 @@ in ''
 
       --checkbox-unchecked-bgcolor: #${background} !important;
       --checkbox-unchecked-hover-bgcolor: #${background} !important;
+
+      --in-content-button-background: #${background} !important;
     }
 
     .search-wrapper .logo-and-wordmark .wordmark {
