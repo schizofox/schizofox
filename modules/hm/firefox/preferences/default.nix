@@ -51,7 +51,7 @@ in {
   "content.notify.interval" = 100000;
 
   # Disable session restore
-  "browser.sessionstore.resume_from_crash" = cfg.security.noSessionRestore;
+  "browser.sessionstore.resume_from_crash" = !cfg.security.noSessionRestore;
 
   # disable caching
   "browser.cache.disk.enable" = false;
