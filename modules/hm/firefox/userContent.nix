@@ -34,7 +34,10 @@ in ''
       --newtab-text-primary-color: #${foreground} !important;
       --newtab-primary-element-text-color: #${background-darker} !important;
       --newtab-primary-action-background: #${primary} !important;
+
       --brand-color-accent: #${primary} !important;
+      --color-accent-primary-hover: #${primary} !important;
+      --color-accent-primary-active: #${primary} !important;
 
       --in-content-primary-button-background: #${primary} !important;
       --in-content-primary-button-background-active: #${primary} !important;
