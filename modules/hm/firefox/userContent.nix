@@ -99,6 +99,13 @@ in ''
     .addon-detail-actions input[type="radio"]:not(:checked) {
       background-color: #${background-darker} !important;
     }
+
+    .toggle-button {
+      --toggle-background-color: #${background-darker} !important;
+      --toggle-background-color-hover: #${background-darker} !important;
+      --toggle-background-color-active: #${background-darker} !important;
+      --toggle-border-color: #${foreground} !important;
+    }
   }
 
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userContent)}
