@@ -89,6 +89,10 @@ in ''
     .privacy-detailedoption {
       background-color: #${background} !important;
     }
+
+    .addon-detail-actions input[type="radio"]:not(:checked) {
+      background-color: #${background-darker} !important;
+    }
   }
 
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userContent)}
