@@ -2,7 +2,7 @@
 <img src="https://github.com/schizofox/assets/blob/main/logo/logo.png" alt="screenshot" width="200" align="center" />
 </p>
 
-# Schizofox
+# Schizofox [Work In Progress]
 
 _our goal is to get on the CIA watchlist_
 
