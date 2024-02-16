@@ -1,0 +1,25 @@
+name: flake-update
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * mon" # 5am every monday
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.1.1
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v9
+
+      - name: update
+        uses: DeterminateSystems/update-flake-lock@v20
+        with:
+          pr-title: "flake: bump inputs"
+      - name: merge
+        run: |
+          gh pr merge ${{ steps.update.outputs.pull-request-number }} --squash --delete-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
