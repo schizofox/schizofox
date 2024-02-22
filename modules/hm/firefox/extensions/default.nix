@@ -16,7 +16,6 @@
   mkForceInstalled = builtins.mapAttrs (_: cfg: {installation_mode = "force_installed";} // cfg);
   addons =
     ext.defaultExtensions
-    // lib.optionalAttrs ext.darkreader.enable {"addon@darkreader.org".install_url = "file://${reader}/release/darkreader-firefox.xpi";}
-    // lib.optionalAttrs (ext.extraExtensions != {}) ext.extraExtensions;
+    // lib.optionalAttrs ext.darkreader.enable {"addon@darkreader.org".install_url = "file://${reader}/release/darkreader-firefox.xpi";};
 in
   mkForceInstalled addons
