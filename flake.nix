@@ -37,9 +37,8 @@
           inherit (import ./lib/extended-lib.nix nixpkgs.lib) schizofox;
         };
 
-        homeManagerModule = self.homeManagerModules.schizofox; # an alias to the default module
         homeManagerModules = {
-          schizofox = import ./modules/hm self;
+          schizofox = import ./modules/home-manager self;
           default = self.homeManagerModules.schizofox;
         };
       };
