@@ -5,7 +5,7 @@
 }: let
   inherit (lib) mkOption types literalExpression mkEnableOption;
 
-  cfg = config.programs.schizofox;
+  cfg = config.programs.schizofox.extensions;
 
   # extensions that will be enabled by default
   defaultExtensions = {"uBlock0@raymondhill.net".install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";};
