@@ -2,6 +2,14 @@
   inherit (lib) mkOption types literalExpression;
 in {
   options.programs.schizofox.misc = {
+    displayBookmarksInToolbar = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to display the bookmarks in toolbar on startup.
+      '';
+    };
+
     bookmarks = mkOption {
       type = with types; listOf attrs;
       default = [];
