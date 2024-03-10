@@ -37,7 +37,7 @@
         OverrideFirstRunPage = "";
         DisableTelemetry = true;
         AppAutoUpdate = false;
-        CaptivePortal = false;
+        CaptivePortal = cfg.security.enableCaptivePortal;
         DisableFirefoxStudies = true;
         DisableFirefoxAccounts = true;
         DisablePocket = true;

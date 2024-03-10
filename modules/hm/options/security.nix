@@ -25,6 +25,13 @@ in {
       '';
     };
 
+    enableCaptivePortal = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Enable captive portal";
+    };
+
     noSessionRestore = mkOption {
       type = types.bool;
       default = false;
