@@ -42,7 +42,7 @@
         DisableFirefoxAccounts = true;
         DisablePocket = true;
         DisableFormHistory = true;
-        DisplayBookmarksToolbar = false;
+        DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
         DontCheckDefaultBrowser = true;
         DisableSetDesktopBackground = true;
         PasswordManagerEnabled = false;
