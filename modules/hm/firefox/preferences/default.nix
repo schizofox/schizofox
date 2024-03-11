@@ -9,10 +9,7 @@ in {
   "browser.download.useDownloadDir" = false;
   "browser.aboutConfig.showWarning" = false;
   "browser.tabs.firefox-view" = false;
-  "browser.toolbars.bookmarks.visibility" = lib.mkMerge [
-    (lib.mkIf cfg.misc.displayBookmarksInToolbar "always")
-    (lib.mkIf (!cfg.misc.displayBookmarksInToolbar) "never")
-  ];
+  "browser.toolbars.bookmarks.visibility" = cfg.misc.displayBookmarksInToolbar;
   "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
   "toolkit.zoomManager.zoomValues" = ".8,.90,.95,1,1.1,1.2";
   "xpinstall.signatures.required" = false;
