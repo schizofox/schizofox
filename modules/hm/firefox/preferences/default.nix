@@ -1,11 +1,15 @@
-{cfg, ...}: let
+{
+  cfg,
+  lib,
+  ...
+}: let
   inherit (cfg.theme.colors) background-darker background foreground;
 in {
   # Quality of life stuff
   "browser.download.useDownloadDir" = false;
   "browser.aboutConfig.showWarning" = false;
   "browser.tabs.firefox-view" = false;
-  "browser.toolbars.bookmarks.visibility" = "never";
+  "browser.toolbars.bookmarks.visibility" = cfg.misc.displayBookmarksInToolbar;
   "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
   "toolkit.zoomManager.zoomValues" = ".8,.90,.95,1,1.1,1.2";
   "xpinstall.signatures.required" = false;

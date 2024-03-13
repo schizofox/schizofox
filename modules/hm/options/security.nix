@@ -1,5 +1,5 @@
 {lib, ...}: let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption mkEnableOption types;
 in {
   options.programs.schizofox.security = {
     userAgent = mkOption {
@@ -24,6 +24,8 @@ in {
         Disabled on default, because it's quite annoying. Tip: use ctrl+i";
       '';
     };
+
+    enableCaptivePortal = mkEnableOption "captive portal";
 
     noSessionRestore = mkOption {
       type = types.bool;

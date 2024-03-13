@@ -2,6 +2,13 @@
   inherit (lib) mkOption types literalExpression;
 in {
   options.programs.schizofox.misc = {
+    displayBookmarksInToolbar = lib.mkOption {
+      type =
+        lib.types.enum
+        ["always" "never" "newtab"];
+      default = "never";
+    };
+
     bookmarks = mkOption {
       type = with types; listOf attrs;
       default = [];
