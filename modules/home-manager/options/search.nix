@@ -8,10 +8,10 @@
   cfg = config.programs.schizofox;
 in {
   options.programs.schizofox.search = {
-    defaultSearchEngine = mkOption {
+    defaultEngine = mkOption {
       type = types.str;
-      example = "DuckDuckGo";
-      default = "Brave";
+      default = "DuckDuckGo";
+      example = literalExpression ''"Brave"'';
       description = "Default search engine";
     };
 
@@ -35,7 +35,7 @@ in {
     removeEngines = mkOption {
       type = with types; listOf str;
       default = ["Google" "Bing" "Amazon.com" "eBay" "Twitter" "Wikipedia"];
-      description = "List of default search engines to remove";
+      description = "List of search engines to remove from the defaults provided";
       example = literalExpression ''["LibRedirect"]'';
     };
 
@@ -49,12 +49,17 @@ in {
     searxQuery = mkOption {
       type = types.str;
       default = "${cfg.search.searxUrl}/search?q={searchTerms}&categories=general";
-      description = "Search query for searx (or any other schizo search engine)";
+      description = "Search query for the Searx(ng) instance";
       example = literalExpression "https://searx.be/search?q={searchTerms}&categories=general";
     };
 
     searxRandomizer = {
-      enable = mkEnableOption "Randomize searx instances";
+      enable = mkEnableOption ''
+        selecting a random Searx(ng) instance while making a browser query. The default
+        list contains an instance hosted by one of the Schizofox maintainers. You may
+        set `searxRandomizer.instances = lib.mkForce [ ]` if this is undesirable.
+      '';
+
       instances = mkOption {
         type = with types; listOf str;
         default = ["searx.be" "search.notashelf.dev"];

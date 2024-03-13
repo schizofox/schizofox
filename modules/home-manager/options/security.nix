@@ -15,15 +15,11 @@ in {
       '';
     };
 
-    sanitizeOnShutdown = mkOption {
-      type = types.bool;
-      default = false;
-      example = true;
-      description = ''
-        Clear cookies, history and other data on shutdown.
-        Disabled on default, because it's quite annoying. Tip: use ctrl+i";
-      '';
-    };
+    sanitizeOnShutdown = mkEnableOption ''
+      deletion of cookies, history and other data on shutdown.
+
+      Disabled on default, because it's quite annoying. Tip: use ctrl+i";
+    '';
 
     enableCaptivePortal = mkEnableOption "captive portal";
 
@@ -42,7 +38,7 @@ in {
       default = false;
       example = true;
       description = ''
-        Wrap schizofox desktop entry with proxychains-ng.
+        Whether to wrap Schizofox desktop entry with proxychains-ng.
 
         See https://github.com/rofl0r/proxychains-ng for more details.
       '';
