@@ -40,8 +40,8 @@ in {
 
       border = mkOption {
         type = types.str;
-        example = "rgba(0, 0, 0, 0)";
-        default = "rgba(0, 0, 0, 0)";
+        example = "00000000";
+        default = "00000000";
         description = "Border color";
       };
     };
