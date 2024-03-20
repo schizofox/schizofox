@@ -6,8 +6,4 @@ lib: let
 in
   lib.extend (self: super: {
     schizofox = mkSchizoLib {lib = self;};
-
-    # For forward compatibility.
-    literalExpression = super.literalExpression or super.literalExample;
-    literalDocBook = super.literalDocBook or super.literalExample;
   })
