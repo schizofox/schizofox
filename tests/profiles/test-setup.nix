@@ -15,17 +15,18 @@
     {home.stateVersion = "23.05";}
   ];
 
-  services.xserver = {
-    enable = true;
-
+  services = {
     displayManager = {
       autoLogin = {
         enable = true;
         user = "test";
       };
-      gdm.enable = true;
     };
 
-    desktopManager.gnome.enable = true;
+    xserver = {
+      enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
+    };
   };
 }
