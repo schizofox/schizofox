@@ -8,15 +8,11 @@
     ...
   } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [
-        ./pkgs
-        ./tests
-      ];
+      systems = import inputs.systems;
 
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        # add more systems if they are supported
+      imports = [
+        ./pkgs # packages exposed by the flake
+        ./tests # machine tests
       ];
 
       perSystem = {pkgs, ...}: {
@@ -39,7 +35,7 @@
 
         homeManagerModule = self.homeManagerModules.schizofox; # an alias to the default module
         homeManagerModules = {
-          schizofox = import ./modules/hm self;
+          schizofox = import ./modules/home-manager self;
           default = self.homeManagerModules.schizofox;
         };
       };
@@ -47,6 +43,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    # Overridable flake systems.
+    # See: <https://github.com/nix-systems/nix-systems>
+    systems.url = "github:nix-systems/default-linux";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";

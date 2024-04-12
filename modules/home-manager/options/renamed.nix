@@ -1,5 +1,5 @@
 {lib, ...}: let
-  inherit (lib) mkRenamedOptionModule;
+  inherit (lib.modules) mkRenamedOptionModule;
 in {
   imports = [
     (mkRenamedOptionModule ["programs" "schizofox" "bookmarks"] ["programs" "schizofox" "misc" "bookmarks"])
@@ -13,5 +13,7 @@ in {
 
     (mkRenamedOptionModule ["programs" "schizofox" "theme" "simplefox"] ["programs" "schizofox" "extensions" "simplefox"])
     (mkRenamedOptionModule ["programs" "schizofox" "theme" "darkreader"] ["programs" "schizofox" "extensions" "darkreader"])
+
+    (mkRenamedOptionModule ["programs" "schizofox" "misc" "drmFix"] ["programs" "schizofox" "misc" "drm" "enable"])
   ];
 }

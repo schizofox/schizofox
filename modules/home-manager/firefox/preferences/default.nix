@@ -15,8 +15,8 @@ in {
   "xpinstall.signatures.required" = false;
   "browser.uidensity" = 1;
 
-  "browser.eme.ui.enabled" = cfg.misc.drmFix;
-  "media.eme.ui.enabled" = cfg.misc.drmFix;
+  "browser.eme.ui.enabled" = cfg.misc.drm.enable;
+  "media.eme.ui.enabled" = cfg.misc.drm.enable;
 
   "browser.startup.homepage" =
     if cfg.misc.startPageURL != null
