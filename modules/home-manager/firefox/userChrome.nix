@@ -14,146 +14,152 @@
 in ''
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userChrome)}
 
-  * {
-    font-family: "${font}" !important;
-  }
 
-  :root {
-    --toolbar-bgcolor: #${background} !important;
-    --toolbarbutton-icon-fill: #${foreground} !important;
+   ${
+    lib.optionalString cfg.theme.defaultUserChrome.enable ''
+      * {
+        font-family: "${font}" !important;
+      }
 
-    --system-color-accent: #${primary} !important;
-    --system-color-accent-hover: #${primary} !important;
-    --system-color-accent-active: #${primary} !important;
+      :root {
+        --toolbar-bgcolor: #${background} !important;
+        --toolbarbutton-icon-fill: #${foreground} !important;
 
-    --arrowpanel-background: #${background} !important;
-    --arrowpanel-color: #${foreground} !important;
-    --arrowpanel-dimmed: #${background} !important;
-    --arrowpanel-border-color: #${border} !important;
+        --system-color-accent: #${primary} !important;
+        --system-color-accent-hover: #${primary} !important;
+        --system-color-accent-active: #${primary} !important;
 
-    --urlbar-box-bgcolor: #${background} !important;
-    --urlbar-box-text-color: #${foreground} !important;
+        --arrowpanel-background: #${background} !important;
+        --arrowpanel-color: #${foreground} !important;
+        --arrowpanel-dimmed: #${background} !important;
+        --arrowpanel-border-color: #${border} !important;
 
-    --checkbox-checked-bgcolor: #${primary} !important;
-    --checkbox-checked-hover-bgcolor: #${primary} !important;
+        --urlbar-box-bgcolor: #${background} !important;
+        --urlbar-box-text-color: #${foreground} !important;
 
-    --button-primary-bgcolor: #${primary} !important;
-    --button-primary-hover-bgcolor: #${primary} !important;
-    --button-primary-active-bgcolor: #${primary} !important;
-    --button-primary-color: #${background-darker} !important;
+        --checkbox-checked-bgcolor: #${primary} !important;
+        --checkbox-checked-hover-bgcolor: #${primary} !important;
 
-    --in-content-page-background: #${background-darker} !important;
+        --button-primary-bgcolor: #${primary} !important;
+        --button-primary-hover-bgcolor: #${primary} !important;
+        --button-primary-active-bgcolor: #${primary} !important;
+        --button-primary-color: #${background-darker} !important;
 
-    --in-content-button-background: #${background} !important;
-    --in-content-button-background-hover: #${background} !important;
-    --in-content-button-background-active: #${background} !important;
-    --in-content-button-text-color: #${foreground} !important;
+        --in-content-page-background: #${background-darker} !important;
 
-    --in-content-primary-button-background: #${primary} !important;
-    --in-content-primary-button-background-hover: #${primary} !important;
-    --in-content-primary-button-text-color: #${background-darker} !important;
+        --in-content-button-background: #${background} !important;
+        --in-content-button-background-hover: #${background} !important;
+        --in-content-button-background-active: #${background} !important;
+        --in-content-button-text-color: #${foreground} !important;
 
-    --focus-outline-color: #${primary} !important;
+        --in-content-primary-button-background: #${primary} !important;
+        --in-content-primary-button-background-hover: #${primary} !important;
+        --in-content-primary-button-text-color: #${background-darker} !important;
 
-    --lwt-text-color: #${foreground} !important;
-    --tab-loading-fill: #${primary} !important;
-  }
+        --focus-outline-color: #${primary} !important;
 
-  #navigator-toolbox {
-    background: #${background-darker} !important;
-    border-bottom: 1px solid #${border} !important;
-  }
+        --lwt-text-color: #${foreground} !important;
+        --tab-loading-fill: #${primary} !important;
+      }
 
-  tab {
-    color: #${foreground} !important;
-  }
+      #navigator-toolbox {
+        background: #${background-darker} !important;
+        border-bottom: 1px solid #${border} !important;
+      }
 
-  .toolbarbutton-1 {
-    color: #${foreground} !important;
-  }
+      tab {
+        color: #${foreground} !important;
+      }
 
-  #urlbar {
-    color: #${foreground} !important;
-  }
+      .toolbarbutton-1 {
+        color: #${foreground} !important;
+      }
 
-  #urlbar-background {
-    background: #${background-darker} !important;
-    border-color: #${border} !important;
-  }
+      #urlbar {
+        color: #${foreground} !important;
+      }
 
-  #menubar-items {
-    color: #${foreground} !important;
-  }
+      #urlbar-background {
+        background: #${background-darker} !important;
+        border-color: #${border} !important;
+      }
 
-  menubar > menu[open] {
-    border-bottom-color: #${primary} !important;
-  }
+      #menubar-items {
+        color: #${foreground} !important;
+      }
 
-  .urlbarView-row[selected] {
-    background-color: #${primary} !important;
-  }
+      menubar > menu[open] {
+        border-bottom-color: #${primary} !important;
+      }
 
-  .urlbarView-row[source="bookmarks"] > .urlbarView-row-inner > .urlbarView-no-wrap > .urlbarView-favicon, #urlbar-engine-one-off-item-bookmarks {
-    fill: #${primary} !important;
-  }
+      .urlbarView-row[selected] {
+        background-color: #${primary} !important;
+      }
 
-  .urlbarView-row-inner:not(:selected) .urlbarView-action {
-    color: #${primary} !important;
-  }
+      .urlbarView-row[source="bookmarks"] > .urlbarView-row-inner > .urlbarView-no-wrap > .urlbarView-favicon, #urlbar-engine-one-off-item-bookmarks {
+        fill: #${primary} !important;
+      }
 
-  .urlbarView-row-inner:selected .urlbarView-action {
-    color: #${background-darker} !important;
-  }
+      .urlbarView-row-inner:not(:selected) .urlbarView-action {
+        color: #${primary} !important;
+      }
 
-  .searchbar-engine-one-off-item[selected] {
-    background-color: #${primary} !important;
-  }
+      .urlbarView-row-inner:selected .urlbarView-action {
+        color: #${background-darker} !important;
+      }
 
-  html|button[autofocus], html|button[type="submit"], xul|button[default], button.primary {
-    background-color: #${primary} !important;
-  }
+      .searchbar-engine-one-off-item[selected] {
+        background-color: #${primary} !important;
+      }
 
-  menupopup {
-    --panel-background: #${background} !important;
-    --panel-color: #${foreground} !important;
-    font-family: "${font}" !important;
-  }
+      html|button[autofocus], html|button[type="submit"], xul|button[default], button.primary {
+        background-color: #${primary} !important;
+      }
 
-  menuitem {
-    color: #${foreground} !important;
-  }
+      menupopup {
+        --panel-background: #${background} !important;
+        --panel-color: #${foreground} !important;
+        font-family: "${font}" !important;
+      }
 
-  #star-button[starred] {
-    fill: #${primary} !important;
-  }
+      menuitem {
+        color: #${foreground} !important;
+      }
 
-  .toolbarbutton-badge {
-    background-color: #${background-darker} !important;
-    color: #${foreground} !important;
-  }
+      #star-button[starred] {
+        fill: #${primary} !important;
+      }
 
-  #downloads-button[attention="success"] > .toolbarbutton-badge-stack > #downloads-indicator-anchor > #downloads-indicator-icon,
-  #downloads-button[attention="success"] > .toolbarbutton-badge-stack > #downloads-indicator-start-box > #downloads-indicator-start-image,
-  #downloads-indicator-finish-image {
-    fill: #${primary} !important;
-    stroke: #${primary} !important;
-  }
+      .toolbarbutton-badge {
+        background-color: #${background-darker} !important;
+        color: #${foreground} !important;
+      }
 
-  #downloads-indicator-progress-inner {
-    background: conic-gradient(#${primary} var(--download-progress-pcent), transparent var(--download-progress-pcent)) !important;
-  }
+      #downloads-button[attention="success"] > .toolbarbutton-badge-stack > #downloads-indicator-anchor > #downloads-indicator-icon,
+      #downloads-button[attention="success"] > .toolbarbutton-badge-stack > #downloads-indicator-start-box > #downloads-indicator-start-image,
+      #downloads-indicator-finish-image {
+        fill: #${primary} !important;
+        stroke: #${primary} !important;
+      }
 
-  #urlbar .search-panel-one-offs-header-label {
-    color: #${foreground} !important;
-    opacity: 1.0 !important;
-  }
+      #downloads-indicator-progress-inner {
+        background: conic-gradient(#${primary} var(--download-progress-pcent), transparent var(--download-progress-pcent)) !important;
+      }
 
-  #commonDialog {
-    background: #${background-darker} !important;
-  }
+      #urlbar .search-panel-one-offs-header-label {
+        color: #${foreground} !important;
+        opacity: 1.0 !important;
+      }
 
-  .downloadProgress::-moz-progress-bar {
-    background-color: #${primary} !important;
+      #commonDialog {
+        background: #${background-darker} !important;
+      }
+
+      .downloadProgress::-moz-progress-bar {
+        background-color: #${primary} !important;
+      }
+
+    ''
   }
 
   ${cfg.theme.extraUserChrome}

@@ -1,7 +1,25 @@
 {lib, ...}: let
-  inherit (lib) mkOption types literalExpression mkEnableOption;
+  inherit (lib.options) mkOption literalExpression mkEnableOption;
+  inherit (lib) types;
 in {
   options.programs.schizofox.extensions = {
+    simplefox = {
+      enable = mkEnableOption ''
+        A Userstyle theme for Firefox minimalist and Keyboard centered.
+      '';
+
+      showUrlBar = mkEnableOption ''
+        Show the URL bar on hover.
+      '';
+    };
+
+    # TODO: patchDefaultColors bool option
+    darkreader.enable =
+      mkEnableOption ''
+        Dark mode on all sites (patched to match overall theme)
+      ''
+      // {default = true;}; # no escape
+
     defaultExtensions = mkOption {
       type = types.attrs;
       default = {
@@ -24,23 +42,6 @@ in {
         any of the default addons.
       '';
     };
-
-    simplefox = {
-      enable = mkEnableOption ''
-        A Userstyle theme for Firefox minimalist and Keyboard centered.
-      '';
-
-      showUrlBar = mkEnableOption ''
-        Show the URL bar on hover.
-      '';
-    };
-
-    # TODO: patchDefaultColors bool option
-    darkreader.enable =
-      mkEnableOption ''
-        Dark mode on all sites (patched to match overall theme)
-      ''
-      // {default = true;}; # no escape
 
     extraExtensions = mkOption {
       type = types.attrs;

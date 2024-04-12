@@ -48,11 +48,11 @@ in {
       '';
     };
 
-    sandbox = mkOption {
+    sandbox = mkEnableOption {
       type = types.bool;
       default = true;
       example = true;
-      description = "Enable runtime sandboxing with NixPak";
+      description = "runtime sandboxing with NixPak";
     };
   };
 }

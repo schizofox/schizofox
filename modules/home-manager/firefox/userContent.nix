@@ -8,108 +8,113 @@
   inherit (cfg.theme.colors) background background-darker foreground primary border;
   inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) userContent;
 in ''
-  @-moz-document url-prefix("about:") {
-    * {
-      font-family: "${font}" !important;
-    }
 
-    html {
-      background: #${background-darker};
-    }
+  ${
+    lib.optionalString cfg.theme.defaultUserContent.enable ''
+      @-moz-document url-prefix("about:") {
+        * {
+          font-family: "${font}" !important;
+        }
 
-    :root {
-      --in-content-page-background: #${background-darker} !important;
-      --in-content-page-color: #${foreground} !important;
+        html {
+          background: #${background-darker};
+        }
 
-      --in-content-text-color: #${foreground} !important;
+        :root {
+          --in-content-page-background: #${background-darker} !important;
+          --in-content-page-color: #${foreground} !important;
 
-      --in-content-box-background: #${background} !important;
-      --in-content-box-info-background: #${background} !important;
-      --in-content-box-border-color: #${border} !important;
+          --in-content-text-color: #${foreground} !important;
 
-      --in-content-table-background: #${background} !important;
+          --in-content-box-background: #${background} !important;
+          --in-content-box-info-background: #${background} !important;
+          --in-content-box-border-color: #${border} !important;
 
-      --newtab-background-color: #${background-darker} !important;
-      --newtab-background-color-secondary: #${background} !important;
-      --newtab-text-primary-color: #${foreground} !important;
-      --newtab-primary-element-text-color: #${background-darker} !important;
-      --newtab-primary-action-background: #${primary} !important;
+          --in-content-table-background: #${background} !important;
 
-      --brand-color-accent: #${primary} !important;
-      --color-accent-primary-hover: #${primary} !important;
-      --color-accent-primary-active: #${primary} !important;
+          --newtab-background-color: #${background-darker} !important;
+          --newtab-background-color-secondary: #${background} !important;
+          --newtab-text-primary-color: #${foreground} !important;
+          --newtab-primary-element-text-color: #${background-darker} !important;
+          --newtab-primary-action-background: #${primary} !important;
 
-      --in-content-primary-button-background: #${primary} !important;
-      --in-content-primary-button-background-active: #${primary} !important;
-      --in-content-primary-button-background-hover: #${primary} !important;
-      --in-content-primary-button-text-color: #${background-darker} !important;
+          --brand-color-accent: #${primary} !important;
+          --color-accent-primary-hover: #${primary} !important;
+          --color-accent-primary-active: #${primary} !important;
 
-      --checkbox-unchecked-bgcolor: #${background} !important;
-      --checkbox-unchecked-hover-bgcolor: #${background} !important;
+          --in-content-primary-button-background: #${primary} !important;
+          --in-content-primary-button-background-active: #${primary} !important;
+          --in-content-primary-button-background-hover: #${primary} !important;
+          --in-content-primary-button-text-color: #${background-darker} !important;
 
-      --in-content-button-background: #${background} !important;
-      --in-content-button-background-hover: #${background} !important;
+          --checkbox-unchecked-bgcolor: #${background} !important;
+          --checkbox-unchecked-hover-bgcolor: #${background} !important;
 
-      --card-shadow: transparent !important;
-    }
+          --in-content-button-background: #${background} !important;
+          --in-content-button-background-hover: #${background} !important;
 
-    .search-wrapper .logo-and-wordmark .wordmark {
-      fill: #${foreground} !important;
-    }
+          --card-shadow: transparent !important;
+        }
 
-    .checkbox-check[checked] {
-      color: #${background-darker} !important;
-    }
+        .search-wrapper .logo-and-wordmark .wordmark {
+          fill: #${foreground} !important;
+        }
 
-    html|button[autofocus], html|button[type="submit"], xul|button[default], button.primary {
-      background-color: #${primary} !important;
-    }
+        .checkbox-check[checked] {
+          color: #${background-darker} !important;
+        }
 
-    panel {
-      --panel-background: #${background} !important;
-      --panel-color: #${foreground} !important;
-    }
+        html|button[autofocus], html|button[type="submit"], xul|button[default], button.primary {
+          background-color: #${primary} !important;
+        }
 
-    panel-list {
-      background: #${background} !important;
-    }
+        panel {
+          --panel-background: #${background} !important;
+          --panel-color: #${foreground} !important;
+        }
 
-    input[type="checkbox"]:enabled:checked,
-    input[type="checkbox"]:enabled:checked:hover {
-      background-color: #${primary} !important;
-    }
+        panel-list {
+          background: #${background} !important;
+        }
 
-    #trackingProtectionShield {
-      color: #${primary} !important;
-    }
+        input[type="checkbox"]:enabled:checked,
+        input[type="checkbox"]:enabled:checked:hover {
+          background-color: #${primary} !important;
+        }
 
-    .dialogBox {
-      background-color: #${background-darker} !important;
-    }
+        #trackingProtectionShield {
+          color: #${primary} !important;
+        }
 
-    dialog {
-      background-color: #${background-darker} !important;
-      color: #${foreground} !important;
-    }
+        .dialogBox {
+          background-color: #${background-darker} !important;
+        }
 
-    .privacy-detailedoption {
-      background-color: #${background} !important;
-    }
+        dialog {
+          background-color: #${background-darker} !important;
+          color: #${foreground} !important;
+        }
 
-    .addon-detail-actions input[type="radio"]:not(:checked) {
-      background-color: #${background-darker} !important;
-    }
+        .privacy-detailedoption {
+          background-color: #${background} !important;
+        }
 
-    .theme-enable-button {
-      background-color: #${background-darker} !important;
-    }
+        .addon-detail-actions input[type="radio"]:not(:checked) {
+          background-color: #${background-darker} !important;
+        }
 
-    .toggle-button {
-      --toggle-background-color: #${background-darker} !important;
-      --toggle-background-color-hover: #${background-darker} !important;
-      --toggle-background-color-active: #${background-darker} !important;
-      --toggle-border-color: #${foreground} !important;
-    }
+        .theme-enable-button {
+          background-color: #${background-darker} !important;
+        }
+
+        .toggle-button {
+          --toggle-background-color: #${background-darker} !important;
+          --toggle-background-color-hover: #${background-darker} !important;
+          --toggle-background-color-active: #${background-darker} !important;
+          --toggle-border-color: #${foreground} !important;
+        }
+      }
+    ''
   }
 
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userContent)}

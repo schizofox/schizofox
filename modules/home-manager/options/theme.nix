@@ -1,12 +1,6 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: let
-  inherit (lib) mkEnableOption mkOption mkPackageOption mdDoc types literalExpression;
-
-  cfg = config.programs.schizofox;
+{lib, ...}: let
+  inherit (lib.options) mkOption mkEnableOption;
+  inherit (lib) types;
 in {
   options.programs.schizofox.theme = {
     colors = {
@@ -52,6 +46,9 @@ in {
       default = "Lexend";
       description = "Default firefox font";
     };
+
+    defaultUserChrome.enable = mkEnableOption "default userChrome for Schizofox" // {default = true;};
+    defaultUserContent.enable = mkEnableOption "default userContent for Schizofox" // {default = true;};
 
     extraUserChrome = mkOption {
       type = types.str;
