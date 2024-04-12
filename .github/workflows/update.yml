@@ -9,12 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v9
+      - name: "Install Nix"
+        uses: cachix/install-nix-action@master
 
-      - name: update
+      - name: "Update flake"
         uses: DeterminateSystems/update-flake-lock@v20
         with:
           pr-title: "flake: bump inputs"
