@@ -1,9 +1,10 @@
 {lib, ...}: let
-  inherit (lib) mkOption mkEnableOption types;
+  inherit (lib.options) mkOption mkEnableOption;
+  inherit (lib.types) str bool;
 in {
   options.programs.schizofox.security = {
     userAgent = mkOption {
-      type = types.str;
+      type = str;
       default = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0";
       description = "Spoof user agent";
       example = ''
@@ -16,19 +17,21 @@ in {
     };
 
     sanitizeOnShutdown = mkOption {
-      type = types.bool;
+      type = bool;
       default = false;
       example = true;
       description = ''
         Clear cookies, history and other data on shutdown.
-        Disabled on default, because it's quite annoying. Tip: use ctrl+i";
+        Disabled on default, because it's quite annoying.
+
+        Tip: use ctrl+i";
       '';
     };
 
     enableCaptivePortal = mkEnableOption "captive portal";
 
     noSessionRestore = mkOption {
-      type = types.bool;
+      type = bool;
       default = false;
       example = true;
       description = ''
@@ -38,7 +41,7 @@ in {
     };
 
     wrapWithProxychains = mkOption {
-      type = types.bool;
+      type = bool;
       default = false;
       example = true;
       description = ''
@@ -49,7 +52,7 @@ in {
     };
 
     sandbox = mkEnableOption {
-      type = types.bool;
+      type = bool;
       default = true;
       example = true;
       description = "runtime sandboxing with NixPak";

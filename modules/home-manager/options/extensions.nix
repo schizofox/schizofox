@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib.options) mkOption literalExpression mkEnableOption;
-  inherit (lib) types;
+  inherit (lib.types) attrs;
 in {
   options.programs.schizofox.extensions = {
     simplefox = {
@@ -21,7 +21,7 @@ in {
       // {default = true;}; # no escape
 
     defaultExtensions = mkOption {
-      type = types.attrs;
+      type = attrs;
       default = {
         "uBlock0@raymondhill.net".install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
         "{36bdf805-c6f2-4f41-94d2-9b646342c1dc}".install_url = "https://addons.mozilla.org/firefox/downloads/latest/export-cookies-txt/latest.xpi";
@@ -44,7 +44,7 @@ in {
     };
 
     extraExtensions = mkOption {
-      type = types.attrs;
+      type = attrs;
       default = {};
       description = ''
         Extra extensions that will be installed in addition to default extensions. Will be merged
