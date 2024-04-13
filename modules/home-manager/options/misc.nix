@@ -48,5 +48,9 @@ in {
         with the canvas (practically anything at this point)
       '';
     };
+
+    firefoxSync = mkEnableOption ''
+      Firefox Sync.
+    '';
   };
 }
