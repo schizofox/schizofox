@@ -153,7 +153,7 @@ in {
                 (envSuffix "XDG_RUNTIME_DIR" "/doc")
                 (envSuffix "XDG_RUNTIME_DIR" "/dconf")
 
-                (sloth.concat [sloth.homeDir "/.mozilla"])
+                (sloth.concat [sloth.homeDir "/${cfg.configPath}"])
               ];
 
               bind.ro =
