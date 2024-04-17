@@ -12,6 +12,11 @@ in {
     package = mkPackageOption pkgs "firefox-esr-115-unwrapped" {
       example = "firefox-esr-unwrapped";
     };
+    executableName = mkOption {
+      type = lib.types.str;
+      default = "firefox";
+      example = "floorp";
+    };
 
     settings = mkOption {
       type = attrsOf (jsonFormat.type

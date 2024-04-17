@@ -113,7 +113,7 @@
         + ''
           rm -rf $out/share/applications/*
           install -D ${desktopItem}/share/applications/Schizofox.desktop $out/share/applications/Schizofox.desktop
-          makeWrapper $out/bin/firefox $out/bin/schizofox
+          makeWrapper $out/bin/${cfg.executableName} $out/bin/schizofox
         '';
     });
 in
