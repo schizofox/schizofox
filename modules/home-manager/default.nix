@@ -32,20 +32,10 @@ self: {
     inherit pkgs;
   };
 
-  mozillaConfigPath =
-    if isDarwin
-    then "Library/Application Support/Mozilla"
-    else "${config.home.homeDirectory}/.mozilla";
-
-  firefoxConfigPath =
-    if isDarwin
-    then "Library/Application Support/Firefox"
-    else mozillaConfigPath + "/firefox";
-
   profilesPath =
     if isDarwin
-    then "${firefoxConfigPath}/Profiles"
-    else firefoxConfigPath;
+    then "${cfg.configPath}/Profiles"
+    else "${config.home.homeDirectory}/" + cfg.configPath;
 
   maybeTheme = opt: lib.findFirst builtins.isNull opt.package [opt opt.package];
 
@@ -70,7 +60,7 @@ in {
   config = mkIf cfg.enable {
     home.file = {
       # profile config
-      "${firefoxConfigPath}/profiles.ini".text = ''
+      "${cfg.configPath}/profiles.ini".text = ''
         [Profile0]
         Name=default
         IsRelative=1

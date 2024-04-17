@@ -4,6 +4,7 @@
   ...
 }: let
   inherit (lib.options) mkEnableOption mkPackageOption mkOption literalExpression;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   inherit (lib.types) attrsOf;
   jsonFormat = pkgs.formats.json {};
 in {
@@ -16,6 +17,14 @@ in {
       type = lib.types.str;
       default = "firefox";
       example = "floorp";
+    };
+    configPath = mkOption {
+      type = lib.types.str;
+      default =
+        if isDarwin
+        then "Library/Application Support/Firefox"
+        else ".mozilla/firefox";
+      example = ".mozilla/firefox";
     };
 
     settings = mkOption {
