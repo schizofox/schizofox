@@ -39,7 +39,7 @@
         AppAutoUpdate = false;
         CaptivePortal = cfg.security.enableCaptivePortal;
         DisableFirefoxStudies = true;
-        DisableFirefoxAccounts = true;
+        DisableFirefoxAccounts = !cfg.misc.firefoxSync;
         DisablePocket = true;
         DisableFormHistory = true;
         DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
