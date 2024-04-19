@@ -49,8 +49,6 @@ in {
       '';
     };
 
-    firefoxSync = mkEnableOption ''
-      Firefox Sync.
-    '';
+    firefoxSync = mkEnableOption "Firefox Sync";
   };
 }
