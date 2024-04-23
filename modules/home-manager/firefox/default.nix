@@ -24,7 +24,7 @@
       else "schizofox %U";
     icon = "${logo}";
     terminal = false;
-    categories = ["Application" "Network" "WebBrowser"];
+    categories = ["Network" "WebBrowser"];
     mimeTypes = ["text/html" "text/xml"];
   };
 
