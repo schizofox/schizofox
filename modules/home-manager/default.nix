@@ -183,7 +183,8 @@ in {
                     "/app/etc/firefox"
                   ]
                 ]
-                ++ just' cursorTheme "${cursorTheme}";
+                ++ just' cursorTheme "${cursorTheme}"
+                ++ config.programs.schizofox.security.extraSandboxBinds;
 
               env = {
                 XDG_DATA_DIRS = lib.makeSearchPath "share" ([
