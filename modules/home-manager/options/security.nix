@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib.options) mkOption mkEnableOption;
-  inherit (lib.types) str bool;
+  inherit (lib.types) str bool listOf;
 in {
   options.programs.schizofox.security = {
     userAgent = mkOption {
@@ -56,6 +56,15 @@ in {
       default = true;
       example = true;
       description = "runtime sandboxing with NixPak";
+    };
+
+    extraSandboxBinds = mkOption {
+      type = listOf str;
+      default = [];
+      example = [
+        "/home/\${username}/.config/tridactyl"
+      ];
+      description = "Extra read-only paths to bind-mount into the sandbox.";
     };
   };
 }
