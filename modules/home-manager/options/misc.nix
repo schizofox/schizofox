@@ -37,6 +37,11 @@ in {
       We *always* recommend legally obtaining content those platforms provide.
     '';
 
+    contextMenu.enable = mkEnableOption ''
+      the context menu that appears by default when you right-click on a page.
+      Fixes the issue where a second context menu appears on top of the YouTube one.
+    '';
+
     disableWebgl = mkOption {
       type = bool;
       default = false;
