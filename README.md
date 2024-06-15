@@ -197,6 +197,7 @@ below. Please make sure to check them out, or support them <3
 <div align="center">
     <div align="center" style="border: none;">
         <table align="center" style="border-collapse: collapse; margin: 0 auto;">
+            <!-- First Row -->
             <tr align="center">
                 <!-- mrtnvgr -->
                 <td align="center">
@@ -219,7 +220,10 @@ below. Please make sure to check them out, or support them <3
                     </a>
                     <h3 align="center">Max Headroom (Contributor)</h3>
                 </td>
-                <!-- gerg-l -->
+            </tr>
+            <!-- Second Row -->
+            <tr align="center">
+                <!-- louis-thevenet -->
                 <td align="center">
                     <a href="https://github.com/louis-thevenet" style="text-decoration: none;">
                         <img align="center" src='https://avatars.githubusercontent.com/u/55986107?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
@@ -231,35 +235,38 @@ below. Please make sure to check them out, or support them <3
                     <a href="https://github.com/nyawox" style="text-decoration: none;">
                         <img align="center" src='https://avatars.githubusercontent.com/u/93813719?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
                     </a>
-                    <h3 align="center"> (Contributor)</h3>
+                    <h3 align="center"> nyawox (Contributor)</h3>
                 </td>
                 <!-- Chomky -->
                 <td align="center">
                     <a href="https://github.com/justchokingaround" style="text-decoration: none;">
                         <img align="center" src='https://avatars.githubusercontent.com/u/44473782?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
                     </a>
-                    <h3 align="center"> (Contributor)</h3>
+                    <h3 align="center"> Chomky (Contributor)</h3>
                 </td>
+            </tr>
+            <!-- Third Row -->
+            <tr align="center">
                 <!-- Surfaceflinger -->
                 <td align="center">
                     <a href="https://github.com/surfaceflinger" style="text-decoration: none;">
                         <img align="center" src='https://avatars.githubusercontent.com/u/44725111?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
                     </a>
-                    <h3 align="center"> (Contributor)</h3>
+                    <h3 align="center">Surfaceflinger (Contributor)</h3>
                 </td>
                 <!-- Diniamo -->
                 <td align="center">
                     <a href="https://github.com/diniamo" style="text-decoration: none;">
                         <img align="center" src='https://avatars.githubusercontent.com/u/55629891?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
                     </a>
-                    <h3 align="center"> (Contributor)</h3>
+                    <h3 align="center">diniamo (Contributor)</h3>
                 </td>
                 <!-- eriedaberrie -->
                 <td align="center">
                     <a href="https://github.com/eriedaberrie" style="text-decoration: none;">
                         <img align="center" src='https://avatars.githubusercontent.com/u/64395218?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
                     </a>
-                    <h3 align="center"> (Contributor)</h3>
+                    <h3 align="center">eriedaberria (Contributor)</h3>
                 </td>
             </tr>
         </table>
