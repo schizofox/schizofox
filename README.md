@@ -63,18 +63,12 @@ security, we would recommend that look into the Tor browser.
       colors and a font, with DarkReader integration.
 - [x] Optional [NixPak] wrapping sandboxing and additional security
 
-### Contributing
+### Contributing <a name = "doc_contributing"></a>
 
-Schizofox is still beta software, and breaking changes are to be expected.
-
-Make sure to submit an issue in case anything breaks, or make a PR if you know
-how to fix said issue.
-
-## 💛 Donate
-
-If you would like to support us, you may use Liberapay to do so:
-
-<a href="https://liberapay.com/schizofox/donate"><img src="https://img.shields.io/liberapay/patrons/notashelf.svg?logo=liberapay?color=e5c890&labelColor=303446&style=for-the-badge"></a>
+Schizofox should still be considered beta software, although it is being daily
+driven by many. Expect breaking changes, and make sure to submit an issue in
+case anything breaks. If you know how to fix an existing issue, or would like to
+implement new changes then feel free to create a pull request.
 
 ## Configuration
 
@@ -150,10 +144,17 @@ programs.schizofox = {
 }
 ```
 
-## Credits <3
+## 💛 Support Us <a name="doc_support_us"></a>
+
+Schizofox is maintained by the people below. If it has helped you in any shape
+or form, please consider supporting us to help us continue developing Schizofox.
+Thank you in advance!
+
+<h3 align="center" style="font-size: 55px">
+    Maintainers
+</h3>
 
 <div align="center">
-<!-- Author Info -->
     <div align="center" style="border: none;">
         <table align="center" style="border-collapse: collapse; margin: 0 auto;">
             <tr align="center">
@@ -178,7 +179,38 @@ programs.schizofox = {
     </div>
 </div>
 
-Thanks to the awesome people below:
+<h3 align="center" style="font-size: 55px">
+    Organization
+</h3>
+
+<div align="center" style="border: none;">
+    <a href="https://liberapay.com/schizofox/donate">
+        <img src="https://img.shields.io/liberapay/patrons/notashelf.svg?logo=liberapay?color=e5c890&labelColor=303446&style=for-the-badge">
+    </a>
+</div>
+
+### Contributors and Credits <a name="doc_contributors_credits"></a>
+
+Schizofox has been made possible with the invaluable contributions of the people
+below. Please make sure to check them out, or support them <3
+
+<div align="center">
+    <div align="center" style="border: none;">
+        <table align="center" style="border-collapse: collapse; margin: 0 auto;">
+            <tr align="center">
+                <!-- Sioodmy -->
+                <td align="center">
+                    <h3 align="center">mrtnvgr (Contributor)</h3>
+                    <a href="https://github.com/mrtnvgr" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/48406064?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+In addition, our special thanks go to:
 
 - [hnhx](https://github.com/hnhx)
-- [neoney](https://github.com/n3oney)
+- [neoney](https://github.com/neoney)
