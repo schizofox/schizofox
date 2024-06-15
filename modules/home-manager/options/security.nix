@@ -3,6 +3,17 @@
   inherit (lib.types) str bool listOf;
 in {
   options.programs.schizofox.security = {
+    javascript.enable = mkEnableOption {
+      type = bool;
+      default = true;
+      example = true;
+      description = ''
+        JavaScript support in Schizofox. This defaults to true as many websites
+        rely on Javascript to function properly, but it can be disabled for
+        additional security and privacy purposes.
+      '';
+    };
+
     userAgent = mkOption {
       type = str;
       default = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0";

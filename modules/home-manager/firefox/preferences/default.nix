@@ -5,6 +5,9 @@
 }: let
   inherit (cfg.theme.colors) background-darker background foreground;
 in {
+  # Javascript toggle
+  "javascript.enable" = cfg.security.javascript.enable;
+
   # Quality of life stuff
   "browser.download.useDownloadDir" = false;
   "browser.aboutConfig.showWarning" = false;
