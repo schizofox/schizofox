@@ -34,7 +34,20 @@ in {
 
     drm.enable = mkEnableOption ''
       DRM for websites that require it, such as Netflix and Spotify.
-      We *always* recommend legally obtaining content those platforms provide.
+
+      ::: {.warning}
+      We *always* recommend legally obtaining content those platforms
+      provide.
+      :::
+    '';
+
+    contextMenu.enable = mkEnableOption ''
+      right-click context menu that is disabled by default.
+
+      ::: {.note}
+      Fixes the issue where a second context menu appears 
+      on top of the YouTube one.
+      :::
     '';
 
     disableWebgl = mkOption {
