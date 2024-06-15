@@ -6,7 +6,7 @@
   foreground ? "cdd6f4",
   ...
 }: let
-  version = "4.9.67";
+  version = "4.9.86";
 in
   buildNpmPackage {
     pname = "darkreader";
@@ -16,14 +16,17 @@ in
       owner = "darkreader";
       repo = "darkreader";
       rev = "v${version}";
-      hash = "sha256-lz7wkUo4OB/Gu/q45RVpj9Vmk4u65D0opvjgOeEjjpw=";
+      hash = "sha256-i5/zlDunCzqGAf6VtgGk/hUKQeavcxbxSZuaOvDaMiw=";
     };
 
-    npmDepsHash = "sha256-DgijQj3p4yiAUlwUC1cXkF8afHdm2ZOd/PNXVt6WZW8=";
+    npmDepsHash = "sha256-0Rl3ceRywaGFNo+OF55vSlTbI2II//w//YIK0I5+b5o=";
 
     patchPhase = ''
       runHook prePatch
-      sed -i 's/181a1b/${background}/g; s/e8e6e3/${foreground}/g' src/defaults.ts
+
+      substituteInPlace src/defaults.ts --replace "181a1b" ${background}
+      substituteInPlace src/defaults.ts --replace "e8e6e3" ${foreground}
+
       runHook postPatch
     '';
 
@@ -31,11 +34,13 @@ in
 
     installPhase = ''
       runHook preInstall
-      cp -r build $out/
+      cp -rv build $out/
       runHook postInstall
     '';
 
-    meta = with lib; {
-      maintainers = with maintainers; [notashelf];
+    meta = {
+      description = "Custom patched Dark reader for Schizofox";
+      maintainers = with lib.maintainers; [notashelf sioodmy];
+      license = lib.licenses.mit;
     };
   }
