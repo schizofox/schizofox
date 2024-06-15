@@ -45,7 +45,7 @@ in {
       right-click context menu that is disabled by default.
 
       ::: {.note}
-      Fixes the issue where a second context menu appears 
+      Fixes the issue where a second context menu appears
       on top of the YouTube one.
       :::
     '';
