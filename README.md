@@ -62,6 +62,9 @@ security, we would recommend that look into the Tor browser.
 - [x] Declarative theming. Schizofox allows for browser-wide theming with 3
       colors and a font, with DarkReader integration.
 - [x] Optional [NixPak] wrapping sandboxing and additional security
+- [ ] User agent randomizer
+- [ ] Searx instance randomizer
+- [ ] Tor wrapper
 
 ### Contributing <a name = "doc_contributing"></a>
 
@@ -150,12 +153,11 @@ Schizofox is maintained by the people below. If it has helped you in any shape
 or form, please consider supporting us to help us continue developing Schizofox.
 Thank you in advance!
 
-<h3 align="center" style="font-size: 55px">
-    Maintainers
-</h3>
-
 <div align="center">
     <div align="center" style="border: none;">
+        <h3 align="center" style="font-size: 55px">
+            Maintainers
+        </h3>
         <table align="center" style="border-collapse: collapse; margin: 0 auto;">
             <tr align="center">
                 <!-- NotAShelf -->
@@ -176,17 +178,13 @@ Thank you in advance!
                 </td>
             </tr>
         </table>
+        <h3 align="center" style="font-size: 55px">
+            Organization
+        </h3>
+        <a href="https://liberapay.com/schizofox/donate">
+            <img src="https://img.shields.io/liberapay/patrons/notashelf.svg?logo=liberapay?color=e5c890&labelColor=303446&style=for-the-badge">
+        </a>
     </div>
-</div>
-
-<h3 align="center" style="font-size: 55px">
-    Organization
-</h3>
-
-<div align="center" style="border: none;">
-    <a href="https://liberapay.com/schizofox/donate">
-        <img src="https://img.shields.io/liberapay/patrons/notashelf.svg?logo=liberapay?color=e5c890&labelColor=303446&style=for-the-badge">
-    </a>
 </div>
 
 ### Contributors and Credits <a name="doc_contributors_credits"></a>
@@ -273,7 +271,27 @@ below. Please make sure to check them out, or support them <3
     </div>
 </div>
 
-In addition, our special thanks go to:
+In addition, our special thanks go to for their support.
 
-- [hnhx](https://github.com/hnhx)
-- [neoney](https://github.com/neoney)
+<div align="center">
+    <div align="center" style="border: none;">
+        <table align="center" style="border-collapse: collapse; margin: 0 auto;">
+            <tr align="center">
+                <!-- hnhx -->
+                <td align="center">
+                    <a href="https://github.com/hnhxr" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/49120638?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center">hnhx</h3>
+                </td>
+                <!-- Gerg -->
+                <td align="center">
+                    <a href="https://github.com/neoney" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/9493799?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center">gerg-l (Contributor) </h3>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
