@@ -9,62 +9,59 @@
 <div align="center">
     <p align = "center">
         Firefox configuration wrapper for the Delusional and the
-        Schizoprenic
+        Schizoprenic</br>
     </p>
     <!-- Repo Info -->
     <img alt="Stars" src="https://img.shields.io/github/stars/schizofox/schizofox">
     <img alt="Forks" src="https://img.shields.io/github/forks/schizofox/schizofox">
     <img alt="Issues" src="https://img.shields.io/github/issues/schizofox/schizofox">
     <img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/schizofox/schizofox">
-    <!-- Author Info -->
-    <div align="center" style="border: none;">
-        <table align="center" style="border-collapse: collapse; margin: 0 auto;">
-            <tr align="center">
-                <!-- NotAShelf -->
-                <td align="center">
-                    <h3 align="center">NotAShelf (Maintainer)</h3>
-                    <a href="https://ko-fi.com/notashelf" style="text-decoration: none;">
-                        <img align="center" src='https://avatars.githubusercontent.com/u/62766066?s=55&v=4' width="55" height="55">
-                        <img align="center" src='https://ko-fi.com/img/githubbutton_sm.svg'>
-                    </a>
-                </td>
-                <!-- Sioodmy -->
-                <td align="center">
-                    <h3 align="center">Sioodmy (Maintainer)</h3>
-                    <a href="https://ko-fi.com/sioodmy" style="text-decoration: none;">
-                        <img align="center" src='https://avatars.githubusercontent.com/u/81568712?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
-                        <img align="center" src='https://ko-fi.com/img/githubbutton_sm.svg'>
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </div>
 </div>
 
 ## About Schizofox
 
-Schizofox started as a part of
-[Sioodmy's dotfiles](https://github.com/sioodmy/dotfiles) and was adapted by
-[NotAShelf](https://github.com/notashelf/nyx) for future use. As such, it has
-been moved into its own standalone flake and eventually an organization.
+[Sioodmy's dotfiles]: https://github.com/sioodmy/dotfiles
+[Nyx]: https://github.com/notashelf/nyx
 
-Compared to other browsers/configurations, I would say it's pretty
-_schizophrenic_, but it is also daily driveable so some compromises were made.
-Keep in mind that any "super ultra privacy friendly firefox config" will make
-you stick out and won't protect you from fingerprinting; sadly there is no
-escape from that. If you are really looking for security, look into the Tor
-browser.
+Schizofox has started as an unnamed Firefox configuration as a part of
+[Sioodmy's dotfiles] and was later adapted by @NotAShelf in [Nyx] for future
+use.
 
-Fun fact: clearing cookies is just a waste of time with cookie isolation enabled
-(just use temporary containers if you need to)
+As we saw it would not be feasible to maintain two separate configurations,
+Schizofox has since been moved into its own standalone flake and eventually an
+organization.
 
-### Notable Features
+Compared to other browsers or browser configurations, Schizofox is quite
+_schizoprenic_ but it is also designed for daily-driving, so some compromises
+had to be made. Nevertheless, most options that affect privacy or security are
+behind toggles and you can enable or disable, should you wish to do so.
 
-- Declarative theming. Just specify 3 colors and your font of choice and nix
-  will do the rest (userChrome.css and darkreader config)
-- Declarative extension installation with the home-manager module
-- NixPak wrapped package
-- Extensive & modular configuration
+Keep in mind that any _"super ultra privacy friendly Firefox configuration"_
+will make you stick out, and contribute to fingerprinting; sadly there is no
+escape from that, not with a regular browser. If you are really looking for
+security, we would recommend that look into the Tor browser.
+
+<!-- deno-fmt-ignore-start -->
+
+> [!NOTE]
+> Fun fact: clearing cookies is just a waste of time with cookie
+> isolation enabled (just use temporary containers if you need to)
+
+<!-- deno-fmt-ignore-end -->
+
+### Notable Features <a name = "doc_features"></a>
+
+[Nixpak]: https://github.com/nixpak/nixpak
+[Home-Manager]: https://github.com/nix-community/home-manager
+
+- [x] Extensive & modular configuration
+  - [x] Custom policy options
+  - [x] Declarative extension installation with the provided [Home-Manager]
+        module.
+  - [x] Custom userStyle and userChrome configurations
+- [x] Declarative theming. Schizofox allows for browser-wide theming with 3
+      colors and a font, with DarkReader integration.
+- [x] Optional [NixPak] wrapping sandboxing and additional security
 
 ### Contributing
 
@@ -154,6 +151,32 @@ programs.schizofox = {
 ```
 
 ## Credits <3
+
+<div align="center">
+<!-- Author Info -->
+    <div align="center" style="border: none;">
+        <table align="center" style="border-collapse: collapse; margin: 0 auto;">
+            <tr align="center">
+                <!-- NotAShelf -->
+                <td align="center">
+                    <h3 align="center">NotAShelf (Maintainer)</h3>
+                    <a href="https://ko-fi.com/notashelf" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/62766066?s=55&v=4' width="55" height="55">
+                        <img align="center" src='https://ko-fi.com/img/githubbutton_sm.svg'>
+                    </a>
+                </td>
+                <!-- Sioodmy -->
+                <td align="center">
+                    <h3 align="center">Sioodmy (Maintainer)</h3>
+                    <a href="https://ko-fi.com/sioodmy" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/81568712?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                        <img align="center" src='https://ko-fi.com/img/githubbutton_sm.svg'>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
 
 Thanks to the awesome people below:
 
