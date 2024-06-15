@@ -284,12 +284,12 @@ In addition, our special thanks go to for their support.
                     </a>
                     <h3 align="center">hnhx</h3>
                 </td>
-                <!-- Gerg -->
+                <!-- neoney -->
                 <td align="center">
                     <a href="https://github.com/neoney" style="text-decoration: none;">
                         <img align="center" src='https://avatars.githubusercontent.com/u/9493799?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
                     </a>
-                    <h3 align="center">gerg-l (Contributor) </h3>
+                    <h3 align="center">neoney</h3>
                 </td>
             </tr>
         </table>
