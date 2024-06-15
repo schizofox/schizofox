@@ -1,12 +1,47 @@
 <p align="center">
-<img src="https://github.com/schizofox/assets/blob/main/logo/logo.png" alt="screenshot" width="200" align="center" />
+    <img src="https://github.com/schizofox/assets/blob/main/logo/logo.png" alt="screenshot" width="200" align="center" />
 </p>
 
-# Schizofox
+<h1 align="center" style="font-size: 65px">
+    Schizofox
+</h1>
 
-_our goal is to get on the CIA watchlist_
+<div align="center">
+    <p align = "center">
+        Firefox configuration wrapper for the Delusional and the
+        Schizoprenic
+    </p>
+    <!-- Repo Info -->
+    <img alt="Stars" src="https://img.shields.io/github/stars/schizofox/schizofox">
+    <img alt="Forks" src="https://img.shields.io/github/forks/schizofox/schizofox">
+    <img alt="Issues" src="https://img.shields.io/github/issues/schizofox/schizofox">
+    <img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/schizofox/schizofox">
+    <!-- Author Info -->
+    <div align="center" style="border: none;">
+        <table align="center" style="border-collapse: collapse; margin: 0 auto;">
+            <tr align="center">
+                <!-- NotAShelf -->
+                <td align="center">
+                    <h3 align="center">NotAShelf (Maintainer)</h3>
+                    <a href="https://ko-fi.com/notashelf" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/62766066?s=55&v=4' width="55" height="55">
+                        <img align="center" src='https://ko-fi.com/img/githubbutton_sm.svg'>
+                    </a>
+                </td>
+                <!-- Sioodmy -->
+                <td align="center">
+                    <h3 align="center">Sioodmy (Maintainer)</h3>
+                    <a href="https://ko-fi.com/sioodmy" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/81568712?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                        <img align="center" src='https://ko-fi.com/img/githubbutton_sm.svg'>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
 
-## About
+## About Schizofox
 
 Schizofox started as a part of
 [Sioodmy's dotfiles](https://github.com/sioodmy/dotfiles) and was adapted by
