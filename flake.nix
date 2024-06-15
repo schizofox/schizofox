@@ -45,8 +45,10 @@
       systems = import inputs.systems;
 
       imports = [
-        ./pkgs # packages exposed by the flake
-        ./tests # machine tests
+        ./flake/pkgs # packages exposed by the flake
+        ./flake/tests # machine tests
+        ./flake/lib # extended library
+        ./flake/modules # modules exported by the flake
       ];
 
       perSystem = {pkgs, ...}: {
@@ -59,18 +61,6 @@
             statix
             deadnix
           ];
-        };
-      };
-
-      flake = {
-        lib = {
-          inherit (import ./lib/extended-lib.nix nixpkgs.lib) schizofox;
-        };
-
-        homeManagerModule = self.homeManagerModules.schizofox; # an alias to the default module
-        homeManagerModules = {
-          schizofox = import ./modules/home-manager self;
-          default = self.homeManagerModules.schizofox;
         };
       };
     };
