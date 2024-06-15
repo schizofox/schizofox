@@ -286,8 +286,8 @@ In addition, our special thanks go to for their support.
                 </td>
                 <!-- neoney -->
                 <td align="center">
-                    <a href="https://github.com/neoney" style="text-decoration: none;">
-                        <img align="center" src='https://avatars.githubusercontent.com/u/9493799?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    <a href="https://github.com/n3oney" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/30625554?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
                     </a>
                     <h3 align="center">neoney</h3>
                 </td>
