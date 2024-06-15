@@ -198,12 +198,68 @@ below. Please make sure to check them out, or support them <3
     <div align="center" style="border: none;">
         <table align="center" style="border-collapse: collapse; margin: 0 auto;">
             <tr align="center">
-                <!-- Sioodmy -->
+                <!-- mrtnvgr -->
                 <td align="center">
-                    <h3 align="center">mrtnvgr (Contributor)</h3>
                     <a href="https://github.com/mrtnvgr" style="text-decoration: none;">
                         <img align="center" src='https://avatars.githubusercontent.com/u/48406064?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
                     </a>
+                    <h3 align="center">mrtnvgr (Contributor)</h3>
+                </td>
+                <!-- Gerg -->
+                <td align="center">
+                    <a href="https://github.com/gerg-l" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/88247690?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center">gerg-l (Contributor) </h3>
+                </td>
+                <!-- Max Headroom -->
+                <td align="center">
+                    <a href="https://github.com/max-privatevoid" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/55053574?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center">Max Headroom (Contributor)</h3>
+                </td>
+                <!-- gerg-l -->
+                <td align="center">
+                    <a href="https://github.com/louis-thevenet" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/55986107?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center">louis-thevenet (Contributor)</h3>
+                </td>
+                <!-- nyawox -->
+                <td align="center">
+                    <a href="https://github.com/nyawox" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/93813719?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center"> (Contributor)</h3>
+                </td>
+                <!-- Chomky -->
+                <td align="center">
+                    <a href="https://github.com/justchokingaround" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/44473782?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center"> (Contributor)</h3>
+                </td>
+                <!-- Surfaceflinger -->
+                <td align="center">
+                    <a href="https://github.com/surfaceflinger" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/44725111?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center"> (Contributor)</h3>
+                </td>
+                <!-- Diniamo -->
+                <td align="center">
+                    <a href="https://github.com/diniamo" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/55629891?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center"> (Contributor)</h3>
+                </td>
+                <!-- eriedaberrie -->
+                <td align="center">
+                    <a href="https://github.com/eriedaberrie" style="text-decoration: none;">
+                        <img align="center" src='https://avatars.githubusercontent.com/u/64395218?s=55&v=4' width="55" height="55", style="border-radius: 50%;">
+                    </a>
+                    <h3 align="center"> (Contributor)</h3>
                 </td>
             </tr>
         </table>
