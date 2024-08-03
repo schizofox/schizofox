@@ -10,18 +10,13 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Install Nix"
-        uses: cachix/install-nix-action@master
+        uses: DeterminateSystems/nix-installer-action@v13
 
-      - name: "Update flake"
-        uses: DeterminateSystems/update-flake-lock@v20
-        with:
-          pr-title: "flake: bump inputs"
-      - name: merge
+      - name: "Update flake.lock"
         run: |
-          gh pr merge ${{ steps.update.outputs.pull-request-number }} --squash --delete-branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          nix flake update --commit-lock-file
+          git push origin HEAD:${{ github.ref_name }}
