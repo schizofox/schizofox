@@ -7,9 +7,9 @@
 </h1>
 
 <div align="center">
-    <p align = "center">
+    <p align="center">
         Firefox configuration wrapper for the Delusional and the
-        Schizoprenic</br>
+        Schizophrenic</br>
     </p>
     <!-- Repo Info -->
     <img alt="Stars" src="https://img.shields.io/github/stars/schizofox/schizofox">
@@ -21,15 +21,17 @@
 ## About Schizofox
 
 [Sioodmy's dotfiles]: https://github.com/sioodmy/dotfiles
+[@NotAShelf]: https://github.com/notashelf
 [Nyx]: https://github.com/notashelf/nyx
 
 Schizofox has started as an unnamed Firefox configuration as a part of
-[Sioodmy's dotfiles] and was later adapted by @NotAShelf in [Nyx] for future
+[Sioodmy's dotfiles] and was later adapted by [@NotAShelf] in [Nyx] for future
 use.
 
-As we saw it would not be feasible to maintain two separate configurations,
-Schizofox has since been moved into its own standalone flake and eventually an
-organization.
+As we came to notice it would not be feasible to maintain two separate
+configurations, Schizofox has since been moved into its own standalone flake and
+eventually an organization. Thus, this project is the result of combined efforts
+of two people with special interest in security.
 
 Compared to other browsers or browser configurations, Schizofox is quite
 _schizoprenic_ but it is also designed for daily-driving, so some compromises
@@ -45,7 +47,7 @@ security, we would recommend that look into the Tor browser.
 
 > [!NOTE]
 > Fun fact: clearing cookies is just a waste of time with cookie
-> isolation enabled (just use temporary containers if you need to)
+> isolation enabled: just use temporary containers if you need to.
 
 <!-- deno-fmt-ignore-end -->
 
@@ -58,22 +60,35 @@ security, we would recommend that look into the Tor browser.
   - [x] Custom policy options
   - [x] Declarative extension installation with the provided [Home-Manager]
         module.
-  - [x] Custom userStyle and userChrome configurations
+  - [x] Custom `userStyle` and `userChrome` configurations
 - [x] Declarative theming. Schizofox allows for browser-wide theming with 3
       colors and a font, with DarkReader integration.
 - [x] Optional [NixPak] wrapping sandboxing and additional security
+- [x] Searx instance randomizer
 - [ ] User agent randomizer
-- [ ] Searx instance randomizer
 - [ ] Tor wrapper
 
-### Contributing <a name = "doc_contributing"></a>
+### Contributing <a name="doc_contributing"></a>
 
 Schizofox should still be considered beta software, although it is being daily
 driven by many. Expect breaking changes, and make sure to submit an issue in
 case anything breaks. If you know how to fix an existing issue, or would like to
 implement new changes then feel free to create a pull request.
 
-## Configuration
+## Sample Configuration
+
+<!-- deno-fmt-ignore-start -->
+
+> [!WARNING]
+> Sample configuration may be outdated at any given time. If you receive
+> warnings about outdated configuration options, please refer to the module
+> options for intended usage. Schizofox will attempt to remain
+> backwards-compatible at all times, but this is not _always_ feasible.
+
+<!-- deno-fmt-ignore-end -->
+
+<details>
+  <summary>Click to expand!</summary>
 
 ```nix
 imports = [ inputs.schizofox.homeManagerModule ];
@@ -146,6 +161,8 @@ programs.schizofox = {
 
 }
 ```
+
+</details>
 
 ## 💛 Support Us <a name="doc_support_us"></a>
 
