@@ -78,5 +78,24 @@ in {
       ];
       description = "Extra read-only paths to bind-mount into the sandbox.";
     };
+
+    webRTC = {
+      disable = mkOption {
+        type = bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether to disable WebRTC in Firefox.
+
+          WebRTC  is a technology that enables peer-to-peer communication
+          directly within web browsers without the need for plugins or
+          external applications. It supports video, voice, and generic data
+          sharing between peers, which is highly useful for applications like
+          video conferencing, file sharing, and live streaming.
+
+          Disabling WebRTC _might_ prevent IP leaks and other privacy issues.
+        '';
+      };
+    };
   };
 }

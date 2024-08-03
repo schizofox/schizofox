@@ -1,8 +1,4 @@
-{
-  cfg,
-  lib,
-  ...
-}: let
+{cfg, ...}: let
   inherit (cfg.theme.colors) background-darker background foreground;
 in {
   # Javascript toggle
@@ -241,6 +237,7 @@ in {
   "network.file.disable_unc_paths" = true;
 
   # force webrtc inside proxy when one is used
+  "media.peerconnection.enabled" = !cfg.security.webRTC.disable;
   "media.peerconnection.ice.proxy_only_if_behind_proxy" = true;
 
   # forces dns query through the proxy when using one
