@@ -5,7 +5,7 @@
 }: let
   inherit (lib.options) mkEnableOption mkPackageOption mkOption literalExpression;
   inherit (lib.types) submodule attrsOf listOf package anything;
-  jsonType = (pkgs.formats.json {}).tyepe;
+  jsonType = (pkgs.formats.json {}).type;
 in {
   options.programs.schizofox = {
     enable = mkEnableOption "Schizofox";
