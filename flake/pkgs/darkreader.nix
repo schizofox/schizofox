@@ -24,8 +24,9 @@ in
     patchPhase = ''
       runHook prePatch
 
-      substituteInPlace src/defaults.ts --replace "181a1b" ${background}
-      substituteInPlace src/defaults.ts --replace "e8e6e3" ${foreground}
+      substituteInPlace src/defaults.ts \
+        --replace-fail "181a1b" ${background} \
+        --replace-fail "e8e6e3" ${foreground}
 
       runHook postPatch
     '';
