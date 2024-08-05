@@ -29,90 +29,96 @@
   };
 
   wrappedFox =
-    (wrapFirefox cfg.package {
-      # for a list of avialable policies, see:
-      #  https://github.com/mozilla/policy-templates/blob/master/README.md
-      #  https://mozilla.github.io/policy-templates/
-      extraPolicies = {
-        OverrideFirstRunPage = "";
-        DisableTelemetry = true;
-        AppAutoUpdate = false;
-        CaptivePortal = cfg.security.enableCaptivePortal;
-        DisableFirefoxStudies = true;
-        DisableFirefoxAccounts = !cfg.misc.firefoxSync;
-        DisablePocket = true;
-        DisableFormHistory = true;
-        DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
-        DontCheckDefaultBrowser = true;
-        DisableSetDesktopBackground = true;
-        PasswordManagerEnabled = false;
-        PromptForDownloadLocation = true;
-        SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
+    (wrapFirefox cfg.package ({
+        cfg.speechSynthesisSupport = cfg.misc.speechSynthesisSupport;
 
-        NoDefaultBookmarks = true;
-        OfferToSaveLogins = false;
+        # For a list of avialable policies, please see:
+        #  <https://github.com/mozilla/policy-templates/blob/master/README.md>
+        #  <https://mozilla.github.io/policy-templates>
+        extraPolicies = {
+          OverrideFirstRunPage = "";
+          DisableTelemetry = true;
+          AppAutoUpdate = false;
+          CaptivePortal = cfg.security.enableCaptivePortal;
+          DisableFirefoxStudies = true;
+          DisableFirefoxAccounts = !cfg.misc.firefoxSync;
+          DisablePocket = true;
+          DisableFormHistory = true;
+          DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
+          DontCheckDefaultBrowser = true;
+          DisableSetDesktopBackground = true;
+          PasswordManagerEnabled = false;
+          PromptForDownloadLocation = true;
+          SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
 
-        EnableTrackingProtection = {
-          Cryptomining = true;
-          Fingerprinting = true;
-          Locked = true;
-          Value = true;
+          NoDefaultBookmarks = true;
+          OfferToSaveLogins = false;
+
+          EnableTrackingProtection = {
+            Cryptomining = true;
+            Fingerprinting = true;
+            Locked = true;
+            Value = true;
+          };
+
+          FirefoxHome = {
+            Search = true;
+            Pocket = false;
+            Snippets = false;
+            TopSites = false;
+            Highlights = false;
+          };
+
+          UserMessaging = {
+            ExtensionRecommendations = false;
+            SkipOnboarding = true;
+          };
+
+          Cookies = {
+            Behavior = "accept";
+            ExpireAtSessionEnd = false;
+            Locked = false;
+          };
+
+          SearchEngines = {
+            Add =
+              cfg.search.addEngines
+              ++ [
+                {
+                  Name = "Searx";
+                  Description = "Searx";
+                  Alias = "!sx";
+                  Method = "GET";
+                  URLTemplate =
+                    if cfg.search.searxRandomizer.enable
+                    then "http://127.0.0.1:8000/search?q={searchTerms}"
+                    else cfg.search.searxQuery;
+                }
+              ];
+            Default = cfg.search.defaultSearchEngine;
+            Remove = cfg.search.removeEngines;
+          };
+
+          Bookmarks = cfg.misc.bookmarks;
+
+          ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
         };
-
-        FirefoxHome = {
-          Search = true;
-          Pocket = false;
-          Snippets = false;
-          TopSites = false;
-          Highlights = false;
-        };
-
-        UserMessaging = {
-          ExtensionRecommendations = false;
-          SkipOnboarding = true;
-        };
-
-        Cookies = {
-          Behavior = "accept";
-          ExpireAtSessionEnd = false;
-          Locked = false;
-        };
-
-        SearchEngines = {
-          Add =
-            cfg.search.addEngines
-            ++ [
-              {
-                Name = "Searx";
-                Description = "Searx";
-                Alias = "!sx";
-                Method = "GET";
-                URLTemplate =
-                  if cfg.search.searxRandomizer.enable
-                  then "http://127.0.0.1:8000/search?q={searchTerms}"
-                  else cfg.search.searxQuery;
-              }
-            ];
-          Default = cfg.search.defaultSearchEngine;
-          Remove = cfg.search.removeEngines;
-        };
-
-        Bookmarks = cfg.misc.bookmarks;
-
-        ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
-      };
-    })
+      }
+      // cfg.extraWrapperArgs))
     .overrideAttrs (old: {
       buildCommand =
-        (
-          old.buildCommand or ""
-          /*
-          shouldn't ever happen...
-          */
-        )
+        (old.buildCommand or "")
         + ''
+          # Remove desktop item shipped by Firefox derivation
           rm -rf $out/share/applications/*
-          install -D ${desktopItem}/share/applications/Schizofox.desktop $out/share/applications/Schizofox.desktop
+
+          # Install desktop item
+          install -D ${desktopItem}/share/applications/Schizofox.desktop \
+            $out/share/applications/Schizofox.desktop
+
+          # Wrap Firefox binary with our customizations.
+          # TODO: We'd like to make full use of makeWrapper
+          # here for additional flags and variables.
           makeWrapper $out/bin/firefox $out/bin/schizofox
         '';
     });
