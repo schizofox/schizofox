@@ -47,6 +47,7 @@ in {
     };
 
     extraWrapperArgs = mkOption {
+      default = {};
       type = submodule {
         freeformType = attrsOf anything;
 
@@ -55,25 +56,12 @@ in {
         # options are the ones we **want** type-checked so that the
         # end-user does not hit obscure errors due to type mismatches.
         options = {
-          nixExtensions = mkOption {
-            type = listOf package;
+          nativeMessagingHosts = mkOption {
             default = [];
-            example = ''
-              [
-                (fetchFirefoxAddon {
-                  name = "ublock"; # Has to be unique!
-                  url = "https://addons.mozilla.org/firefox/downloads/file/3679754/ublock_origin-1.31.0-an+fx.xpi";
-                  hash = "sha256-2e73AbmYZlZXCP5ptYVcFjQYdjDp4iPoEPEOSCVF5sA=";
-                })
-              ]
-            '';
-
+            example = "[pkgs.tridactyl-native]";
+            type = listOf package;
             description = ''
-              Additional Firefox extensions to be passed to wrapFirefox.
-
-              ::: {.warning}
-              This option can *only* be used with an ESR build of Firefox.
-              :::
+              List of packages that provide native messaging hosts.
             '';
           };
         };
@@ -90,6 +78,8 @@ in {
         interfaces in the Schizofox module, but it must also be used with
         great care.
 
+        Please see the documentation for the `wrapFirefox` function in
+        the nixpkgs manual.
       '';
     };
   };
