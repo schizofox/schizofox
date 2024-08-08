@@ -454,4 +454,7 @@ in {
   "browser.display.focus_background_color.dark" = "#${background-darker}";
   "browser.display.foreground_color.dark" = "#${foreground}";
   "browser.display.focus_text_color" = "#${foreground}";
+
+  # https://support.mozilla.org/en-US/kb/privacy-preserving-attribution
+  "dom.private-attribution.submission.enable" = false;
 }

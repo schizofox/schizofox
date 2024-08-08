@@ -9,7 +9,7 @@
 in {
   options.programs.schizofox = {
     enable = mkEnableOption "Schizofox";
-    package = mkPackageOption pkgs "firefox-esr-115-unwrapped" {
+    package = mkPackageOption pkgs "firefox-esr-128-unwrapped" {
       example = "firefox-esr-unwrapped";
     };
 
