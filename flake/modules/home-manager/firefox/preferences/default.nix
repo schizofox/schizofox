@@ -456,5 +456,5 @@ in {
   "browser.display.focus_text_color" = "#${foreground}";
 
   # https://support.mozilla.org/en-US/kb/privacy-preserving-attribution
-  "dom.private-attribution.submission.enable" = false;
+  "dom.private-attribution.submission.enabled" = false;
 }
