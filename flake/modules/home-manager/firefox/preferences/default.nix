@@ -1,8 +1,12 @@
 {cfg, ...}: let
   inherit (cfg.theme.colors) background-darker background foreground;
 in {
-  # Javascript toggle
+  # Allow toggling Javascript.
   "javascript.enable" = cfg.security.javascript.enable;
+
+  # We do not care about your VPN, mozilla.
+  # See: https://support.mozilla.org/en-US/questions/1414266#answer-1582507
+  "browser.privatebrowsing.vpnpromourl" = "";
 
   # Quality of life stuff
   "browser.download.useDownloadDir" = false;
@@ -58,7 +62,9 @@ in {
 
   # disable caching
   "browser.cache.disk.enable" = false;
-  # fix for video playback
+  "browser.cache.offline.enable" = false;
+
+  # Fix for video playback
   "browser.privatebrowsing.forceMediaMemoryCache" = true;
   "media.memory_cache_max_size" = 65536;
   "browser.helperApps.deleteTempFileOnExit" = true;
@@ -70,8 +76,12 @@ in {
   # prevent websites from storing session data like cookies and forms
   "browser.formfill.enable" = false;
   "browser.sessionstore.privacy_level" = 2;
+
   # Isolate cookies, you don't have to delete them every time, duh
   "privacy.firstparty.isolate" = true;
+
+  # Accept for current session only
+  "network.cookie.lifetimePolicy" = 2;
 
   # Extensions cannot be updated without permission
   "extensions.update.enabled" = false;
@@ -100,12 +110,14 @@ in {
   # Don't call home for blacklisting
   "extensions.blocklist.enabled" = false;
 
-  # Disable homecalling
+  # Disable dial-home features.
   "app.update.url" = "http://127.0.0.1/";
+  "browser.aboutwelcome.enabled" = false;
   "startup.homepage_welcome_url" = "";
   "browser.startup.homepage_override.mstone" = "ignore";
+  "browser.uitour.enabled" = false;
 
-  # Help url
+  # Redirect functions that would normally dial-home to localhost.
   "app.support.baseURL" = "http://127.0.0.1/";
   "app.support.inputURL" = "http://127.0.0.1/";
   "app.feedback.baseURL" = "http://127.0.0.1/";
@@ -114,14 +126,14 @@ in {
   "plugins.update.url" = "http://127.0.0.1/";
   "browser.customizemode.tip0.learnMoreUrl" = "http://127.0.0.1/";
 
-  # Privacy & Freedom Issues
-  # https:webdevelopmentaid.wordpress.com/2013/10/21/customize-privacy-settings-in-mozilla-firefox-part-1-aboutconfig/
-  # https:panopticlick.eff.org
-  # http:ip-check.info
-  # http:browserspy.dk
-  # https:wiki.mozilla.org/Fingerprinting
-  # http:www.browserleaks.com
-  # http:fingerprint.pet-portal.eu
+  # Privacy & Freedom Issues #
+  #  https://webdevelopmentaid.wordpress.com/2013/10/21/customize-privacy-settings-in-mozilla-firefox-part-1-aboutconfig/
+  #  https://panopticlick.eff.org
+  #  http://ip-check.info
+  #  http://browserspy.dk
+  #  https//:wiki.mozilla.org/Fingerprinting
+  #  http://www.browserleaks.com
+  #  http://fingerprint.pet-portal.eu
   "browser.translation.engine" = "";
   "media.gmp-provider.enabled" = false;
   "browser.urlbar.update2.engineAliasRefresh" = true;
@@ -139,9 +151,6 @@ in {
   "browser.shopping.experience2023.enabled" = false;
   "security.OCSP.enabled" = 0;
   "security.OCSP.require" = false;
-  "browser.discovery.containers.enabled" = false;
-  "browser.discovery.enabled" = false;
-  "browser.discovery.sites" = "http://127.0.0.1/";
   "services.sync.prefs.sync.browser.startup.homepage" = false;
   "browser.contentblocking.report.monitor.home_page_url" = "http://127.0.0.1/";
   "browser.contentblocking.category" = "strict";
@@ -168,6 +177,14 @@ in {
   "browser.slowStartup.notificationDisabled" = true;
   "network.http.sendRefererHeader" = 2;
   "network.http.referer.spoofSource" = true;
+
+  # Disable addon recommendations that would pop up in
+  # about:addons. Uses google analytics internally
+  "extensions.getAddons.showPane" = false;
+  "extensions.htmlaboutaddons.recommendations.enable" = false;
+  "browser.discovery.containers.enabled" = false;
+  "browser.discovery.enabled" = false;
+  "browser.discovery.sites" = "http://127.0.0.1/";
 
   # Disable "beacon" asynchronous HTTP transfers (used for analytics)
   # https://developer.mozilla.org/en-US/docs/Web/API/navigator.sendBeacon
@@ -240,6 +257,9 @@ in {
   "media.peerconnection.enabled" = !cfg.security.webRTC.disable;
   "media.peerconnection.ice.proxy_only_if_behind_proxy" = true;
 
+  # Websites can track the microphone and camera status of your device.
+  "media.navigator.enabled" = false;
+
   # forces dns query through the proxy when using one
   "network.proxy.socks_remote_dns" = true;
 
@@ -249,6 +269,10 @@ in {
   "camera.control.face_detection.enabled" = false;
   "camera.control.autofocus_moving_callback.enabled" = false;
   "network.http.speculative-parallel-limit" = 0;
+
+  # Disable preloading of autocomplete URLs. Firefox preloads URLs that
+  # autocomplete when a user types into the address bar, which is a concern
+  # if URLs are suggested that the user does not want to connect to
   "browser.urlbar.speculativeConnect.enabled" = false;
 
   # No search suggestions
@@ -287,10 +311,19 @@ in {
   "privacy.resistFingerprinting" = true;
   "webgl.disabled" = cfg.misc.disableWebgl;
   "privacy.trackingprotection.cryptomining.enabled" = true;
-  # prevents rfp from breaking AMO
+
+  # Prevents rfp from breaking AMO
   "privacy.resistFingerprinting.block_mozAddonManager" = true;
   "browser.display.use_system_colors" = false;
   "privacy.trackingprotection.fingerprinting.enabled" = true;
+
+  # TODO: Those should be customizable from a list of allowed URLs.
+  # Allow embedded content.
+  # See:
+  #  <https://www.reddit.com/r/firefox/comments/l79nxy/firefox_dev_is_ignoring_social_tracking_preference/gl84ukk>
+  #  <https://www.reddit.com/r/firefox/comments/pvds9m/reddit_embeds_not_loading/>
+  # "urlclassifier.trackingSkipURLs" = "*.reddit.com, *.twitter.com, *.twimg.com, *.tiktok.com";
+  # "urlclassifier.features.socialtracking.skipURLs" = "*.instagram.com, *.twitter.com, *.twimg.com";
 
   # Services
   "gecko.handlerService.schemes.mailto.0.name" = "";
