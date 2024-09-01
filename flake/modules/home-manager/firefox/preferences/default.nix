@@ -360,10 +360,10 @@ in {
   # General settings
   "security.tls.unrestricted_rc4_fallback" = false;
   "security.tls.insecure_fallback_hosts.use_static_list" = false;
-  "security.tls.version.min" = 1;
+  "security.tls.version.min" = 3;
   "security.cert_pinning.enforcement_level" = 2;
   "security.remote_settings.crlite_filters.enabled" = true;
-  "security.ssl.require_safe_negotiation" = false;
+  "security.ssl.require_safe_negotiation" = true;
   "security.ssl.treat_unsafe_negotiation_as_broken" = true;
   "security.ssl3.rsa_seed_sha" = true;
 
