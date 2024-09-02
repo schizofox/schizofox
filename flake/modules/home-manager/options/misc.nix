@@ -19,7 +19,7 @@ in {
       type = listOf attrs;
       default = [];
       description = "List of bookmarks to add to your Schizofox configuration";
-      example = literalExpression ''
+      example = ''
         [
           {
             Title = "Example";
@@ -45,8 +45,10 @@ in {
       right-click context menu that is disabled by default.
 
       ::: {.note}
-      Fixes the issue where a second context menu appears
-      on top of the YouTube one.
+      Setting this to true fixes an issue where a second
+      context menu appears on top of the YouTube one, which
+      was introduced by a security policy that disallows
+      web-pages from hijacking the context menu.
       :::
     '';
 
@@ -63,5 +65,16 @@ in {
     };
 
     firefoxSync = mkEnableOption "Firefox Sync";
+
+    speechSynthesisSupport = mkEnableOption ''
+      speech synthesis support in Firefox.
+
+      ::: {.note}
+      This is enabled by default in wrapFirefox due to accessibility
+      reasons, however, those who need rely on this feature may disable
+      speech synthesis support to reduce the closure size by a significant
+      amount
+      :::
+    '';
   };
 }
