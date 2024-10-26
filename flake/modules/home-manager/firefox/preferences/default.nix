@@ -748,6 +748,15 @@ in {
 
   ## Schizofox Policies
 
+  # Enable `@-moz-document` media query
+  "layout.css.moz-document.content.enabled" = true;
+
+  # Set default page colors
+  "browser.display.background_color.dark" = "#${background}";
+  "browser.display.focus_background_color.dark" = "#${background-darker}";
+  "browser.display.foreground_color.dark" = "#${foreground}";
+  "browser.display.focus_text_color" = "#${foreground}";
+
   # Do not tell what plugins do we have enabled.
   # See:
   #  <https://mail.mozilla.org/pipermail/firefox-dev/2013-november/001186.html>
@@ -756,6 +765,8 @@ in {
 
   # Disable Firefox View Button
   # Note: currently does not work, and must be managed imperatively.
+  # XXX: Enterprise policy might be able to resolve this.
+  "browser.tabs.firefox-view" = false;
 
   # Whether to display bookmarks in the Toolbar
   "browser.toolbars.bookmarks.visibility" = cfg.misc.displayBookmarksInToolbar;
@@ -1075,15 +1086,9 @@ in {
   "browser.contentblocking.report.vpn-ios.url" = "";
   "browser.privatebrowsing.promoEnabled" = false;
 
-  # Enable `@-moz-document` media query
-  "layout.css.moz-document.content.enabled" = true;
-
-  # Set default page colors
-  "browser.display.background_color.dark" = "#${background}";
-  "browser.display.focus_background_color.dark" = "#${background-darker}";
-  "browser.display.foreground_color.dark" = "#${foreground}";
-  "browser.display.focus_text_color" = "#${foreground}";
-
   # https://support.mozilla.org/en-US/kb/privacy-preserving-attribution
   "dom.private-attribution.submission.enabled" = false;
+
+  # Show more ssl cert infos
+  "security.identityblock.show_extended_validation" = true;
 }
