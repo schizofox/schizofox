@@ -22,12 +22,14 @@ in {
   # Disable about:config warning
   "browser.aboutConfig.showWarning" = false;
 
-  # Set startup page
+  # Set startup page.
   #  - 0=blank
   #  - 1=home
   #  - 2=last visited page,
   #  - 3=resume previous session
-  "browser.startup.page" = 0;
+  # Note: this breaks 'browser.setup.homepage', so we should handle
+  # this behaviour there instead.
+  # "browser.startup.page" =  0;
   "browser.startup.homepage" =
     if cfg.misc.startPageURL != null
     then "${cfg.misc.startPageURL}"
