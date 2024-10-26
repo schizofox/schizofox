@@ -73,6 +73,12 @@
         Locked = false;
       };
 
+      # Attempt to support Smartcards (e.g. Nitrokeys) by using a proxy module.
+      # This should provide an easier interface than `nixpkgs.config.firefox.smartcardSupport = true`
+      SecurityDevices = {
+        "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
+      };
+
       ## Shutdown sanitization behaviour
       DisableFormHistory = cfg.security.sanitizeOnShutdown.enable;
       SanitizeOnShutdown = cfg.security.sanitizeOnShutdown.enable;
