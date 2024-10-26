@@ -86,11 +86,13 @@
       PasswordManagerEnabled = false;
       DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
       TranslateEnabled = cfg.misc.translate.enable;
+      ShowHomeButton = cfg.misc.showHomeButton;
 
       # User Messaging
       UserMessaging = {
         ExtensionRecommendations = false;
         SkipOnboarding = true;
+        MoreFromMozilla = false;
       };
 
       SearchEngines = {

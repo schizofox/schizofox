@@ -77,5 +77,6 @@ in {
         {option}`programs.schizofox.settings`
       ''
       // {default = true;};
+    showHomeButton = mkEnableOption "displaying Home Button in the toolbar";
   };
 }
