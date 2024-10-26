@@ -29,7 +29,7 @@ in {
   #  - 3=resume previous session
   # Note: this breaks 'browser.setup.homepage', so we should handle
   # this behaviour there instead.
-  # "browser.startup.page" =  0;
+  "browser.startup.page" = 3;
   "browser.startup.homepage" =
     if cfg.misc.startPageURL != null
     then "${cfg.misc.startPageURL}"
@@ -765,8 +765,6 @@ in {
   # Note: this is a security flaw, but it is necessary
   # for custom Dark Reader builds.
   "xpinstall.signatures.required" = false;
-
-  ##########################
 
   "browser.eme.ui.enabled" = cfg.misc.drm.enable;
   "media.eme.ui.enabled" = cfg.misc.drm.enable;

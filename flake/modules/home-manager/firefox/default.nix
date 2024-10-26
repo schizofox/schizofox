@@ -31,9 +31,9 @@
   };
 
   wrappedFox = wrapFirefox cfg.package {
-    # for a list of avialable policies, see:
-    #  https://github.com/mozilla/policy-templates/blob/master/README.md
-    #  https://mozilla.github.io/policy-templates/
+    # For a list of available policies, please see:
+    #  <https://github.com/mozilla/policy-templates/blob/master/README.md>
+    #  <https://mozilla.github.io/policy-templates>
     extraPolicies = {
       OverrideFirstRunPage = "";
       DisableTelemetry = true;
@@ -48,7 +48,7 @@
       DisableSetDesktopBackground = true;
       PasswordManagerEnabled = false;
       PromptForDownloadLocation = true;
-      SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
+      SanitizeOnShutdown = cfg.security.sanitizeOnShutdown.enable;
 
       NoDefaultBookmarks = true;
       OfferToSaveLogins = false;
