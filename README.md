@@ -201,6 +201,15 @@ programs.schizofox = {
 
 </details>
 
+## Frequently Asked Questions (FAQ)
+
+**Q:** An user.js preference is greyed out, and overrides my own settings set in
+`programs.schizofox.settings`!
+
+**A:** This is usually the case when an _enterprise policy_ takes priority over
+your preferences. If you do not set any enterprise policies yourself, open an
+issue. We will handle it.
+
 ## 💛 Support Us <a name="doc_support_us"></a>
 
 Schizofox is maintained by the people below. If it has helped you in any shape
@@ -243,10 +252,9 @@ Thank you in advance!
 
 ### Contributors and Credits <a name="doc_contributors_credits"></a>
 
-Schizofox has been made possible with the invaluable contributions of the people
-below. Please make sure to check them out, or support them <3
-
 <div align="center">
+    Schizofox has been made possible with the invaluable contributions of the people
+    below. Please make sure to check them out, or support them <3
     <div align="center" style="border: none;">
         <table align="center" style="border-collapse: collapse; margin: 0 auto;">
             <!-- First Row -->
@@ -325,9 +333,8 @@ below. Please make sure to check them out, or support them <3
     </div>
 </div>
 
-In addition, our special thanks go to for their support.
-
 <div align="center">
+    In addition, our special thanks go to the people below for their support.
     <div align="center" style="border: none;">
         <table align="center" style="border-collapse: collapse; margin: 0 auto;">
             <tr align="center">
@@ -348,4 +355,5 @@ In addition, our special thanks go to for their support.
             </tr>
         </table>
     </div>
+
 </div>
