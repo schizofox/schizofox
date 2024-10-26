@@ -1,4 +1,5 @@
 {cfg, ...}: let
+  inherit (cfg) security;
   inherit (cfg.theme.colors) background-darker background foreground;
 in {
   # # This is an amalgamation of our (Schzifox') and Arkenfox' policies. Please report any compatibility issues
@@ -16,7 +17,7 @@ in {
   # Global Javascript toggle. This defaults to true to retain
   # compatibility with most webpages, however, this is also a
   # security flaw. Disable if Javascript is not required.
-  "javascript.enable" = cfg.security.javascript.enable;
+  "javascript.enable" = security.javascript.enable;
 
   # Disable about:config warning
   "browser.aboutConfig.showWarning" = false;
@@ -589,20 +590,20 @@ in {
   # Enable Firefox to clear items on shutdown
   # Note: In FF129+ clearing "siteSettings" on shutdown (2811), or manually via site data (2820) and
   # via history (2830), will no longer remove sanitize on shutdown "cookie and site data" site exception
-  # "privacy.sanitize.sanitizeOnShutdown" = true;
+  "privacy.sanitize.sanitizeOnShutdown" = security.sanitizeOnShutdown.enable;
 
   # Set/enforce what items to clear on shutdown
   # Note: If "history" is true, downloads will also be cleared
-  # "privacy.clearOnShutdown.cache" = true;
-  # "privacy.clearOnShutdown_v2.cache" = true;
-  # "privacy.clearOnShutdown.downloads" = true;
-  # "privacy.clearOnShutdown.formdata" = true;
-  # "privacy.clearOnShutdown.history"= true;
+  "privacy.clearOnShutdown.cache" = security.sanitizeOnShutdown.sanitize.cache;
+  # "privacy.clearOnShutdown_v2.cache" = security.sanitizeOnShutdown.sanitize.cache;
+  "privacy.clearOnShutdown.downloads" = security.sanitizeOnShutdown.sanitize.downloads;
+  "privacy.clearOnShutdown.formdata" = security.sanitizeOnShutdown.sanitize.formdata;
+  "privacy.clearOnShutdown.history" = security.sanitizeOnShutdown.sanitize.history;
   # "privacy.clearOnShutdown_v2.historyFormDataAndDownloads" = true;
-  # "privacy.clearOnShutdown.siteSettings" = true;
+  "privacy.clearOnShutdown.siteSettings" = security.sanitizeOnShutdown.sanitize.siteSettings;
 
   # Set Session Restore to clear on shutdown
-  # "privacy.clearOnShutdown.openWindows" = true; #  Not needed if Session Restore is not used
+  "privacy.clearOnShutdown.openWindows" = security.noSessionRestore; #  Not needed if Session Restore is not used
 
   ## SANITIZE ON SHUTDOWN: RESPECTS "ALLOW" SITE EXCEPTIONS FF103+ | v2 migration is FF128+ ***/
   # Set "Cookies" and "Site Data" to clear on shutdown (if 2810 is true) [SETUP-CHROME]
