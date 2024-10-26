@@ -31,28 +31,25 @@
   };
 
   wrappedFox = wrapFirefox cfg.package {
-    # For a list of available policies, please see:
+    # For a list of available policies, or explanations of policies set below, please see:
     #  <https://github.com/mozilla/policy-templates/blob/master/README.md>
     #  <https://mozilla.github.io/policy-templates>
+    # Enterprise policies override all userjs preferences.
     extraPolicies = {
+      ## Features obsoleted by Nix
+      AppAutoUpdate = false;
+
+      ## Security / Privacy
       OverrideFirstRunPage = "";
       DisableTelemetry = true;
-      AppAutoUpdate = false;
       CaptivePortal = cfg.security.enableCaptivePortal;
       DisableFirefoxStudies = true;
       DisableFirefoxAccounts = !cfg.misc.firefoxSync;
       DisablePocket = true;
-      DisableFormHistory = true;
-      DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
-      DontCheckDefaultBrowser = true;
       DisableSetDesktopBackground = true;
-      PasswordManagerEnabled = false;
       PromptForDownloadLocation = true;
-      SanitizeOnShutdown = cfg.security.sanitizeOnShutdown.enable;
 
-      NoDefaultBookmarks = true;
-      OfferToSaveLogins = false;
-
+      # Tracking Protection
       EnableTrackingProtection = {
         Cryptomining = true;
         Fingerprinting = true;
@@ -60,6 +57,7 @@
         Value = true;
       };
 
+      # Firefox Home
       FirefoxHome = {
         Search = true;
         Pocket = false;
@@ -68,15 +66,28 @@
         Highlights = false;
       };
 
-      UserMessaging = {
-        ExtensionRecommendations = false;
-        SkipOnboarding = true;
-      };
-
+      # How Schizofox should handle cookies
       Cookies = {
         Behavior = "accept";
         ExpireAtSessionEnd = false;
         Locked = false;
+      };
+
+      ## Shutdown sanitization behaviour
+      DisableFormHistory = cfg.security.sanitizeOnShutdown.enable;
+      SanitizeOnShutdown = cfg.security.sanitizeOnShutdown.enable;
+
+      ## Irrelevant
+      DontCheckDefaultBrowser = true;
+
+      ## Misc
+      NoDefaultBookmarks = true;
+      OfferToSaveLogins = false;
+      PasswordManagerEnabled = false;
+      DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
+      UserMessaging = {
+        ExtensionRecommendations = false;
+        SkipOnboarding = true;
       };
 
       SearchEngines = {
