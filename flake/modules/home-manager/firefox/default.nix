@@ -85,6 +85,9 @@
       OfferToSaveLogins = false;
       PasswordManagerEnabled = false;
       DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
+      TranslateEnabled = cfg.misc.translate.enable;
+
+      # User Messaging
       UserMessaging = {
         ExtensionRecommendations = false;
         SkipOnboarding = true;
