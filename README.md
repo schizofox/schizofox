@@ -24,6 +24,8 @@
 [@NotAShelf]: https://github.com/notashelf
 [Nyx]: https://github.com/notashelf/nyx
 
+### Preface
+
 Schizofox has started as an unnamed Firefox configuration as a part of
 [Sioodmy's dotfiles] and was later adapted by [@NotAShelf] in [Nyx] for future
 use.
@@ -32,6 +34,13 @@ As we came to notice it would not be feasible to maintain two separate
 configurations, Schizofox has since been moved into its own standalone flake and
 eventually an organization. Thus, this project is the result of combined efforts
 of two people with special interest in security.
+
+### What is Schizofox?
+
+Schizofox is, simply put, a Firefox "distribution" (think Neovim distributions)
+with hardened, preferable defaults and extensive customizability. In addition to
+prioritizing privacy and security, Schizofox allows modifying its behaviour for
+extended compatibility, should the user prefer that.
 
 Compared to other browsers or browser configurations, Schizofox is quite
 _schizoprenic_ but it is also designed for daily-driving, so some compromises
@@ -51,10 +60,9 @@ security, we would recommend that look into the Tor browser.
 
 <!-- deno-fmt-ignore-end -->
 
-### Notable Features <a name = "doc_features"></a>
+## Notable Features <a name = "doc_features"></a>
 
 [Nixpak]: https://github.com/nixpak/nixpak
-[Home-Manager]: https://github.com/nix-community/home-manager
 
 - [x] Extensive & modular configuration
   - [x] Custom policy options
@@ -67,6 +75,35 @@ security, we would recommend that look into the Tor browser.
 - [x] Searx instance randomizer
 - [ ] User agent randomizer
 - [ ] Tor wrapper
+
+## Installing Schizofox
+
+[Home-Manager]: https://github.com/nix-community/home-manager
+
+For the time being, Schizofox **only** supports [Home-Manager] installations.
+This is because it is infinitely more tedious to try to write to ~/.mozilla
+without Home-Manager, and because Firefox provides _no good way_ to set
+policy/storage/userChrome/userContent paths.
+
+### Using the Home-Manager module
+
+Add Schizofox as a flake input:
+
+```nix
+# flake.nix
+{
+  inputs = {
+    # ...
+    schizofox.url = "github:schizofox/schizofox";
+    # ...
+  }
+}
+```
+
+And then add `inputs.schizofox.homeManagerModules.default` to `imports` in a
+Home-Manager configuration file. That's all, you can now use
+`programs.schizofox.enable` to enable Schizofox. Refer to sample configuration
+or the module options to learn more about how to modify Schizofox' behaviour.
 
 ### Contributing <a name="doc_contributing"></a>
 
@@ -128,7 +165,7 @@ programs.schizofox = {
   };
 
   security = {
-    sanitizeOnShutdown = false;
+    sanitizeOnShutdown.enable = true;
     sandbox = true;
     userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0";
   };
