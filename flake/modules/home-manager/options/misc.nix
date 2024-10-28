@@ -63,5 +63,20 @@ in {
     };
 
     firefoxSync = mkEnableOption "Firefox Sync";
+    translate.enable =
+      mkEnableOption ''
+        webpage translation.
+
+        ::: {.note}
+        Web page translation is done completely on the client, so there is no data
+        or privacy risk.
+        :::
+
+        If you only want to disable the popup, you can set the pref
+        `browser.translations.automaticallyPopup` in Schizofox'
+        {option}`programs.schizofox.settings`
+      ''
+      // {default = true;};
+    showHomeButton = mkEnableOption "displaying Home Button in the toolbar";
   };
 }

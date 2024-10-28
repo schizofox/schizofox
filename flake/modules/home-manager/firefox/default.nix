@@ -1,12 +1,14 @@
 {
+  self,
+  pkgs,
+  lib,
+  # Dependencies
   fetchurl,
   makeDesktopItem,
   wrapFirefox,
   profilesPath,
+  # Customizability
   cfg,
-  self,
-  pkgs,
-  lib,
   ...
 }: let
   logo = builtins.fetchurl {
@@ -28,93 +30,115 @@
     mimeTypes = ["text/html" "text/xml"];
   };
 
-  wrappedFox =
-    (wrapFirefox cfg.package {
-      # for a list of avialable policies, see:
-      #  https://github.com/mozilla/policy-templates/blob/master/README.md
-      #  https://mozilla.github.io/policy-templates/
-      extraPolicies = {
-        OverrideFirstRunPage = "";
-        DisableTelemetry = true;
-        AppAutoUpdate = false;
-        CaptivePortal = cfg.security.enableCaptivePortal;
-        DisableFirefoxStudies = true;
-        DisableFirefoxAccounts = !cfg.misc.firefoxSync;
-        DisablePocket = true;
-        DisableFormHistory = true;
-        DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
-        DontCheckDefaultBrowser = true;
-        DisableSetDesktopBackground = true;
-        PasswordManagerEnabled = false;
-        PromptForDownloadLocation = true;
-        SanitizeOnShutdown = cfg.security.sanitizeOnShutdown;
+  wrappedFox = wrapFirefox cfg.package {
+    # For a list of available policies, or explanations of policies set below, please see:
+    #  <https://github.com/mozilla/policy-templates/blob/master/README.md>
+    #  <https://mozilla.github.io/policy-templates>
+    # Enterprise policies override all userjs preferences.
+    extraPolicies = {
+      ## Features obsoleted by Nix
+      AppAutoUpdate = false;
 
-        NoDefaultBookmarks = true;
-        OfferToSaveLogins = false;
+      ## Security / Privacy
+      OverrideFirstRunPage = "";
+      DisableTelemetry = true;
+      CaptivePortal = cfg.security.enableCaptivePortal;
+      DisableFirefoxStudies = true;
+      DisableFirefoxAccounts = !cfg.misc.firefoxSync;
+      DisablePocket = true;
+      DisableSetDesktopBackground = true;
+      PromptForDownloadLocation = true;
 
-        EnableTrackingProtection = {
-          Cryptomining = true;
-          Fingerprinting = true;
-          Locked = true;
-          Value = true;
-        };
-
-        FirefoxHome = {
-          Search = true;
-          Pocket = false;
-          Snippets = false;
-          TopSites = false;
-          Highlights = false;
-        };
-
-        UserMessaging = {
-          ExtensionRecommendations = false;
-          SkipOnboarding = true;
-        };
-
-        Cookies = {
-          Behavior = "accept";
-          ExpireAtSessionEnd = false;
-          Locked = false;
-        };
-
-        SearchEngines = {
-          Add =
-            cfg.search.addEngines
-            ++ [
-              {
-                Name = "Searx";
-                Description = "Searx";
-                Alias = "!sx";
-                Method = "GET";
-                URLTemplate =
-                  if cfg.search.searxRandomizer.enable
-                  then "http://127.0.0.1:8000/search?q={searchTerms}"
-                  else cfg.search.searxQuery;
-              }
-            ];
-          Default = cfg.search.defaultSearchEngine;
-          Remove = cfg.search.removeEngines;
-        };
-
-        Bookmarks = cfg.misc.bookmarks;
-
-        ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
+      # Tracking Protection
+      EnableTrackingProtection = {
+        Cryptomining = true;
+        Fingerprinting = true;
+        Locked = true;
+        Value = true;
       };
-    })
-    .overrideAttrs (old: {
-      buildCommand =
-        (
-          old.buildCommand or ""
-          /*
-          shouldn't ever happen...
-          */
-        )
-        + ''
-          rm -rf $out/share/applications/*
-          install -D ${desktopItem}/share/applications/Schizofox.desktop $out/share/applications/Schizofox.desktop
-          makeWrapper $out/bin/firefox $out/bin/schizofox
-        '';
-    });
+
+      # Firefox Home
+      FirefoxHome = {
+        Search = true;
+        Pocket = false;
+        Snippets = false;
+        TopSites = false;
+        Highlights = false;
+      };
+
+      # How Schizofox should handle cookies
+      Cookies = {
+        Behavior = "accept";
+        ExpireAtSessionEnd = false;
+        Locked = false;
+      };
+
+      # Attempt to support Smartcards (e.g. Nitrokeys) by using a proxy module.
+      # This should provide an easier interface than `nixpkgs.config.firefox.smartcardSupport = true`
+      SecurityDevices = {
+        "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
+      };
+
+      ## Shutdown sanitization behaviour
+      DisableFormHistory = cfg.security.sanitizeOnShutdown.enable;
+      SanitizeOnShutdown = cfg.security.sanitizeOnShutdown.enable;
+
+      ## Irrelevant
+      DontCheckDefaultBrowser = true;
+
+      ## Misc
+      NoDefaultBookmarks = true;
+      OfferToSaveLogins = false;
+      PasswordManagerEnabled = false;
+      DisplayBookmarksToolbar = cfg.misc.displayBookmarksInToolbar;
+      TranslateEnabled = cfg.misc.translate.enable;
+      ShowHomeButton = cfg.misc.showHomeButton;
+
+      # User Messaging
+      UserMessaging = {
+        ExtensionRecommendations = false;
+        SkipOnboarding = true;
+        MoreFromMozilla = false;
+      };
+
+      SearchEngines = {
+        Add =
+          cfg.search.addEngines
+          ++ [
+            {
+              Name = "Searx";
+              Description = "Searx";
+              Alias = "!sx";
+              Method = "GET";
+              URLTemplate =
+                if cfg.search.searxRandomizer.enable
+                then "http://127.0.0.1:8000/search?q={searchTerms}"
+                else cfg.search.searxQuery;
+            }
+          ];
+        Default = cfg.search.defaultSearchEngine;
+        Remove = cfg.search.removeEngines;
+      };
+
+      Bookmarks = cfg.misc.bookmarks;
+
+      ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
+    };
+  };
+
+  finalPackage = wrappedFox.overrideAttrs (old: {
+    buildCommand =
+      (
+        old.buildCommand or ""
+        /*
+        shouldn't ever happen...
+        */
+      )
+      + ''
+        rm -rf $out/share/applications/*
+        install -D ${desktopItem}/share/applications/Schizofox.desktop $out/share/applications/Schizofox.desktop
+        makeWrapper $out/bin/firefox $out/bin/schizofox
+      '';
+  });
 in
-  wrappedFox
+  finalPackage
