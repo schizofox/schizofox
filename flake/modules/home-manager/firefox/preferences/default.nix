@@ -665,6 +665,9 @@ in {
   "privacy.window.maxInnerWidth" = 1600;
   "privacy.window.maxInnerHeight" = 900;
 
+  # Dynamically resizes the inner window by applying margins in stepped ranges
+  "privacy.resistFingerprinting.letterboxing" = true;
+
   # Disable mozAddonManager Web API
   # See:
   #  <https://bugzilla.mozilla.org/buglist.cgi?bug_id=1384330,1406795,1415644,1453988>
@@ -676,7 +679,7 @@ in {
   #  - 2=enabled
   # Note: when changing from value 2, preferred languages ('intl.accept_languages') is not reset, and
   # sets 'en-US, en' for displaying pages and 'en-US' as locale.
-  "privacy.spoof_english" = true;
+  "privacy.spoof_english" = 1;
 
   # Disable using system colors
   "browser.display.use_system_colors" = false;
