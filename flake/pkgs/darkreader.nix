@@ -6,7 +6,7 @@
   foreground ? "cdd6f4",
   ...
 }: let
-  version = "4.9.86";
+  version = "4.9.96";
 in
   buildNpmPackage {
     pname = "darkreader";
@@ -16,16 +16,17 @@ in
       owner = "darkreader";
       repo = "darkreader";
       rev = "v${version}";
-      hash = "sha256-i5/zlDunCzqGAf6VtgGk/hUKQeavcxbxSZuaOvDaMiw=";
+      hash = "sha256-2AYIFVTTMns1u0jKk3XeFuYdC1MfG9aOCMjAfZtlXuI=";
     };
 
-    npmDepsHash = "sha256-0Rl3ceRywaGFNo+OF55vSlTbI2II//w//YIK0I5+b5o=";
+    npmDepsHash = "sha256-dSuCL8GZXiksqVQ+TypzOdAROn3q30ExaGCJu72GLyY=";
 
     patchPhase = ''
       runHook prePatch
 
-      substituteInPlace src/defaults.ts --replace "181a1b" ${background}
-      substituteInPlace src/defaults.ts --replace "e8e6e3" ${foreground}
+      substituteInPlace src/defaults.ts \
+        --replace-fail "181a1b" ${background} \
+        --replace-fail "e8e6e3" ${foreground}
 
       runHook postPatch
     '';
