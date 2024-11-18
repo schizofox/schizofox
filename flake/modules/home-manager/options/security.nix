@@ -30,7 +30,7 @@ in {
 
     userAgent = mkOption {
       type = str;
-      default = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0";
+      default = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0";
       description = "Spoofed user agent string to be sent";
       example = ''
         ::: {.tip}
