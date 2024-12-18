@@ -203,12 +203,19 @@ programs.schizofox = {
 
 ## Frequently Asked Questions (FAQ)
 
-**Q:** An user.js preference is greyed out, and overrides my own settings set in
-`programs.schizofox.settings`!
+**Q:** An `user.js` preference is greyed out, and overrides my own settings set
+in `programs.schizofox.settings`!
 
 **A:** This is usually the case when an _enterprise policy_ takes priority over
 your preferences. If you do not set any enterprise policies yourself, open an
 issue. We will handle it.
+
+**Q:** How do I customize UI declaratively?
+
+**A:** Firefox allows you to configure UI (toolsbars, not themes) via
+`browser.uiCustomization.state` in `about:config`. This corresponds to
+`programs.schizofox.settings."browser.uiCustomization.state" = builtins.toJSON {}`
+in your Schizofox module.
 
 ## 💛 Support Us <a name="doc_support_us"></a>
 
