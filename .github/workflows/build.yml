@@ -1,0 +1,35 @@
+name: "Build Packages"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/build.yml"
+      - "flake/pkgs/**"
+      - "flake.{nix,lock}"
+
+jobs:
+  cachix:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - darkreader # make sure darkreader package always builds
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Set default git branch (to reduce log spam)
+        run: git config --global init.defaultBranch main
+
+      - name: Validate Flake
+        run: nix flake check || exit 1
+
+      - name: Build packages from build matrix
+        run: nix build .#${{ matrix.package }} -Lv
