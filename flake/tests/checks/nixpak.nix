@@ -19,7 +19,7 @@ nixosTest {
     home-manager.users.test = {
       programs.schizofox = {
         enable = true;
-        security.sandbox = true;
+        security.sandbox.enable = true;
       };
     };
   };

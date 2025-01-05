@@ -9,6 +9,7 @@ self: {
   inherit (lib.modules) mkIf;
   inherit (lib.strings) concatStrings;
   inherit (lib.attrsets) mapAttrsToList;
+  inherit (lib.lists) optionals;
 
   userPrefValue = pref:
     toJSON (
@@ -93,7 +94,7 @@ in {
     home.packages = let
       pkg = pkgs.callPackage ./firefox {inherit profilesPath cfg self pkgs lib;};
     in
-      if cfg.security.sandbox
+      if cfg.security.sandbox.enable
       then [
         (mkNixPak {
           config = {sloth, ...}: let
@@ -165,7 +166,7 @@ in {
                 (sloth.concat [sloth.homeDir "/.mozilla"])
               ];
 
-              bind.ro =
+              bind.ro = builtins.concatLists [
                 [
                   "/etc/resolv.conf"
 
@@ -182,8 +183,13 @@ in {
                     "/app/etc/firefox"
                   ]
                 ]
-                ++ just' cursorTheme "${cursorTheme}"
-                ++ config.programs.schizofox.security.extraSandboxBinds;
+
+                (just' cursorTheme "${cursorTheme}")
+
+                # Additional Read-only paths specified by the user
+                cfg.security.sandbox.extraBinds
+                (optionals cfg.security.sandbox.allowFontPaths ["/etc/fonts"])
+              ];
 
               env = {
                 XDG_DATA_DIRS = lib.makeSearchPath "share" ([

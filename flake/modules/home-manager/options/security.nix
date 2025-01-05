@@ -121,20 +121,27 @@ in {
       '';
     };
 
-    sandbox = mkEnableOption {
-      type = bool;
-      default = true;
-      example = true;
-      description = "runtime sandboxing with NixPak";
-    };
+    sandbox = {
+      enable = mkOption {
+        type = bool;
+        default = true;
+        example = false;
+        description = "runtime sandboxing with NixPak";
+      };
 
-    extraSandboxBinds = mkOption {
-      type = listOf str;
-      default = [];
-      example = [
-        "/home/\${username}/.config/tridactyl"
-      ];
-      description = "Extra read-only paths to bind-mount into the sandbox.";
+      extraBinds = mkOption {
+        type = listOf str;
+        default = [];
+        example = ["/home/\${username}/.config/tridactyl"];
+        description = "Extra, read-only, paths to bind-mount into the sandbox.";
+      };
+
+      allowFontPaths = mkOption {
+        type = bool;
+        default = true;
+        example = false;
+        description = "Whether to add {file}`/etc/fonts` to the nixpak sandbox";
+      };
     };
 
     webRTC = {

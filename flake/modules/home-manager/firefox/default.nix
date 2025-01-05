@@ -129,10 +129,8 @@
   finalPackage = wrappedFox.overrideAttrs (old: {
     buildCommand =
       (
+        # Shouldn't ever happen...
         old.buildCommand or ""
-        /*
-        shouldn't ever happen...
-        */
       )
       + ''
         rm -rf $out/share/applications/*
