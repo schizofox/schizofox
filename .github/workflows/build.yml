@@ -11,12 +11,13 @@ on:
       - "flake.{nix,lock}"
 
 jobs:
-  cachix:
+  build-default-packages:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         package:
-          - darkreader # make sure darkreader package always builds
+          - darkreader # custom patched darkreader
+          - searx-randomizer # re-export
     steps:
       - uses: actions/checkout@v4
         name: Checkout
