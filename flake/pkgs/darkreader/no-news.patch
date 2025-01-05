@@ -1,0 +1,82 @@
+diff --git i/src/background/extension.ts w/src/background/extension.ts
+index c2dd9b82..783f7b0c 100644
+--- i/src/background/extension.ts
++++ w/src/background/extension.ts
+@@ -21,7 +21,6 @@ import DevTools from './devtools';
+ import IconManager from './icon-manager';
+ import type {ExtensionAdapter} from './messenger';
+ import Messenger from './messenger';
+-import Newsmaker from './newsmaker';
+ import TabManager from './tab-manager';
+ import UIHighlights from './ui-highlights';
+ import UserStorage from './user-storage';
+@@ -259,7 +258,6 @@ export class Extension {
+             TabManager.updateContentScript({runOnProtectedPages: UserStorage.settings.enableForProtectedPages});
+         }
+
+-        UserStorage.settings.fetchNews && Newsmaker.subscribe();
+         Extension.startBarrier!.resolve();
+     }
+
+@@ -274,8 +272,6 @@ export class Extension {
+             changeSettings: Extension.changeSettings,
+             setTheme: Extension.setTheme,
+             toggleActiveTab: Extension.toggleActiveTab,
+-            markNewsAsRead: Newsmaker.markAsRead,
+-            markNewsAsDisplayed: Newsmaker.markAsDisplayed,
+             loadConfig: ConfigManager.load,
+             applyDevDynamicThemeFixes: DevTools.applyDynamicThemeFixes,
+             resetDevDynamicThemeFixes: DevTools.resetDynamicThemeFixes,
+@@ -396,13 +392,12 @@ export class Extension {
+     static async collectData(): Promise<ExtensionData> {
+         await Extension.loadData();
+         const [
+-            news,
+             shortcuts,
+             activeTab,
+             isAllowedFileSchemeAccess,
+             uiHighlights,
+         ] = await Promise.all([
+-            Newsmaker.getLatest(),
++
+             Extension.getShortcuts(),
+             Extension.getActiveTabInfo(),
+             new Promise<boolean>((r) => chrome.extension.isAllowedFileSchemeAccess(r)),
+@@ -413,7 +408,6 @@ export class Extension {
+             isReady: true,
+             isAllowedFileSchemeAccess,
+             settings: UserStorage.settings,
+-            news,
+             shortcuts,
+             colorScheme: ConfigManager.COLOR_SCHEMES_RAW!,
+             forcedScheme: Extension.autoState === 'scheme-dark' ? 'dark' : Extension.autoState === 'scheme-light' ? 'light' : null,
+@@ -537,9 +531,6 @@ export class Extension {
+                 resetWindowTheme();
+             }
+         }
+-        if (prev.fetchNews !== UserStorage.settings.fetchNews) {
+-            UserStorage.settings.fetchNews ? Newsmaker.subscribe() : Newsmaker.unSubscribe();
+-        }
+
+         if (prev.enableContextMenus !== UserStorage.settings.enableContextMenus) {
+             if (UserStorage.settings.enableContextMenus) {
+diff --git i/src/background/index.ts w/src/background/index.ts
+index 46f3eee8..71187e79 100644
+--- i/src/background/index.ts
++++ w/src/background/index.ts
+@@ -1,5 +1,5 @@
+ import {canInjectScript, keepListeningToEvents} from '../background/utils/extension-api';
+-import type {ColorScheme, DebugMessageBGtoCS, DebugMessageBGtoUI, DebugMessageCStoBG, ExtensionData, News, UserSettings} from '../definitions';
++import type {ColorScheme, DebugMessageBGtoCS, DebugMessageBGtoUI, DebugMessageCStoBG, ExtensionData, UserSettings} from '../definitions';
+ import {getHelpURL, UNINSTALL_URL} from '../utils/links';
+ import {emulateColorScheme, isSystemDarkModeEnabled} from '../utils/media-query';
+ import {DebugMessageTypeBGtoCS, DebugMessageTypeBGtoUI, DebugMessageTypeCStoBG} from '../utils/message';
+@@ -7,7 +7,6 @@ import {isFirefox} from '../utils/platform';
+
+ import {Extension} from './extension';
+ import {makeChromiumHappy} from './make-chromium-happy';
+-import {setNewsForTesting} from './newsmaker';
+ import {ASSERT} from './utils/log';
+ import {sendLog} from './utils/sendLog';
+
+

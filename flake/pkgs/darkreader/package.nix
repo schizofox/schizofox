@@ -2,11 +2,12 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
+  esbuild,
   background ? "1e1e2e",
   foreground ? "cdd6f4",
   ...
 }: let
-  version = "4.9.96";
+  version = "4.9.99";
 in
   buildNpmPackage {
     pname = "darkreader";
@@ -15,11 +16,14 @@ in
     src = fetchFromGitHub {
       owner = "darkreader";
       repo = "darkreader";
-      rev = "v${version}";
-      hash = "sha256-2AYIFVTTMns1u0jKk3XeFuYdC1MfG9aOCMjAfZtlXuI=";
+      tag = "v${version}";
+      hash = "sha256-K375/4qOyE1Tp/T5V5uCGcNd1IVVbT1Pjdnq/8oRHj0=";
     };
 
-    npmDepsHash = "sha256-dSuCL8GZXiksqVQ+TypzOdAROn3q30ExaGCJu72GLyY=";
+    patches = [./no-news.patch];
+
+    env.ESBUILD_BINARY_PATH = lib.getExe esbuild;
+    npmDepsHash = "sha256-m41HkwgbeRRmxJALQFJl/grYjjIqFOc47ltaesob1FA=";
 
     patchPhase = ''
       runHook prePatch
@@ -40,7 +44,7 @@ in
     '';
 
     meta = {
-      description = "Custom patched Dark reader for Schizofox";
+      description = "Custom build of Darkreader for Schizofox, with color tweaks.";
       maintainers = with lib.maintainers; [notashelf sioodmy];
       license = lib.licenses.mit;
     };

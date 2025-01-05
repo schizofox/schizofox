@@ -2,7 +2,7 @@
   perSystem = {pkgs, ...}: {
     packages = {
       # Extensions
-      darkreader = pkgs.callPackage ./darkreader.nix {};
+      darkreader = pkgs.callPackage ./darkreader/package.nix {};
 
       # Simplefox
       userChrome = pkgs.callPackage ./simplefox/userChrome.nix {};
