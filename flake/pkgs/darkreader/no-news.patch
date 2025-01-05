@@ -79,4 +79,1135 @@ index 46f3eee8..71187e79 100644
  import {ASSERT} from './utils/log';
  import {sendLog} from './utils/sendLog';
 
+diff --git i/src/background/newsmaker.ts w/src/background/newsmaker.ts
+deleted file mode 100644
+index 694a3044..00000000
+--- i/src/background/newsmaker.ts
++++ /dev/null
+@@ -1,221 +0,0 @@
+-import type {News} from '../definitions';
+-import {getBlogPostURL, NEWS_URL} from '../utils/links';
+-import {StateManager} from '../utils/state-manager';
+-import {getDurationInMinutes} from '../utils/time';
+-
+-import IconManager from './icon-manager';
+-import {readSyncStorage, readLocalStorage, writeSyncStorage, writeLocalStorage} from './utils/extension-api';
+-import {logWarn} from './utils/log';
+-
+-declare const __TEST__: boolean;
+-
+-interface NewsmakerState extends Record<string, unknown> {
+-    latest: News[];
+-    latestTimestamp: number | null;
+-}
+-
+-let newsForTesting: News[] | null = [{
+-    id: 'some',
+-    date: '10',
+-    url: '/',
+-    headline: 'News',
+-}];
+-
+-export default class Newsmaker {
+-    private static readonly UPDATE_INTERVAL = getDurationInMinutes({hours: 4});
+-    private static readonly ALARM_NAME = 'newsmaker';
+-    private static readonly LOCAL_STORAGE_KEY = 'Newsmaker-state';
+-
+-    private static initialized: boolean;
+-    private static stateManager: StateManager<NewsmakerState>;
+-    private static latest: News[];
+-    private static latestTimestamp: number | null;
+-
+-    private static init() {
+-        if (Newsmaker.initialized) {
+-            // This path is never taken since Extension.constructor() ever creates one instance.
+-            logWarn('Attempting to re-initialize Newsmaker. Doing nothing.');
+-            return;
+-        }
+-        Newsmaker.initialized = true;
+-
+-        Newsmaker.stateManager = new StateManager<NewsmakerState>(Newsmaker.LOCAL_STORAGE_KEY, this, {latest: [], latestTimestamp: null}, logWarn);
+-        Newsmaker.latest = [];
+-        Newsmaker.latestTimestamp = null;
+-    }
+-
+-    private static onUpdate() {
+-        Newsmaker.init();
+-        const latestNews = Newsmaker.latest.length > 0 && Newsmaker.latest[0];
+-        if (latestNews && latestNews.badge && !latestNews.read && !latestNews.displayed) {
+-            IconManager.showBadge(latestNews.badge);
+-            return;
+-        }
+-
+-        IconManager.hideBadge();
+-    }
+-
+-    static async getLatest(): Promise<News[]> {
+-        Newsmaker.init();
+-        await Newsmaker.stateManager.loadState();
+-        return Newsmaker.latest;
+-    }
+-
+-    private static alarmListener = (alarm: chrome.alarms.Alarm): void => {
+-        Newsmaker.init();
+-        if (alarm.name === Newsmaker.ALARM_NAME) {
+-            Newsmaker.updateNews();
+-        }
+-    };
+-
+-    static subscribe(): void {
+-        Newsmaker.init();
+-        if ((Newsmaker.latestTimestamp === null) || (Newsmaker.latestTimestamp + Newsmaker.UPDATE_INTERVAL < Date.now())) {
+-            Newsmaker.updateNews();
+-        }
+-        chrome.alarms.onAlarm.addListener(Newsmaker.alarmListener);
+-        chrome.alarms.create(Newsmaker.ALARM_NAME, {periodInMinutes: Newsmaker.UPDATE_INTERVAL});
+-    }
+-
+-    static unSubscribe(): void {
+-        // No need to call Newsmaker.init()
+-        chrome.alarms.onAlarm.removeListener(Newsmaker.alarmListener);
+-        chrome.alarms.clear(Newsmaker.ALARM_NAME);
+-    }
+-
+-    private static async updateNews(): Promise<void> {
+-        Newsmaker.init();
+-        const news = await Newsmaker.getNews();
+-        if (Array.isArray(news)) {
+-            Newsmaker.latest = news;
+-            Newsmaker.latestTimestamp = Date.now();
+-            Newsmaker.onUpdate();
+-            await Newsmaker.stateManager.saveState();
+-        }
+-    }
+-
+-    private static async getReadNews(): Promise<string[]> {
+-        Newsmaker.init();
+-        const [
+-            sync,
+-            local,
+-        ] = await Promise.all([
+-            readSyncStorage({readNews: []}),
+-            readLocalStorage({readNews: []}),
+-        ]);
+-        return Array.from(new Set([
+-            ...sync ? sync.readNews : [],
+-            ...local ? local.readNews : [],
+-        ]));
+-    }
+-
+-    private static async getDisplayedNews(): Promise<string[]> {
+-        Newsmaker.init();
+-        const [
+-            sync,
+-            local,
+-        ] = await Promise.all([
+-            readSyncStorage({displayedNews: []}),
+-            readLocalStorage({displayedNews: []}),
+-        ]);
+-        return Array.from(new Set([
+-            ...sync ? sync.displayedNews : [],
+-            ...local ? local.displayedNews : [],
+-        ]));
+-    }
+-
+-    private static async getNews(): Promise<News[] | null> {
+-        Newsmaker.init();
+-        if (__TEST__) {
+-            return newsForTesting;
+-        }
+-        try {
+-            const response = await fetch(NEWS_URL, {cache: 'no-cache'});
+-            const $news: Array<Omit<News, 'read' | 'url'> & {date: string}> = await response.json();
+-            const readNews = await Newsmaker.getReadNews();
+-            const displayedNews = await Newsmaker.getDisplayedNews();
+-            const news: News[] = $news.map((n) => {
+-                const url = getBlogPostURL(n.id);
+-                const read = Newsmaker.wasRead(n.id, readNews);
+-                const displayed = Newsmaker.wasDisplayed(n.id, displayedNews);
+-                return {...n, url, read, displayed};
+-            });
+-            for (let i = 0; i < news.length; i++) {
+-                const date = new Date(news[i].date);
+-                if (isNaN(date.getTime())) {
+-                    throw new Error(`Unable to parse date ${date}`);
+-                }
+-            }
+-            return news;
+-        } catch (err) {
+-            console.error(err);
+-            return null;
+-        }
+-    }
+-
+-    static async markAsRead(ids: string[]): Promise<void> {
+-        Newsmaker.init();
+-        const readNews = await Newsmaker.getReadNews();
+-        const results = readNews.slice();
+-        let changed = false;
+-        ids.forEach((id) => {
+-            if (readNews.indexOf(id) < 0) {
+-                results.push(id);
+-                changed = true;
+-            }
+-        });
+-        if (changed) {
+-            Newsmaker.latest = Newsmaker.latest.map((n) => {
+-                const read = Newsmaker.wasRead(n.id, results);
+-                return {...n, read};
+-            });
+-            Newsmaker.onUpdate();
+-            const obj = {readNews: results};
+-            await Promise.all([
+-                writeLocalStorage(obj),
+-                writeSyncStorage(obj),
+-                Newsmaker.stateManager.saveState(),
+-            ]);
+-        }
+-    }
+-
+-    static async markAsDisplayed(ids: string[]): Promise<void> {
+-        Newsmaker.init();
+-        const displayedNews = await Newsmaker.getDisplayedNews();
+-        const results = displayedNews.slice();
+-        let changed = false;
+-        ids.forEach((id) => {
+-            if (displayedNews.indexOf(id) < 0) {
+-                results.push(id);
+-                changed = true;
+-            }
+-        });
+-        if (changed) {
+-            Newsmaker.latest = Newsmaker.latest.map((n) => {
+-                const displayed = Newsmaker.wasDisplayed(n.id, results);
+-                return {...n, displayed};
+-            });
+-            Newsmaker.onUpdate();
+-            const obj = {displayedNews: results};
+-            await Promise.all([
+-                writeLocalStorage(obj),
+-                writeSyncStorage(obj),
+-                Newsmaker.stateManager.saveState(),
+-            ]);
+-        }
+-    }
+-
+-    private static wasRead(id: string, readNews: string[]): boolean {
+-        return readNews.includes(id);
+-    }
+-
+-    private static wasDisplayed(id: string, displayedNews: string[]): boolean {
+-        return displayedNews.includes(id);
+-    }
+-}
+-
+-export function setNewsForTesting(news: News[]): void {
+-    if (__TEST__) {
+-        newsForTesting = news;
+-    }
+-}
+diff --git i/src/ui/connect/connector.ts w/src/ui/connect/connector.ts
+index ac3305ee..d8d66bfd 100644
+--- i/src/ui/connect/connector.ts
++++ w/src/ui/connect/connector.ts
+@@ -105,10 +105,6 @@ export default class Connector implements ExtensionActions {
+         chrome.runtime.sendMessage<MessageUItoBG>({type: MessageTypeUItoBG.TOGGLE_ACTIVE_TAB, data: {}});
+     }
 
+-    markNewsAsRead(ids: string[]): void {
+-        chrome.runtime.sendMessage<MessageUItoBG>({type: MessageTypeUItoBG.MARK_NEWS_AS_READ, data: ids});
+-    }
+-
+     markNewsAsDisplayed(ids: string[]): void {
+         chrome.runtime.sendMessage<MessageUItoBG>({type: MessageTypeUItoBG.MARK_NEWS_AS_DISPLAYED, data: ids});
+     }
+diff --git i/src/ui/connect/mock.ts w/src/ui/connect/mock.ts
+index 7d40e4a1..affc9fa6 100644
+--- i/src/ui/connect/mock.ts
++++ w/src/ui/connect/mock.ts
+@@ -9,7 +9,6 @@ export function getMockData(override = {} as Partial<ExtensionData>): ExtensionD
+         settings: {
+             schemeVersion: 2,
+             enabled: true,
+-            fetchNews: true,
+             presets: [],
+             theme: {
+                 mode: 1,
+@@ -60,7 +59,6 @@ export function getMockData(override = {} as Partial<ExtensionData>): ExtensionD
+             'fantasy',
+             'system-ui',
+         ],
+-        news: [],
+         shortcuts: {
+             'addSite': 'Alt+Shift+A',
+             'toggle': 'Alt+Shift+D',
+diff --git i/src/ui/popup/body/index.tsx w/src/ui/popup/body/index.tsx
+index 1fcb736c..d3f2a0a3 100644
+--- i/src/ui/popup/body/index.tsx
++++ w/src/ui/popup/body/index.tsx
+@@ -137,7 +137,6 @@ export default function Body(props: ViewProps) {
+             <section class="m-section">
+                 <DonateGroup />
+             </section>
+-            <NewsSection {...props} />
+             <Overlay />
+         </body>
+     );
+diff --git i/src/ui/popup/components/body.tsx w/src/ui/popup/components/body.tsx
+index a3fcc516..c2cb1796 100644
+--- i/src/ui/popup/components/body.tsx
++++ w/src/ui/popup/components/body.tsx
+@@ -3,7 +3,7 @@ import {getContext} from 'malevic/dom';
+ import {withForms} from 'malevic/forms';
+ import {withState, useState} from 'malevic/state';
+
+-import type {ExtensionData, ExtensionActions, News as NewsObject} from '../../../definitions';
++import type {ExtensionData, ExtensionActions} from '../../../definitions';
+ import {DONATE_URL, HOMEPAGE_URL, MOBILE_URL, getHelpURL} from '../../../utils/links';
+ import {getLocalMessage} from '../../../utils/locales';
+ import {isMobile} from '../../../utils/platform';
+@@ -16,7 +16,6 @@ import FilterSettings from './filter-settings';
+ import {Header, MoreSiteSettings, MoreToggleSettings} from './header';
+ import Loader from './loader';
+ import MoreSettings from './more-settings';
+-import {NewsGroup, NewsButton} from './news';
+ import {MobileLinks, MobileLinksButton} from './news/mobile-links';
+ import SiteListSettings from './site-list-settings';
+
+@@ -33,9 +32,7 @@ interface BodyProps {
+
+ interface BodyState {
+     activeTab: string;
+-    newsOpen: boolean;
+     mobileLinksOpen: boolean;
+-    didNewsSlideIn: boolean;
+     didMobileLinksSlideIn: boolean;
+     moreSiteSettingsOpen: boolean;
+     moreToggleSettingsOpen: boolean;
+@@ -46,9 +43,7 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
+     const context = getContext();
+     const {state, setState} = useState<BodyState>({
+         activeTab: 'Filter',
+-        newsOpen: false,
+         mobileLinksOpen: false,
+-        didNewsSlideIn: false,
+         didMobileLinksSlideIn: false,
+         moreSiteSettingsOpen: false,
+         moreToggleSettingsOpen: false,
+@@ -78,32 +73,14 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
+         return <NewBody {...props} fonts={props.fonts} />;
+     }
+
+-    const unreadNews = props.data.news.filter(({read}) => !read);
+-    const latestNews = props.data.news.length > 0 ? props.data.news[0] : null;
+-    const isFirstNewsUnread = latestNews && !latestNews.read;
+-    let newsWereLongTimeAgo = true;
+-    if (unreadNews.length > 0) {
+-        const latest = new Date(unreadNews[0].date);
+-        const today = new Date();
+-        newsWereLongTimeAgo = latest.getTime() < today.getTime() - getDuration({days: 30});
+-    }
+-    const displayedNewsCount = newsWereLongTimeAgo ? 0 : unreadNews.length;
++
+
+     context.onRender(() => {
+         if (props.data.uiHighlights.includes('mobile-links') && !state.mobileLinksOpen && !state.didMobileLinksSlideIn) {
+             setTimeout(toggleMobileLinks, 750);
+-        } else if (props.data.settings.fetchNews && isFirstNewsUnread && !state.newsOpen && !state.didNewsSlideIn && !newsWereLongTimeAgo) {
+-            setTimeout(toggleNews, 750);
+         }
+     });
+
+-    function toggleNews() {
+-        if (state.newsOpen && unreadNews.length > 0) {
+-            props.actions.markNewsAsRead(unreadNews.map(({id}) => id));
+-        }
+-        setState({newsOpen: !state.newsOpen, didNewsSlideIn: state.didNewsSlideIn || !state.newsOpen});
+-    }
+-
+     function toggleMobileLinks() {
+         setState({mobileLinksOpen: !state.mobileLinksOpen, didMobileLinksSlideIn: state.didMobileLinksSlideIn || !state.mobileLinksOpen});
+         if (state.mobileLinksOpen && props.data.uiHighlights.includes('mobile-links')) {
+@@ -117,13 +94,6 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
+         }
+     }
+
+-    function onNewsOpen(...news: NewsObject[]) {
+-        const unread = news.filter(({read}) => !read);
+-        if (unread.length > 0) {
+-            props.actions.markNewsAsRead(unread.map(({id}) => id));
+-        }
+-    }
+-
+     function toggleMoreSiteSettings() {
+         setState({moreSiteSettingsOpen: !state.moreSiteSettingsOpen, moreToggleSettingsOpen: false, newToggleMenusHighlightHidden: true});
+         if (props.data.uiHighlights.includes('new-toggle-menus')) {
+@@ -138,26 +108,6 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
+         }
+     }
+
+-    const birthdayMessage = getLocalMessage('we_celebrate_10_years');
+-    let birthdayMessageSpec = <span>{birthdayMessage}</span>;
+-    try {
+-        const index10 = birthdayMessage.indexOf('10');
+-        const indexDot = birthdayMessage.indexOf('.', index10);
+-        if (index10 >= 0 && indexDot > index10) {
+-            birthdayMessageSpec = (
+-                <span>
+-                    {birthdayMessage.substring(0, index10)}
+-                    <a href={`${HOMEPAGE_URL}/timeline/`} target="_blank" rel="noopener noreferrer">
+-                        {birthdayMessage.substring(index10, indexDot)}
+-                    </a>
+-                    {birthdayMessage.substring(indexDot)}
+-                </span>
+-            );
+-        }
+-    } catch (err) {
+-        console.error(err);
+-    }
+-
+     const filterTab = <FilterSettings data={props.data} actions={props.actions}>
+         <div class="birthday-container">
+             <i class="birthday-icon">🎉</i>
+@@ -214,16 +164,9 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
+             <footer>
+                 <div class="footer-buttons">
+                     <a class="footer-help-link" href={getHelpURL()} target="_blank" rel="noopener noreferrer">{getLocalMessage('help')}</a>
+-                    <NewsButton active={state.newsOpen} count={displayedNewsCount} onClick={toggleNews} />
+                     <MobileLinksButton active={state.mobileLinksOpen} onClick={toggleMobileLinks} />
+                 </div>
+             </footer>
+-            <NewsGroup
+-                news={props.data.news}
+-                expanded={state.newsOpen}
+-                onNewsOpen={onNewsOpen}
+-                onClose={toggleNews}
+-            />
+             <MobileLinks
+                 expanded={state.mobileLinksOpen}
+                 onLinkClick={disableMobileLinksSlideIn}
+diff --git i/src/ui/popup/components/news/index.tsx w/src/ui/popup/components/news/index.tsx
+deleted file mode 100644
+index 54051c1f..00000000
+--- i/src/ui/popup/components/news/index.tsx
++++ /dev/null
+@@ -1,93 +0,0 @@
+-import {m} from 'malevic';
+-
+-import type {News} from '../../../../definitions';
+-import {BLOG_URL} from '../../../../utils/links';
+-import {getLocalMessage, getUILanguage} from '../../../../utils/locales';
+-import {Button} from '../../../controls';
+-
+-interface NewsProps {
+-    news: News[];
+-    expanded: boolean;
+-    onNewsOpen: (...news: News[]) => void;
+-    onClose: () => void;
+-}
+-
+-const NEWS_COUNT = 2;
+-
+-export function NewsGroup({news, expanded, onNewsOpen, onClose}: NewsProps) {
+-    return (
+-        <div class={{'news': true, 'news--expanded': expanded}}>
+-            <div class="news__header">
+-                <span class="news__header__text">{getLocalMessage('news')}</span>
+-                <span class="news__close" role="button" onclick={onClose}>✕</span>
+-            </div>
+-            <div class="news__list">
+-                {news.slice(0, NEWS_COUNT).map((event) => {
+-                    const date = new Date(event.date);
+-                    let formattedDate: string;
+-                    try {
+-                        // Workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=811403
+-                        const locale = getUILanguage();
+-                        formattedDate = date.toLocaleDateString(locale, {month: 'short', day: 'numeric'});
+-                    } catch (err) {
+-                        formattedDate = date.toISOString().substring(0, 10);
+-                    }
+-                    return (
+-                        <div
+-                            class={{
+-                                'news__event': true,
+-                                'news__event--unread': !event.read,
+-                                'news__event--has-icon': event.icon,
+-                            }}
+-                        >
+-                            <a class="news__event__link" onclick={() => onNewsOpen(event)} href={event.url} target="_blank" rel="noopener noreferrer">
+-                                {event.icon ?
+-                                    <span class="news__event__icon" style={{'background-image': `url('${event.icon}')`}}></span>
+-                                    : null}
+-                                <span class="news__event__date">
+-                                    {formattedDate}
+-                                </span>
+-                                {event.headline}
+-                            </a>
+-                        </div>
+-                    );
+-                })}
+-                {(news.length <= NEWS_COUNT
+-                    ? null
+-                    : <a
+-                        class={{
+-                            'news__read-more': true,
+-                            'news__read-more--unread': news.slice(NEWS_COUNT).find(({read}) => !read),
+-                        }}
+-                        href={BLOG_URL}
+-                        target="_blank"
+-                        onclick={() => onNewsOpen(...news)}
+-                        rel="noopener noreferrer"
+-                    >{getLocalMessage('read_more')}</a>
+-                )}
+-            </div>
+-        </div>
+-    );
+-}
+-
+-interface NewsButtonProps {
+-    active: boolean;
+-    count: number;
+-    onClick: () => void;
+-}
+-
+-export function NewsButton({active, count, onClick}: NewsButtonProps) {
+-    return (
+-        <Button
+-            class={{'news-button': true, 'news-button--active': active}}
+-            href="#news"
+-            data-count={count > 0 && !active ? count : null}
+-            onclick={(e) => {
+-                (e.currentTarget as HTMLElement).blur();
+-                onClick();
+-            }}
+-        >
+-            {getLocalMessage('news')}
+-        </Button>
+-    );
+-}
+diff --git i/src/ui/popup/components/news/mobile-links.tsx w/src/ui/popup/components/news/mobile-links.tsx
+deleted file mode 100644
+index ef61a17c..00000000
+--- i/src/ui/popup/components/news/mobile-links.tsx
++++ /dev/null
+@@ -1,90 +0,0 @@
+-import {m} from 'malevic';
+-import {isFirefox} from 'utils/platform';
+-
+-import {PhoneIcon} from '../../../../ui/icons/phone-icon';
+-import {MOBILE_URL} from '../../../../utils/links';
+-import {getLocalMessage} from '../../../../utils/locales';
+-import {Button} from '../../../controls';
+-
+-
+-interface MobileLinksProps {
+-    expanded: boolean;
+-    onLinkClick: () => void;
+-    onClose: () => void;
+-}
+-
+-export function MobileLinks({expanded, onLinkClick, onClose}: MobileLinksProps) {
+-    return (
+-        <div class={{'news': true, 'news--expanded': expanded}}>
+-            <div class="news__header">
+-                <span class="news__header__text">
+-                    <span class="news__header__text__dark-reader">
+-                        Dark Reader
+-                    </span>
+-                    {' '}
+-                    <span class="news__header__text__mobile">
+-                        Mobile
+-                    </span>
+-                    <i class="news__header__text__phone-icon">
+-                        <PhoneIcon />
+-                    </i>
+-                </span>
+-                <span class="news__close" role="button" onclick={onClose}>✕</span>
+-            </div>
+-            <div class="news__list">
+-                <div class="news__mobile">
+-                    <div class="news__mobile__left">
+-                        <div class="news__mobile__text">
+-                            {getLocalMessage('mobile_text')}
+-                        </div>
+-                        <div class="news__mobile__learn-more-container">
+-                            <a
+-                                href={MOBILE_URL}
+-                                class="news__mobile__learn-more"
+-                                onclick={onLinkClick}
+-                                target="_blank"
+-                                rel="noopener noreferrer"
+-                            >
+-                                {getLocalMessage('learn_more')}
+-                            </a>
+-                            <div class="news__mobile__logos">
+-                                <img class="news__os-icon" src="../assets/images/icon-android-dark.svg" />
+-                                <img class="news__os-icon" src="../assets/images/icon-apple-white.svg" />
+-                            </div>
+-                        </div>
+-                    </div>
+-                    <div class="news__mobile__right">
+-                        <img
+-                            class="news__qr-code"
+-                            src={`../assets/images/${isFirefox ? 'mobile-qr-code-firefox.png' : 'mobile-qr-code.png'}`}
+-                        />
+-                    </div>
+-                </div>
+-            </div>
+-        </div>
+-    );
+-}
+-
+-interface NewsButtonProps {
+-    active: boolean;
+-    onClick: () => void;
+-}
+-
+-export function MobileLinksButton({active, onClick}: NewsButtonProps) {
+-    return (
+-        <Button
+-            class={{'news-button': true, 'news-button--active': active}}
+-            onclick={(e) => {
+-                (e.currentTarget as HTMLElement).blur();
+-                onClick();
+-            }}
+-        >
+-            <span class="news-button__wrapper">
+-                <i class="news-button__phone-icon">
+-                    <PhoneIcon />
+-                </i>
+-                {getLocalMessage('mobile')}
+-            </span>
+-        </Button>
+-    );
+-}
+diff --git i/src/ui/popup/components/news/style.less w/src/ui/popup/components/news/style.less
+deleted file mode 100644
+index cf0b67c4..00000000
+--- i/src/ui/popup/components/news/style.less
++++ /dev/null
+@@ -1,270 +0,0 @@
+-@import "../../../theme";
+-
+-@size-news-icon: 2.5rem;
+-
+-.news {
+-    bottom: @size-control-inner + @size-border + @popup-content-padding;
+-    box-sizing: border-box;
+-    display: flex;
+-    flex-direction: column;
+-    left: 0;
+-    max-height: 0;
+-    opacity: 0;
+-    overflow: hidden;
+-    pointer-events: none;
+-    position: absolute;
+-    text-align: left;
+-    transition: all @time-slow;
+-    width: 100%;
+-    z-index: 1;
+-
+-    &--expanded {
+-        max-height: 12rem;
+-        opacity: 1;
+-        pointer-events: initial;
+-    }
+-
+-    &::before {
+-        background-image: linear-gradient(to top, @color-back, fade(@color-back, 0%));
+-        content: "";
+-        display: block;
+-        height: @size-control-inner;
+-        pointer-events: none;
+-        width: 100%;
+-    }
+-
+-    &__header {
+-        align-items: flex-end;
+-        background-image: linear-gradient(to bottom, fade(@color-back, 90%), fade(@color-back, 95%));
+-        border-top: @size-border solid @color-border;
+-        color: @color-heading;
+-        display: flex;
+-        flex: none;
+-        font-size: @size-text-large;
+-        height: @size-control-inner;
+-        justify-content: space-between;
+-        padding-left: @popup-content-padding;
+-
+-        &__text {
+-            line-height: @size-text-large-height;
+-
+-            &__phone-icon {
+-                color: @color-fore;
+-                display: none;
+-                height: 1rem;
+-                margin: 0 0.25rem;
+-                position: relative;
+-                top: 0.125rem;
+-                width: 1rem;
+-            }
+-
+-            &__dark-reader {
+-                font-weight: bold;
+-            }
+-
+-            &__mobile {
+-                color: @color-control-fore;
+-            }
+-        }
+-    }
+-
+-    &__close {
+-        color: @color-heading;
+-        cursor: pointer;
+-        display: inline-block;
+-        font-size: @size-control-inner * 3 / 4;
+-        height: @size-control-inner;
+-        line-height: @size-control-inner;
+-        text-align: center;
+-        user-select: none;
+-        width: @size-control-inner;
+-
+-        &:hover {
+-            background-color: fade(@color-control-active, 25%);
+-        }
+-    }
+-
+-    &__list {
+-        background-color: fade(@color-back, 95%);
+-        border-bottom: @size-border solid @color-border;
+-        flex: auto;
+-        padding: @indent-large @popup-content-padding;
+-        position: relative;
+-
+-        > :not(:first-child) {
+-            margin-top: @indent-small;
+-        }
+-    }
+-
+-    &__event {
+-        color: @color-fore;
+-        display: block;
+-        flex: none;
+-        position: relative;
+-
+-        &__date {
+-            display: block;
+-            font-size: @size-text-small;
+-        }
+-
+-        &__link {
+-            color: inherit;
+-            display: inline-block;
+-            text-decoration: none;
+-
+-            &:hover {
+-                text-decoration: underline;
+-            }
+-        }
+-
+-        &__icon {
+-            background-position: center;
+-            background-repeat: no-repeat;
+-            background-size: contain;
+-            display: inline-block;
+-            height: @size-news-icon;
+-            left: 0;
+-            position: absolute;
+-            top: calc(50% - @size-news-icon / 2);
+-            width: @size-news-icon;
+-        }
+-
+-        &--has-icon {
+-            padding-left: @size-news-icon + @indent-small;
+-        }
+-
+-        &--unread {
+-            font-weight: bold;
+-
+-            &:first-child {
+-                color: @color-heading;
+-            }
+-        }
+-
+-        &--important {
+-            color: @color-heading;
+-        }
+-
+-        &--important&--unread {
+-            &::before {
+-                background-color: @color-heading;
+-                content: "";
+-                height: 100%;
+-                position: absolute;
+-                right: calc(100% + @indent-large / 2);
+-                text-align: center;
+-                top: 0;
+-                width: @size-border;
+-            }
+-        }
+-    }
+-
+-    &__read-more {
+-        color: inherit;
+-        display: block;
+-        text-decoration: none;
+-
+-        &:hover {
+-            text-decoration: underline;
+-        }
+-
+-        &--unread {
+-            font-weight: bold;
+-        }
+-    }
+-
+-    &__mobile {
+-        align-items: center;
+-        display: flex;
+-        flex-direction: row;
+-        gap: @indent-small;
+-        padding-bottom: @size-border;
+-
+-        &__left {
+-            display: flex;
+-            flex: auto;
+-            flex-direction: column;
+-            gap: @indent-small;
+-        }
+-
+-        &__right {
+-            display: flex;
+-            flex: none;
+-        }
+-
+-        &__learn-more-container {
+-            align-items: center;
+-            display: flex;
+-            flex-direction: row;
+-            gap: @indent-small;
+-        }
+-
+-        &__logos {
+-            display: flex;
+-            flex-direction: row;
+-            flex: none;
+-            gap: 0.25rem;
+-        }
+-
+-        &__learn-more {
+-            color: @color-fore;
+-            font-weight: bold;
+-            transition: color @time-slow;
+-
+-            &:hover {
+-                color: @color-control-fore;
+-            }
+-        }
+-    }
+-
+-    &__qr-code {
+-        border-radius: 5%;
+-        display: inline-block;
+-        height: 5rem;
+-        width: 5rem;
+-    }
+-
+-    &__os-icon {
+-        display: inline-block;
+-        height: 1.25rem;
+-        width: 1.25rem;
+-    }
+-}
+-
+-.news-button {
+-    overflow: visible;
+-    position: relative;
+-
+-    &--active {
+-        border-top: none;
+-        padding-top: @size-border;
+-        z-index: 2;
+-    }
+-
+-    &::after {
+-        background-color: @color-heading;
+-        border-radius: @size-text-small-height / 2;
+-        color: @color-control-fore;
+-        content: attr(data-count);
+-        font-size: @size-text-small;
+-        line-height: @size-text-small-height;
+-        min-width: @size-text-small-height;
+-        position: absolute;
+-        right: -@size-text-small-height / 3;
+-        top: -@size-text-small-height / 3;
+-        z-index: 3;
+-    }
+-
+-    &__phone-icon {
+-        display: inline-block;
+-        height: 1rem;
+-        width: 1rem;
+-    }
+-
+-    &__wrapper {
+-        align-items: center;
+-        display: flex;
+-        flex-direction: row;
+-        justify-content: center;
+-    }
+-}
+diff --git i/src/ui/popup/news-section/index.tsx w/src/ui/popup/news-section/index.tsx
+deleted file mode 100644
+index 998b9c80..00000000
+--- i/src/ui/popup/news-section/index.tsx
++++ /dev/null
+@@ -1,100 +0,0 @@
+-import {m} from 'malevic';
+-import {getContext} from 'malevic/dom';
+-
+-import type {News, ViewProps} from '../../../definitions';
+-import {HOMEPAGE_URL} from '../../../utils/links';
+-import {getDuration} from '../../../utils/time';
+-
+-function isFresh(n: News) {
+-    try {
+-        const now = Date.now();
+-        const date = (new Date(n.date)).getTime();
+-        return (now - date) < getDuration({days: 30});
+-    } catch (err) {
+-        return false;
+-    }
+-}
+-
+-function NewsLink(props: {news: News; isSmall?: boolean; onClick?: () => void}) {
+-    const {news} = props;
+-    return (
+-        <a
+-            href={news.url}
+-            class={{
+-                'news-section__news': true,
+-                'news-section__news--highlight': !news.read && isFresh(news),
+-                'news-section__news--has-icon': news.icon,
+-                'news-section__news--small': props.isSmall,
+-            }}
+-            onclick={props.onClick}
+-            target="_blank"
+-            rel="noopener noreferrer"
+-        >
+-            {news.icon ?
+-                <span
+-                    class="news-section__news__icon"
+-                    style={{'background-image': `url('${news.icon}')`}}
+-                ></span>
+-                : null}
+-            <span class="news-section__news__text">{news.headline}</span>
+-        </a>
+-    );
+-}
+-
+-export default function NewsSection(props: ViewProps) {
+-    const context = getContext();
+-    const store = context.getStore({
+-        expanded: false,
+-        didNewsSlideIn: false,
+-    });
+-    const {expanded, didNewsSlideIn} = store;
+-
+-    const news = props.data.news;
+-    const latest = news && news.length > 0 ? news[0] : null;
+-
+-    function markLatestAsRead() {
+-        if (latest) {
+-            props.actions.markNewsAsRead([latest.id]);
+-        }
+-    }
+-
+-    function toggleNews() {
+-        if (expanded) {
+-            markLatestAsRead();
+-        }
+-        store.expanded = !expanded;
+-        store.didNewsSlideIn = didNewsSlideIn || !store.expanded;
+-        context.refresh();
+-    }
+-
+-    context.onRender(() => {
+-        if (latest && !latest.read && !store.expanded && !store.didNewsSlideIn) {
+-            setTimeout(toggleNews, 750);
+-        }
+-    });
+-
+-    const birthdayExpired = (new Date(2024, 7, 2)).getTime();
+-    const birthdayNews = {
+-        id: 'birthday',
+-        date: '2024-07-07T00:00:00Z',
+-        url: `${HOMEPAGE_URL}/timeline/`,
+-        headline: 'On July 7th we celebrate 10 years!',
+-        icon: '/ui/assets/images/birthday-icon.svg',
+-    };
+-    const birthdayLink = <NewsLink isSmall news={birthdayNews} />;
+-
+-    return (
+-        <div class={{'news-section': true, 'news-section--expanded': expanded}}>
+-            {Date.now() < birthdayExpired ? birthdayLink : latest ? <NewsLink isSmall news={latest} onClick={markLatestAsRead} /> : null}
+-            <div class="news-section__popover">
+-                <div class="news-section__popover__top">
+-                    <div class="news-section__title">
+-                        What's New
+-                    </div>
+-                    <span role="button" class="news-section__close" onclick={toggleNews}>✕</span>
+-                </div>
+-                {latest ? <NewsLink news={latest} onClick={markLatestAsRead} /> : null}
+-            </div>
+-        </div>
+-    );
+-}
+diff --git i/src/ui/popup/news-section/style.less w/src/ui/popup/news-section/style.less
+deleted file mode 100644
+index 1fd8ad02..00000000
+--- i/src/ui/popup/news-section/style.less
++++ /dev/null
+@@ -1,142 +0,0 @@
+-@import "../../theme.less";
+-
+-@news-section-expanded-height: 6rem;
+-@news-section-collapsed-height: 1.875rem;
+-
+-.news-section {
+-    background-color: @color-back;
+-    border-bottom-left-radius: @news-section-collapsed-height / 2;
+-    border-bottom-right-radius: @news-section-collapsed-height / 2;
+-    bottom: 0;
+-    box-sizing: border-box;
+-    display: flex;
+-    flex-direction: column;
+-    height: @news-section-collapsed-height;
+-    left: 0;
+-    overflow: hidden;
+-    padding: 0;
+-    position: absolute;
+-    text-align: center;
+-    transition: height @time-slow;
+-    user-select: none;
+-    white-space: nowrap;
+-    width: 100%;
+-
+-    &__popover {
+-        align-items: stretch;
+-        background-color: @color-back;
+-        display: flex;
+-        flex-direction: column;
+-        left: 0;
+-        height: @news-section-expanded-height;
+-        opacity: 0;
+-        pointer-events: none;
+-        position: absolute;
+-        top: 0;
+-        transition: opacity @time-slow;
+-        width: 100%;
+-
+-        &__top {
+-            border-top: @size-border solid @color-border;
+-            display: flex;
+-            flex-direction: row;
+-            justify-content: space-between;
+-            margin-bottom: @indent-small;
+-        }
+-    }
+-
+-    &__title {
+-        color: @color-heading;
+-        font-size: @size-text-large;
+-        line-height: @size-control-inner;
+-        margin-left: @popup-content-padding;
+-    }
+-
+-    &__news {
+-        align-items: center;
+-        box-sizing: border-box;
+-        color: @color-fore;
+-        display: flex;
+-        flex-direction: row;
+-        font-weight: normal;
+-        justify-content: flex-start;
+-        height: 2.5rem;
+-        padding: 0 @popup-content-padding;
+-        width: 100%;
+-
+-        &__icon {
+-            background-position: center;
+-            background-repeat: no-repeat;
+-            background-size: contain;
+-            display: inline-block;
+-            flex: none;
+-            height: 3rem;
+-            margin-right: @indent-small;
+-            width: 3rem;
+-        }
+-
+-        &__text {
+-            flex: auto;
+-            font-size: @size-text-large;
+-            display: inline-block;
+-            line-height: @size-text-large;
+-            text-align: left;
+-            white-space: normal;
+-        }
+-
+-        &--highlight {
+-            color: @color-heading;
+-            font-weight: bold;
+-        }
+-
+-        &:hover {
+-            color: @color-control-fore;
+-        }
+-    }
+-
+-    &__close {
+-        color: @color-heading;
+-        cursor: pointer;
+-        display: inline-block;
+-        font-size: @size-control-inner * 3 / 4;
+-        height: @size-control-inner;
+-        line-height: @size-control-inner;
+-        text-align: center;
+-        user-select: none;
+-        width: @size-control-inner;
+-
+-        &:hover {
+-            background-color: fade(@color-control-active, 25%);
+-        }
+-    }
+-
+-    &--expanded {
+-        height: @news-section-expanded-height;
+-    }
+-}
+-
+-.news-section--expanded .news-section__popover {
+-    opacity: 1;
+-    pointer-events: all;
+-}
+-
+-.news-section__news--small {
+-    bottom: 0;
+-    font-weight: bold;
+-    height: @news-section-collapsed-height;
+-    padding: 0 @popup-content-padding;
+-}
+-
+-.news-section__news--small .news-section__news__icon {
+-    height: 1.5rem;
+-    margin-right: @indent-small / 2;
+-    width: 1.5rem;
+-}
+-
+-.news-section__news--small .news-section__news__text {
+-    font-size: @size-text-normal;
+-    line-height: @size-text-normal-height;
+-    overflow: hidden;
+-    text-overflow: ellipsis;
+-    white-space: nowrap;
+-}
