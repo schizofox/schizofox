@@ -1,5 +1,5 @@
 {
-  description = "Firefox configuration flake for delusional and schizophrenics";
+  description = "Hardened Firefox configuration for the delusional and schizophrenics";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
@@ -35,13 +35,8 @@
     };
   };
 
-  outputs = {
-    flake-parts,
-    self,
-    nixpkgs,
-    ...
-  } @ inputs:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = import inputs.systems;
 
       imports = [
