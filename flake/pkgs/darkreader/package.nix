@@ -22,7 +22,22 @@ in
 
     patches = [./no-news.patch];
 
-    env.ESBUILD_BINARY_PATH = lib.getExe esbuild;
+    # This is horrible. Since we do not have a binary cache users will
+    # have to build Esbuild from scratch each time. Unfortunately for
+    # them and for us, nixpkgs' esbuild is not compatible with darkreader's.
+    # Hopefully temporary workaround.
+    env.ESBUILD_BINARY_PATH = lib.getExe (esbuild.overrideAttrs (
+      final: _: {
+        version = "0.24.0";
+        src = fetchFromGitHub {
+          owner = "evanw";
+          repo = "esbuild";
+          rev = "v${final.version}";
+          hash = "sha256-czQJqLz6rRgyh9usuhDTmgwMC6oL5UzpwNFQ3PKpKck=";
+        };
+        vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+      }
+    ));
     npmDepsHash = "sha256-m41HkwgbeRRmxJALQFJl/grYjjIqFOc47ltaesob1FA=";
 
     patchPhase = ''
