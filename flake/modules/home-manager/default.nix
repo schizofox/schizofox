@@ -72,8 +72,9 @@ in {
       {
         assertion = hasInfix "esr" cfg.package.version;
         message = ''
-          Package ${cfg.package.pname} is not an ESR release of firefox.
-          The package provided to schizofox must be an ESR release, due to policy management differences.
+          The package provided to 'programs.schizofox.package' is not an ESR release of Firefox: ${cfg.package.pname}
+          
+          For policies to function as intended, you must an ESR release of Firefox. If you think this is a mistake, please open an issue.
         '';
       }
     ];
