@@ -7,7 +7,7 @@ self: {
   inherit (builtins) toJSON isBool isInt isString;
   inherit (pkgs.stdenvNoCC.hostPlatform) isDarwin;
   inherit (lib.modules) mkIf;
-  inherit (lib.strings) concatStrings;
+  inherit (lib.strings) concatStrings hasInfix;
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists) optionals;
 
@@ -68,6 +68,16 @@ in {
   meta.maintainers = with lib.maintainers; [sioodmy NotAShelf];
   imports = [./options];
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = hasInfix "esr" cfg.package.version;
+        message = ''
+          Package ${cfg.package.pname} is not an ESR release of firefox.
+          The package provided to schizofox must be an ESR release, due to policy management differences.
+        '';
+      }
+    ];
+
     home.file = {
       # profile config
       "${firefoxConfigPath}/profiles.ini".text = ''
