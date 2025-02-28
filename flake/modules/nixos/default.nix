@@ -15,19 +15,19 @@ let
       lib
       pkgs
       self
-      profilesPath
+      usingNixosModule
       cursorTheme
       iconTheme
       gtkTheme
       ;
   };
 
-  # https://github.com/nix-community/home-manager/blob/master/modules/programs/firefox.nix#L46
-
   cfg = config.programs.schizofox;
 
+  usingNixosModule = true;
+
   mozillaConfigPath =
-    if isDarwin then "Library/Application Support/Mozilla" else "${config.home.homeDirectory}/.mozilla";
+    if isDarwin then "Library/Application Support/Mozilla" else "/home/NOT_USED/.mozilla";
 
   firefoxConfigPath =
     if isDarwin then "Library/Application Support/Firefox" else mozillaConfigPath + "/firefox";
@@ -41,11 +41,11 @@ let
       opt.package
     ];
 
-  gtkTheme = maybeTheme config.gtk.theme;
+  gtkTheme = null; # maybeTheme config.gtk.theme;
 
-  iconTheme = maybeTheme config.gtk.iconTheme;
+  iconTheme = null; # maybeTheme config.gtk.iconTheme;
 
-  cursorTheme = maybeTheme config.home.pointerCursor;
+  cursorTheme = null; # maybeTheme config.home.pointerCursor;
 
   defaultProfile = "${profilesPath}/schizo.default";
 in
@@ -54,7 +54,9 @@ in
     sioodmy
     NotAShelf
   ];
-  imports = [ ../common/options ];
+  imports = [
+    ../common/options
+  ];
   config = mkIf cfg.enable {
     assertions = [
       {
@@ -67,22 +69,11 @@ in
       }
     ];
 
-    home.file = {
-      # profile config
-      "${firefoxConfigPath}/profiles.ini".text = common.files."profiles.ini".text;
-      # userChrome content
-      "${defaultProfile}/chrome/userChrome.css".text = common.files."userChrome.css".text;
-      # userContent
-      "${defaultProfile}/chrome/userContent.css".text = common.files."userContent.css".text;
-      # user.js
-      "${defaultProfile}/user.js".text = common.files."userContent.css".text;
-    };
-
-    home.packages = common.packages;
+    environment.systemPackages = common.packages;
 
     # Start a local Systemd service for responding to requests with a random
     # Searxng instance to handle the request. Searxng instances will be selected
     # from the list of instances passed to `search.searxRandomizer.instances`
-    systemd.user.services.searx-randomizer = mkIf cfg.search.searxRandomizer.enable common.searx-randomizer-unit;
+    systemd.user.units.searx-randomizer = mkIf cfg.search.searxRandomizer.enable common.searx-randomizer-unit;
   };
 }
