@@ -6,11 +6,13 @@
   fetchurl,
   makeDesktopItem,
   wrapFirefox,
-  profilesPath,
   # Customizability
   cfg,
+  files,
+  usingNixosModule,
   ...
-}: let
+}:
+let
   logo = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/schizofox/assets/main/logo/logo.png";
     sha256 = "1wjzivdmppbzrwdxhza5dzzljl3z59vfgggxim9xjb2rzr0wqyyf";
@@ -20,14 +22,17 @@
     name = "Schizofox";
     desktopName = "Schizofox";
     genericName = "Web Browser";
-    exec =
-      if cfg.security.wrapWithProxychains
-      then "proxychains4 schizofox %U"
-      else "schizofox %U";
+    exec = if cfg.security.wrapWithProxychains then "proxychains4 schizofox %U" else "schizofox %U";
     icon = "${logo}";
     terminal = false;
-    categories = ["Network" "WebBrowser"];
-    mimeTypes = ["text/html" "text/xml"];
+    categories = [
+      "Network"
+      "WebBrowser"
+    ];
+    mimeTypes = [
+      "text/html"
+      "text/xml"
+    ];
   };
 
   wrappedFox = wrapFirefox cfg.package {
@@ -102,31 +107,45 @@
       };
 
       SearchEngines = {
-        Add =
-          cfg.search.addEngines
-          ++ [
-            {
-              Name = "Searx";
-              Description = "Searx";
-              Alias = "!sx";
-              Method = "GET";
-              URLTemplate =
-                if cfg.search.searxRandomizer.enable
-                then "http://127.0.0.1:8000/search?q={searchTerms}"
-                else cfg.search.searxQuery;
-            }
-          ];
+        Add = cfg.search.addEngines ++ [
+          {
+            Name = "Searx";
+            Description = "Searx";
+            Alias = "!sx";
+            Method = "GET";
+            URLTemplate =
+              if cfg.search.searxRandomizer.enable then
+                "http://127.0.0.1:8000/search?q={searchTerms}"
+              else
+                cfg.search.searxQuery;
+          }
+        ];
         Default = cfg.search.defaultSearchEngine;
         Remove = cfg.search.removeEngines;
       };
 
       Bookmarks = cfg.misc.bookmarks;
 
-      ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
+      ExtensionSettings = import ./extensions {
+        inherit
+          cfg
+          self
+          lib
+          pkgs
+          ;
+      };
     };
+    extraPrefs = (lib.optionals usingNixosModule files."user.js".text);
   };
 
   finalPackage = wrappedFox.overrideAttrs (old: {
+    passAsFile = [
+      "fileUserChrome"
+      "fileUserContent"
+    ];
+    fileUserChrome = files."userChrome.css".text;
+    fileUserContent = files."userContent.css".text;
+
     buildCommand =
       (
         # Shouldn't ever happen...
@@ -136,7 +155,17 @@
         rm -rf $out/share/applications/*
         install -D ${desktopItem}/share/applications/Schizofox.desktop $out/share/applications/Schizofox.desktop
         makeWrapper $out/bin/firefox $out/bin/schizofox
-      '';
+        # if using nixos module, install userChrome.css and userContent.css to /usr/lib/firefox/browser/chrome/
+      ''
+      + (
+        if usingNixosModule then
+          ''
+            install -D $fileUserChromePath  $out/usr/lib/firefox/browser/chrome/userChrome.css
+            install -D $fileUserContentPath $out/usr/lib/firefox/browser/chrome/userContent.css
+          ''
+        else
+          ""
+      );
   });
 in
-  finalPackage
+finalPackage
