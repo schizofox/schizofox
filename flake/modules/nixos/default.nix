@@ -26,14 +26,6 @@ let
 
   usingNixosModule = true;
 
-  mozillaConfigPath =
-    if isDarwin then "Library/Application Support/Mozilla" else "/home/NOT_USED/.mozilla";
-
-  firefoxConfigPath =
-    if isDarwin then "Library/Application Support/Firefox" else mozillaConfigPath + "/firefox";
-
-  profilesPath = if isDarwin then "${firefoxConfigPath}/Profiles" else firefoxConfigPath;
-
   maybeTheme =
     opt:
     lib.findFirst builtins.isNull opt.package [
@@ -46,8 +38,6 @@ let
   iconTheme = null; # maybeTheme config.gtk.iconTheme;
 
   cursorTheme = null; # maybeTheme config.home.pointerCursor;
-
-  defaultProfile = "${profilesPath}/schizo.default";
 in
 {
   meta.maintainers = with lib.maintainers; [

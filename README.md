@@ -78,10 +78,7 @@ security, we would recommend that look into the Tor browser.
 
 ## Installing Schizofox
 
-For the time being, Schizofox **primarily** supports [Home-Manager] installations.
-This is because it is infinitely more tedious to try to write to ~/.mozilla
-without Home-Manager, and because Firefox provides _no good way_ to set
-policy/storage/userChrome/userContent paths.
+Schizofox supports [Home-Manager] and NixOS module installations.
 
 Add Schizofox as a flake input:
 
@@ -108,15 +105,11 @@ more about how to modify Schizofox' behaviour.
 
 ### Using the NixOS module
 
-Schizofox supports NixOS module for single-user installations.
-
 After adding Schizofox as a flake input add
 `inputs.schizofox.nixosModules.default` to `imports` in a machine
 configuration file. Similarly to Home-Manager module you can now use
-`programs.schizofox.enable` to enable Schizofox. In addition you will have to
-**set `programs.schizofox.userName` to the name of the user you want to install
-Schizofox for**. Refer to sample configuration or the module options to learn
-more about how to modify Schizofox' behaviour.
+`programs.schizofox.enable` to enable Schizofox. Refer to sample configuration
+or the module options to learn more about how to modify Schizofox' behaviour.
 
 ## Contributing <a name="doc_contributing"></a>
 
