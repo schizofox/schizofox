@@ -3,7 +3,6 @@
   pkgs,
   lib,
   # Dependencies
-  fetchurl,
   makeDesktopItem,
   wrapFirefox,
   # Customizability
@@ -139,13 +138,6 @@ let
   };
 
   finalPackage = wrappedFox.overrideAttrs (old: {
-    passAsFile = [
-      "fileUserChrome"
-      "fileUserContent"
-    ];
-    fileUserChrome = files."userChrome.css".text;
-    fileUserContent = files."userContent.css".text;
-
     buildCommand =
       (
         # Shouldn't ever happen...
@@ -155,17 +147,7 @@ let
         rm -rf $out/share/applications/*
         install -D ${desktopItem}/share/applications/Schizofox.desktop $out/share/applications/Schizofox.desktop
         makeWrapper $out/bin/firefox $out/bin/schizofox
-        # if using nixos module, install userChrome.css and userContent.css to /usr/lib/firefox/browser/chrome/
-      ''
-      + (
-        if usingNixosModule then
-          ''
-            install -D $fileUserChromePath  $out/usr/lib/firefox/browser/chrome/userChrome.css
-            install -D $fileUserContentPath $out/usr/lib/firefox/browser/chrome/userContent.css
-          ''
-        else
-          ""
-      );
+      '';
   });
 in
 finalPackage
