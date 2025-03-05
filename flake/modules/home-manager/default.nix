@@ -1,11 +1,9 @@
-self:
-{
+self: {
   config,
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   inherit (pkgs.stdenvNoCC.hostPlatform) isDarwin;
   inherit (lib.modules) mkIf;
   inherit (lib.strings) hasInfix;
@@ -27,19 +25,21 @@ let
   cfg = config.programs.schizofox;
 
   mozillaConfigPath =
-    if isDarwin then "Library/Application Support/Mozilla" else "${config.home.homeDirectory}/.mozilla";
+    if isDarwin
+    then "Library/Application Support/Mozilla"
+    else "${config.home.homeDirectory}/.mozilla";
 
   firefoxConfigPath =
-    if isDarwin then "Library/Application Support/Firefox" else mozillaConfigPath + "/firefox";
+    if isDarwin
+    then "Library/Application Support/Firefox"
+    else mozillaConfigPath + "/firefox";
 
-  profilesPath = if isDarwin then "${firefoxConfigPath}/Profiles" else firefoxConfigPath;
+  profilesPath =
+    if isDarwin
+    then "${firefoxConfigPath}/Profiles"
+    else firefoxConfigPath;
 
-  maybeTheme =
-    opt:
-    lib.findFirst builtins.isNull opt.package [
-      opt
-      opt.package
-    ];
+  maybeTheme = opt: lib.findFirst builtins.isNull opt.package [opt opt.package];
 
   gtkTheme = maybeTheme config.gtk.theme;
 
@@ -48,13 +48,9 @@ let
   cursorTheme = maybeTheme config.home.pointerCursor;
 
   defaultProfile = "${profilesPath}/schizo.default";
-in
-{
-  meta.maintainers = with lib.maintainers; [
-    sioodmy
-    NotAShelf
-  ];
-  imports = [ ../common/options ];
+in {
+  meta.maintainers = with lib.maintainers; [sioodmy NotAShelf];
+  imports = [../common/options];
   config = mkIf cfg.enable {
     assertions = [
       {

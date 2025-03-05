@@ -10,8 +10,7 @@
   files,
   usingNixosModule,
   ...
-}:
-let
+}: let
   logo = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/schizofox/assets/main/logo/logo.png";
     sha256 = "1wjzivdmppbzrwdxhza5dzzljl3z59vfgggxim9xjb2rzr0wqyyf";
@@ -21,17 +20,14 @@ let
     name = "Schizofox";
     desktopName = "Schizofox";
     genericName = "Web Browser";
-    exec = if cfg.security.wrapWithProxychains then "proxychains4 schizofox %U" else "schizofox %U";
+    exec =
+      if cfg.security.wrapWithProxychains
+      then "proxychains4 schizofox %U"
+      else "schizofox %U";
     icon = "${logo}";
     terminal = false;
-    categories = [
-      "Network"
-      "WebBrowser"
-    ];
-    mimeTypes = [
-      "text/html"
-      "text/xml"
-    ];
+    categories = ["Network" "WebBrowser"];
+    mimeTypes = ["text/html" "text/xml"];
   };
 
   wrappedFox = wrapFirefox cfg.package {
@@ -106,35 +102,29 @@ let
       };
 
       SearchEngines = {
-        Add = cfg.search.addEngines ++ [
-          {
-            Name = "Searx";
-            Description = "Searx";
-            Alias = "!sx";
-            Method = "GET";
-            URLTemplate =
-              if cfg.search.searxRandomizer.enable then
-                "http://127.0.0.1:8000/search?q={searchTerms}"
-              else
-                cfg.search.searxQuery;
-          }
-        ];
+        Add =
+          cfg.search.addEngines
+          ++ [
+            {
+              Name = "Searx";
+              Description = "Searx";
+              Alias = "!sx";
+              Method = "GET";
+              URLTemplate =
+                if cfg.search.searxRandomizer.enable
+                then "http://127.0.0.1:8000/search?q={searchTerms}"
+                else cfg.search.searxQuery;
+            }
+          ];
         Default = cfg.search.defaultSearchEngine;
         Remove = cfg.search.removeEngines;
       };
 
       Bookmarks = cfg.misc.bookmarks;
 
-      ExtensionSettings = import ./extensions {
-        inherit
-          cfg
-          self
-          lib
-          pkgs
-          ;
-      };
+      ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
     };
-    extraPrefs = (lib.optionals usingNixosModule files."user.js".text);
+    extraPrefs = lib.optionals usingNixosModule files."user.js".text;
   };
 
   finalPackage = wrappedFox.overrideAttrs (old: {
@@ -150,4 +140,4 @@ let
       '';
   });
 in
-finalPackage
+  finalPackage
