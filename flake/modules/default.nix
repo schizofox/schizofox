@@ -1,5 +1,4 @@
-{ self, ... }:
-{
+{self, ...}: {
   flake = {
     nixosModule = self.nixosModules.schizofox; # an alias to the default module
     nixosModules = {

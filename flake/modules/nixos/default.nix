@@ -1,11 +1,9 @@
-self:
-{
+self: {
   config,
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   inherit (pkgs.stdenvNoCC.hostPlatform) isDarwin;
   inherit (lib.modules) mkIf;
   inherit (lib.strings) hasInfix;
@@ -26,24 +24,15 @@ let
 
   usingNixosModule = true;
 
-  maybeTheme =
-    opt:
-    lib.findFirst builtins.isNull opt.package [
-      opt
-      opt.package
-    ];
+  maybeTheme = opt: lib.findFirst builtins.isNull opt.package [opt opt.package];
 
   gtkTheme = null; # maybeTheme config.gtk.theme;
 
   iconTheme = null; # maybeTheme config.gtk.iconTheme;
 
   cursorTheme = null; # maybeTheme config.home.pointerCursor;
-in
-{
-  meta.maintainers = with lib.maintainers; [
-    sioodmy
-    NotAShelf
-  ];
+in {
+  meta.maintainers = with lib.maintainers; [sioodmy NotAShelf];
   imports = [
     ../common/options
   ];
