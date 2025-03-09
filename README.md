@@ -66,8 +66,8 @@ security, we would recommend that look into the Tor browser.
 
 - [x] Extensive & modular configuration
   - [x] Custom policy options
-  - [x] Declarative extension installation with the provided [Home-Manager]
-        module.
+  - [x] Declarative extension installation with either the provided [Home-Manager]
+        or [Hjem] module.
   - [x] Custom `userStyle` and `userChrome` configurations
 - [x] Declarative theming. Schizofox allows for browser-wide theming with 3
       colors and a font, with DarkReader integration.
@@ -80,9 +80,11 @@ security, we would recommend that look into the Tor browser.
 
 [Home-Manager]: https://github.com/nix-community/home-manager
 
-For the time being, Schizofox **only** supports [Home-Manager] installations.
+[Hjem]: https://github.com/feel-co/hjem
+
+Schizofox requires either [Home-Mananger] or [Hjem] for installation.
 This is because it is infinitely more tedious to try to write to ~/.mozilla
-without Home-Manager, and because Firefox provides _no good way_ to set
+without tooling to write to $HOME, and because Firefox provides _no good way_ to set
 policy/storage/userChrome/userContent paths.
 
 ### Using the Home-Manager module
@@ -104,6 +106,37 @@ And then add `inputs.schizofox.homeManagerModules.default` to `imports` in a
 Home-Manager configuration file. That's all, you can now use
 `programs.schizofox.enable` to enable Schizofox. Refer to sample configuration
 or the module options to learn more about how to modify Schizofox' behaviour.
+
+### Using the Hjem Module
+
+Add Schizofox as a flake input:
+
+```nix
+# flake.nix
+{
+  inputs = {
+    # ...
+    schizofox.url = "github:schizofox/schizofox";
+    # ...
+  }
+}
+```
+
+You can then add `inputs.schizofox.hjemModules.default` to `hjem.extraModules` and configure it like so:
+
+```nix
+#configuration.nix
+{
+    config.hjem = {
+        extraModules = [inputs.schizofox.hjemModules.default];
+        users.alice = {
+            programs.schizofox.enable = true;
+        };
+    };
+}
+```
+
+Refer to sample configuration or the module options to learn more about how to modify Schizofox' behaviour.
 
 ### Contributing <a name="doc_contributing"></a>
 
