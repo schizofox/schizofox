@@ -11,7 +11,7 @@
   }: let
     callPackage = lib.callPackageWith (pkgs
       // {
-        inherit (config.flake) homeManagerModules;
+        inherit (config.flake) homeManagerModules nixosModules;
         inherit inputs;
       });
   in {

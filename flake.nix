@@ -24,6 +24,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    hjem = {
+      url = "github:feel-co/hjem";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     searx-randomizer = {
       url = "github:schizofox/searx-randomizer";
       inputs.nixpkgs.follows = "nixpkgs";
