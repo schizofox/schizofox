@@ -27,6 +27,8 @@ self: {
   mozillaConfigPath =
     if isDarwin
     then "Library/Application Support/Mozilla"
+    else if cfg.misc.customMozillaFolder.enable
+    then "${config.home.homeDirectory}${cfg.misc.customMozillaFolder.path}"
     else "${config.home.homeDirectory}/.mozilla";
 
   firefoxConfigPath =

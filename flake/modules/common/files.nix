@@ -214,10 +214,14 @@
               (envSuffix "XDG_RUNTIME_DIR" "/doc")
               (envSuffix "XDG_RUNTIME_DIR" "/dconf")
 
-              (sloth.concat [
-                sloth.homeDir
-                "/.mozilla"
-              ])
+              (
+                if cfg.misc.customMozillaFolder.enable
+                then [
+                  (sloth.concat' sloth.homeDir cfg.misc.customMozillaFolder.path)
+                  (sloth.concat' sloth.homeDir "/.mozilla")
+                ]
+                else "${config.home.homeDirectory}/.mozilla"
+              )
             ];
 
             bind.ro = builtins.concatLists [
