@@ -197,32 +197,27 @@
           in {
             network = true;
 
-            bind.rw = [
-              (sloth.concat' sloth.xdgCacheHome "/fontconfig")
-              (sloth.concat' sloth.xdgCacheHome "/mesa_shader_cache")
-              (sloth.concat [
-                (sloth.env "XDG_RUNTIME_DIR")
-                "/"
-                (sloth.envOr "WAYLAND_DISPLAY" "no")
-              ])
-              "/tmp/.X11-unix"
-              (sloth.envOr "XAUTHORITY" "/no-xauth")
+            bind.rw =
+              [
+                (sloth.concat' sloth.xdgCacheHome "/fontconfig")
+                (sloth.concat' sloth.xdgCacheHome "/mesa_shader_cache")
+                (sloth.concat [
+                  (sloth.env "XDG_RUNTIME_DIR")
+                  "/"
+                  (sloth.envOr "WAYLAND_DISPLAY" "no")
+                ])
+                "/tmp/.X11-unix"
+                (sloth.envOr "XAUTHORITY" "/no-xauth")
 
-              (envSuffix "XDG_RUNTIME_DIR" "/at-spi/bus")
-              (envSuffix "XDG_RUNTIME_DIR" "/gvfsd")
-              (envSuffix "XDG_RUNTIME_DIR" "/pulse")
-              (envSuffix "XDG_RUNTIME_DIR" "/doc")
-              (envSuffix "XDG_RUNTIME_DIR" "/dconf")
+                (envSuffix "XDG_RUNTIME_DIR" "/at-spi/bus")
+                (envSuffix "XDG_RUNTIME_DIR" "/gvfsd")
+                (envSuffix "XDG_RUNTIME_DIR" "/pulse")
+                (envSuffix "XDG_RUNTIME_DIR" "/doc")
+                (envSuffix "XDG_RUNTIME_DIR" "/dconf")
 
-              (
-                if cfg.misc.customMozillaFolder.enable
-                then [
-                  (sloth.concat' sloth.homeDir cfg.misc.customMozillaFolder.path)
-                  (sloth.concat' sloth.homeDir "/.mozilla")
-                ]
-                else "${config.home.homeDirectory}/.mozilla"
-              )
-            ];
+                (sloth.concat' sloth.homeDir "/.mozilla")
+              ]
+              ++ lib.optional cfg.misc.customMozillaFolder.enable (sloth.concat' sloth.homeDir cfg.misc.customMozillaFolder.path);
 
             bind.ro = builtins.concatLists [
               [
