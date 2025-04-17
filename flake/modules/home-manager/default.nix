@@ -73,7 +73,7 @@ in {
       # userContent
       "${defaultProfile}/chrome/userContent.css".text = common.files."userContent.css".text;
       # user.js
-      "${defaultProfile}/user.js".text = common.files."userContent.css".text;
+      "${defaultProfile}/user.js".text = common.files."user.js".text;
     };
 
     home.packages = common.packages;
