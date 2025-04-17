@@ -3,12 +3,12 @@
   pkgs,
   lib,
   # Dependencies
-  fetchurl,
   makeDesktopItem,
   wrapFirefox,
-  profilesPath,
   # Customizability
   cfg,
+  files,
+  usingNixosModule,
   ...
 }: let
   logo = builtins.fetchurl {
@@ -124,6 +124,7 @@
 
       ExtensionSettings = import ./extensions {inherit cfg self lib pkgs;};
     };
+    extraPrefs = lib.optionals usingNixosModule files."user.js".text;
   };
 
   finalPackage = wrappedFox.overrideAttrs (old: {
