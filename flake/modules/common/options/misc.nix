@@ -68,6 +68,29 @@ in {
       '';
     };
 
+    aiRuntime = {
+      enable = mkEnableOption ''
+        Firefox AI Runtime
+        This includes stuff like website summaries when hovering over a link
+
+        ::: {.note}
+        LLM inference is done completely on the client, so there is no data
+        or privacy risk.
+        Model itself gets downloaded from model-hub.mozilla.org
+        :::
+      '';
+      url = mkOption {
+        type = str;
+        default =
+          if cfg.misc.aiRuntime.enable
+          then "https://model-hub.mozilla.org/"
+          else "http://127.0.0.1/";
+        defaultText = "http://127.0.0.1/";
+        example = literalExpression "file://$${relative/path/to/startpage.html}";
+        description = "An URL or an absolute path to your Firefox startpage";
+      };
+    };
+
     firefoxSync = mkEnableOption "Firefox Sync";
     translate.enable =
       mkEnableOption ''

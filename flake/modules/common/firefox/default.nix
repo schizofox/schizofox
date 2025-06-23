@@ -70,7 +70,6 @@
         # How Schizofox should handle cookies
         Cookies = {
           Behavior = "accept";
-          ExpireAtSessionEnd = false;
           Locked = false;
         };
 

@@ -236,6 +236,7 @@ in {
 
   # Disable urlbar suggestions
   "browser.urlbar.addons.featureGate" = false;
+  "browser.urlbar.fakespot.featureGate" = false;
   "browser.urlbar.mdn.featureGate" = false;
   "browser.urlbar.pocket.featureGate" = false;
   "browser.urlbar.weather.featureGate" = false;
@@ -288,7 +289,7 @@ in {
   "browser.cache.disk.enable" = false;
 
   # Disable media cache from writing to disk in Private Browsing
-  "browser.privatebrowsing.forceMediaMemoryCache" = false;
+  "browser.privatebrowsing.forceMediaMemoryCache" = true;
   "media.memory_cache_max_size" = 65536; # 64MB
 
   # Disable storing extra session data
@@ -492,9 +493,6 @@ in {
   # Remove special permissions for certain mozilla domains
   "permissions.manager.defaultsUrl" = "";
 
-  # Remove webchannel whitelist
-  "webchannel.allowObject.urlWhitelist" = "";
-
   # Use Punycode in Internationalized Domain Names to eliminate possible spoofing
   # Note: Might be undesirable for non-latin alphabet users since legitimate IDN's
   # are also punycoded. Test here: https://www.xn--80ak6aa92e.com/
@@ -587,7 +585,6 @@ in {
   "privacy.antitracking.enableWebcompat" = false;
 
   ## SHUTDOWN & SANITIZING
-  # TODO: v2 migration in FF128+
 
   # Enable Firefox to clear items on shutdown
   # Note: In FF129+ clearing "siteSettings" on shutdown (2811), or manually via site data (2820) and
@@ -596,13 +593,12 @@ in {
 
   # Set/enforce what items to clear on shutdown
   # Note: If "history" is true, downloads will also be cleared
-  "privacy.clearOnShutdown.cache" = security.sanitizeOnShutdown.sanitize.cache;
-  # "privacy.clearOnShutdown_v2.cache" = security.sanitizeOnShutdown.sanitize.cache;
-  "privacy.clearOnShutdown.downloads" = security.sanitizeOnShutdown.sanitize.downloads;
-  "privacy.clearOnShutdown.formdata" = security.sanitizeOnShutdown.sanitize.formdata;
-  "privacy.clearOnShutdown.history" = security.sanitizeOnShutdown.sanitize.history;
-  # "privacy.clearOnShutdown_v2.historyFormDataAndDownloads" = true;
-  "privacy.clearOnShutdown.siteSettings" = security.sanitizeOnShutdown.sanitize.siteSettings;
+  "privacy.clearOnShutdown_v2.cache" = security.sanitizeOnShutdown.sanitize.cache;
+  "privacy.clearOnShutdown_v2.downloads" = security.sanitizeOnShutdown.sanitize.downloads;
+  "privacy.clearOnShutdown_v2.formdata" = security.sanitizeOnShutdown.sanitize.formdata;
+  "privacy.clearOnShutdown_v2.browsingHistoryAndDownloads" = security.sanitizeOnShutdown.sanitize.history;
+  "privacy.clearOnShutdown_v2.historyFormDataAndDownloads" = false;
+  "privacy.clearOnShutdown_v2.siteSettings" = security.sanitizeOnShutdown.sanitize.siteSettings;
 
   # Set Session Restore to clear on shutdown
   "privacy.clearOnShutdown.openWindows" = security.noSessionRestore; #  Not needed if Session Restore is not used
@@ -683,6 +679,7 @@ in {
 
   # Disable using system colors
   "browser.display.use_system_colors" = false;
+  "widget.non-native-theme.use-theme-accent" = false;
 
   # Enforce links targeting new windows to open in a new tab instead
   #  - 1=most recent window or tab
@@ -824,7 +821,6 @@ in {
 
   "media.autoplay.default" = 5;
 
-  "javascript.use_us_english_locale" = true;
   "intl.accept_languages" = "en-US, en";
 
   # Allow unsigned langpacks
@@ -869,17 +865,20 @@ in {
   "browser.discovery.sites" = "http://127.0.0.1/";
   "services.sync.prefs.sync.browser.startup.homepage" = false;
   "dom.ipc.plugins.flash.subprocess.crashreporter.enabled" = false;
+  "browser.safebrowsing.downloads.remote.url" = "";
   "browser.safebrowsing.enabled" = false;
   "browser.safebrowsing.malware.enabled" = false;
-  "browser.safebrowsing.provider.google.updateURL" = "";
-  "browser.safebrowsing.provider.google.gethashURL" = "";
-  "browser.safebrowsing.provider.google4.updateURL" = "";
+  "browser.safebrowsing.provider.google4.dataSharingURL" = "";
   "browser.safebrowsing.provider.google4.gethashURL" = "";
+  "browser.safebrowsing.provider.google4.updateURL" = "";
+  "browser.safebrowsing.provider.google.gethashURL" = "";
+  "browser.safebrowsing.provider.google.updateURL" = "";
   "browser.safebrowsing.provider.mozilla.gethashURL" = "";
   "browser.safebrowsing.provider.mozilla.updateURL" = "";
   "services.sync.privacyURL" = "http://127.0.0.1/";
   "social.enabled" = false;
   "social.remote-install.enabled" = false;
+  "datareporting.usage.uploadEnabled" = false;
   "datareporting.healthreport.about.reportUrl" = "http://127.0.0.1/";
   "datareporting.healthreport.service.enabled" = false;
   "datareporting.healthreport.documentServerURI" = "http://127.0.0.1/";
@@ -887,6 +886,7 @@ in {
   "social.toast-notifications.enabled" = false;
   "browser.slowStartup.notificationDisabled" = true;
   "network.http.sendRefererHeader" = 2;
+  "browser.ml.chat.enabled" = false;
 
   # Prevent sites from taking over copy/paste
   "dom.event.clipboardevents.enabled" = false;
@@ -1022,15 +1022,10 @@ in {
   "security.tls.version.min" = 3;
   "security.ssl3.rsa_seed_sha" = true;
 
-  # force permission request to show real origin
-  "permissions.delegation.enabled" = true;
-
   # Avoid logjam attack
   "security.ssl3.dhe_rsa_aes_128_sha" = false;
   "security.ssl3.dhe_rsa_aes_256_sha" = false;
   "security.ssl3.dhe_dss_aes_128_sha" = false;
-  "security.ssl3.dhe_rsa_des_ede3_sha" = false;
-  "security.ssl3.rsa_des_ede3_sha" = false;
 
   # Disable Pocket integration
   "browser.pocket.enabled" = false;
@@ -1053,16 +1048,15 @@ in {
   # New tab settings
   "browser.newtabpage.activity-stream.showTopSites" = false;
   "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
-  "browser.newtabpage.activity-stream.feeds.snippets" = false;
   "browser.newtabpage.activity-stream.disableSnippets" = true;
   "browser.newtabpage.activity-stream.tippyTop.service.endpoint" = "";
+  "browser.newtabpage.activity-stream.showWeather" = false;
 
   # Enable xrender
   "gfx.xrender.enabled" = true;
 
   # Disable push notifications
   "dom.webnotifications.enabled" = false;
-  "dom.webnotifications.serviceworker.enabled" = false;
   "dom.push.enabled" = false;
 
   # Disable recommended extensions
@@ -1094,4 +1088,17 @@ in {
 
   # Show more ssl cert infos
   "security.identityblock.show_extended_validation" = true;
+
+  # Purge session icon in Private Browsing windows
+  "browser.privatebrowsing.resetPBM.enabled" = true;
+
+  # Disable url trimming
+  "browser.urlbar.trimURLs" = false;
+
+  # Whether to enable Firefox AI Runtime features
+  "browser.ml.enable" = cfg.misc.aiRuntime.enable;
+  "browser.ml.modelHubRootUrl" = cfg.misc.aiRuntime.url;
+
+  # Enable creation of Text Fragment URLs
+  "dom.text_fragments.create_text_fragment.enabled" = true;
 }
