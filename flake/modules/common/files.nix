@@ -10,10 +10,9 @@
   ...
 }: let
   inherit (builtins) toJSON isBool isInt isString;
-  inherit (pkgs.stdenvNoCC.hostPlatform) isDarwin;
   inherit (lib.strings) concatStrings;
   inherit (lib.attrsets) mapAttrsToList;
-  inherit (lib.lists) optionals;
+  inherit (lib.lists) optionals optional;
 
   # can use lockPref here if we want to prevent users from modifying values
   prefString =
@@ -214,10 +213,9 @@
                 (envSuffix "XDG_RUNTIME_DIR" "/pulse")
                 (envSuffix "XDG_RUNTIME_DIR" "/doc")
                 (envSuffix "XDG_RUNTIME_DIR" "/dconf")
-
-                (sloth.concat' sloth.homeDir "/.mozilla")
               ]
-              ++ lib.optional cfg.misc.customMozillaFolder.enable (sloth.concat' sloth.homeDir cfg.misc.customMozillaFolder.path);
+              ++ (optional (!cfg.misc.customMozillaFolder.enable) (sloth.concat' sloth.homeDir "/.mozilla"))
+              ++ (optional cfg.misc.customMozillaFolder.enable [(sloth.concat' sloth.homeDir cfg.misc.customMozillaFolder.path) (sloth.concat' sloth.homeDir "/.mozilla")]);
 
             bind.ro = builtins.concatLists [
               [
