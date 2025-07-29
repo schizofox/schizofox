@@ -603,6 +603,9 @@ in {
   # Set Session Restore to clear on shutdown
   "privacy.clearOnShutdown.openWindows" = security.noSessionRestore; #  Not needed if Session Restore is not used
 
+  # How many closed tabs should Firefox persist between launches
+  "browser.sessionstore.max_tabs_undo" = security.maxTabsUndo;
+
   ## SANITIZE ON SHUTDOWN: RESPECTS "ALLOW" SITE EXCEPTIONS FF103+ | v2 migration is FF128+ ***/
   # Set "Cookies" and "Site Data" to clear on shutdown (if 2810 is true) [SETUP-CHROME]
   # Exceptions: A "cookie" permission also controls "offlineApps" (see note below). For cross-domain logins,

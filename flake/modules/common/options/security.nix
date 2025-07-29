@@ -5,6 +5,7 @@
 }: let
   inherit (lib.options) mkOption mkEnableOption;
   inherit (lib.types) str bool listOf;
+  inherit (lib.types.ints) unsigned;
 
   cfg = config.programs.schizofox.security;
 in {
@@ -107,6 +108,20 @@ in {
       description = ''
         Disable session restore on startup. This will will get rid of the
         "Restore tabs" button on startup if Firefox has exited unexpectedly.
+      '';
+    };
+
+    maxTabsUndo = mkOption {
+      type = unsigned;
+      default =
+        if cfg.sanitizeOnShutdown.sanitize.history
+        then 0
+        else 25;
+      defaultText = 25;
+      description = ''
+        How many tabs should you be able to restore. This is problematic
+        because it persists closed tabs between browser launches even with
+        history sanitization.
       '';
     };
 
