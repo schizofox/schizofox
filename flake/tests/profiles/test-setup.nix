@@ -1,4 +1,4 @@
-{
+{config, ...}: {
   # he's a thicc boi
   virtualisation = {
     cores = 4;
@@ -12,7 +12,7 @@
   };
 
   home-manager.sharedModules = [
-    {home.stateVersion = "23.05";}
+    {home.stateVersion = config.system.stateVersion;}
   ];
 
   services = {
