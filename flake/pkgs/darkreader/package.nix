@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   esbuild,
+  nodejs_20,
   background ? "1e1e2e",
   foreground ? "cdd6f4",
   ...
@@ -12,6 +13,9 @@ in
   buildNpmPackage {
     pname = "darkreader";
     inherit version;
+
+    # 24 fails because of missing dependencies from esbuild.
+    nodejs = nodejs_20;
 
     src = fetchFromGitHub {
       owner = "darkreader";
