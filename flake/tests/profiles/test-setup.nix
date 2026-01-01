@@ -17,16 +17,13 @@
 
   services = {
     displayManager = {
+      gdm.enable = true;
       autoLogin = {
         enable = true;
         user = "test";
       };
     };
 
-    xserver = {
-      enable = true;
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
-    };
+    desktopManager.gnome.enable = true;
   };
 }
