@@ -3,21 +3,28 @@
   fetchFromGitHub,
   buildNpmPackage,
   esbuild,
+  nodejs_20,
   background ? "1e1e2e",
   foreground ? "cdd6f4",
   ...
 }: let
-  version = "4.9.99";
+  # The next version, 4.9.112, from October 15th 2025,
+  # adds a dependency that fails since it isn't cached for some reason.
+  # On x86_64-linux, is "@unrs/resolver-binding-linux-x64-gnu" v1.11.1.
+  version = "4.9.110";
 in
   buildNpmPackage {
     pname = "darkreader";
     inherit version;
 
+    # 24 fails because of missing dependencies from esbuild.
+    nodejs = nodejs_20;
+
     src = fetchFromGitHub {
       owner = "darkreader";
       repo = "darkreader";
       tag = "v${version}";
-      hash = "sha256-K375/4qOyE1Tp/T5V5uCGcNd1IVVbT1Pjdnq/8oRHj0=";
+      hash = "sha256-mT29w1j8G3/OAI5mXz3+3HWpqCcqtGgVR7SKW/tf/qM=";
     };
 
     patches = [./no-news.patch];
@@ -38,7 +45,7 @@ in
         vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
       }
     ));
-    npmDepsHash = "sha256-m41HkwgbeRRmxJALQFJl/grYjjIqFOc47ltaesob1FA=";
+    npmDepsHash = "sha256-IrRq/ErXTeHWiWN7iui5XJVZjjR0vjgfcsgUtmgjmvs=";
 
     patchPhase = ''
       runHook prePatch

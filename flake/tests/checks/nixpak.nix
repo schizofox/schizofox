@@ -1,10 +1,10 @@
 {
-  nixosTest,
+  testers,
   inputs,
   homeManagerModules,
   ...
 }:
-nixosTest {
+testers.nixosTest {
   name = "basic";
 
   nodes.machine = {

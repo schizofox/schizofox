@@ -1,4 +1,4 @@
-{
+{config, ...}: {
   # he's a thicc boi
   virtualisation = {
     cores = 4;
@@ -12,21 +12,18 @@
   };
 
   home-manager.sharedModules = [
-    {home.stateVersion = "23.05";}
+    {home.stateVersion = config.system.stateVersion;}
   ];
 
   services = {
     displayManager = {
+      gdm.enable = true;
       autoLogin = {
         enable = true;
         user = "test";
       };
     };
 
-    xserver = {
-      enable = true;
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
-    };
+    desktopManager.gnome.enable = true;
   };
 }
