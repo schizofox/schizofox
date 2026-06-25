@@ -7,7 +7,7 @@
   foreground ? "cdd6f4",
   ...
 }: let
-  version = "4.9.125";
+  version = "4.9.128";
 in
   buildNpmPackage {
     pname = "darkreader";
@@ -19,12 +19,12 @@ in
       owner = "darkreader";
       repo = "darkreader";
       tag = "v${version}";
-      hash = "sha256-CpDSKiN1291up8BxDAD1E5+wrpuCzEpL5+KQUa5JnjA=";
+      hash = "sha256-ZeQsQb4m19mhqmackQYfaqs3Vk2GkIBTefluWU4ALMQ=";
     };
 
     patches = [./no-news.patch];
 
-    npmDepsHash = "sha256-ld1hyhyssbG8cI5Kxe5oRECbkFx6hNcoSprIQUf9GAM=";
+    npmDepsHash = "sha256-9aH2gUbbAj6xpPoe2FJ5KYMR4KVDxdD6P8f73soc5Ns=";
 
     patchPhase = ''
       runHook prePatch
