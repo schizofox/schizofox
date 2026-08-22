@@ -4,7 +4,7 @@
   ...
 }: let
   inherit (lib.options) mkOption mkEnableOption;
-  inherit (lib.types) str bool listOf;
+  inherit (lib.types) str bool listOf nullOr;
   inherit (lib.types.ints) unsigned;
 
   cfg = config.programs.schizofox.security;
@@ -30,18 +30,150 @@ in {
     };
 
     userAgent = mkOption {
-      type = str;
-      default = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0";
-      description = "Spoofed user agent string to be sent";
+      type = nullOr str;
+      default = null;
+      description = ''
+        Optional user agent string to send instead of Firefox's normal user agent. Setting one can
+        satisfy sites that require a different user agent, but may cause compatibility problems
+        and make the browser more distinctive.
+      '';
       example = ''
         ::: {.tip}
-        **Some other user agents**
+
+        **Some other user agents**:
+
         Mozilla/5.0 (X11; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
         Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
         Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:110.0) Gecko/20100101 Firefox/110.0
         Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0
         Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+
         :::
+      '';
+    };
+
+    telemetry.enable = mkOption {
+      type = bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether Firefox may collect and submit telemetry and Health Report data. Enabling it
+        can help Mozilla diagnose product problems, but shares browser diagnostic and usage
+        data with Mozilla.
+      '';
+    };
+
+    autofill = {
+      addresses.enable = mkOption {
+        type = bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether Firefox may save and autofill addresses. Enabling it makes form completion more
+          convenient, but retains personal address and contact data locally.
+        '';
+      };
+
+      creditCards.enable = mkOption {
+        type = bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether Firefox may save and autofill credit-card details. Enabling it reduces checkout
+          friction, but retains payment-card data locally.
+        '';
+      };
+    };
+
+    searchSuggestions.enable = mkOption {
+      type = bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether Firefox may request and display search suggestions while typing. Enabling it can
+        make query completion more convenient, but may send partial search queries to the selected
+        search provider.
+      '';
+    };
+
+    httpsOnly.enable = mkOption {
+      type = bool;
+      default = true;
+      example = false;
+      description = ''
+        Whether Firefox uses HTTPS-Only Mode to upgrade navigations to HTTPS and present an
+        error page when a site is unavailable over HTTPS. Disabling it improves compatibility
+        with HTTP-only sites but permits unencrypted connections.
+      '';
+    };
+
+    safeBrowsing = {
+      enable = mkOption {
+        type = bool;
+        default = true;
+        example = false;
+        description = ''
+          Whether Firefox checks sites and downloads against Safe Browsing phishing and malware
+          lists. It protects against known dangerous content, but requires Firefox to maintain
+          and query reputation data.
+        '';
+      };
+
+      remoteDownloads.enable = mkOption {
+        type = bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether Firefox performs remote Safe Browsing reputation checks for downloaded files.
+          Enabling it can detect additional suspicious downloads, but makes an extra remote
+          reputation request about a download.
+        '';
+      };
+    };
+
+    resistFingerprinting = {
+      enable = mkOption {
+        type = bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether Firefox enables Resist Fingerprinting (RFP) to standardize and reduce exposed
+          browser characteristics. RFP can reduce fingerprinting entropy, but commonly breaks
+          websites and does not provide anonymity by itself.
+        '';
+      };
+
+      letterboxing.enable = mkOption {
+        type = bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether Firefox adds RFP letterboxing margins to standardize viewport dimensions.
+          This further reduces screen-size fingerprinting when RFP is enabled, but reduces
+          available page area and can disrupt responsive layouts.
+        '';
+      };
+    };
+
+    webRTC.noHost.enable = mkOption {
+      type = bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether Firefox suppresses host ICE candidates from WebRTC connections. This can prevent
+        websites from learning local network addresses, but can impair direct peer-to-peer calls
+        and video-conferencing services.
+      '';
+    };
+
+    webGPU.enable = mkOption {
+      type = bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether Firefox enables the WebGPU API for browser graphics and compute workloads.
+        Enabling it improves compatibility with WebGPU applications, but exposes additional
+        graphics capability and fingerprinting surface.
       '';
     };
 

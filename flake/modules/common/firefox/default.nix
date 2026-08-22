@@ -42,13 +42,18 @@
 
         ## Security / Privacy
         OverrideFirstRunPage = "";
-        DisableTelemetry = true;
+        DisableTelemetry = !cfg.security.telemetry.enable;
         CaptivePortal = cfg.security.enableCaptivePortal;
         DisableFirefoxStudies = true;
         DisableFirefoxAccounts = !cfg.misc.firefoxSync;
         DisablePocket = true;
         DisableSetDesktopBackground = true;
         PromptForDownloadLocation = true;
+
+        # These Mozilla enterprise policies lock the related settings off.
+        AutofillAddressEnabled = cfg.security.autofill.addresses.enable;
+        AutofillCreditCardEnabled = cfg.security.autofill.creditCards.enable;
+        SearchSuggestEnabled = cfg.security.searchSuggestions.enable;
 
         # Tracking Protection
         EnableTrackingProtection = {

@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   # he's a thicc boi
   virtualisation = {
     cores = 4;
@@ -11,9 +15,17 @@
     password = "";
   };
 
-  home-manager.sharedModules = [
-    {home.stateVersion = config.system.stateVersion;}
-  ];
+  home-manager = {
+    sharedModules = [
+      {home.stateVersion = config.system.stateVersion;}
+    ];
+
+    users.test.home.pointerCursor = {
+      enable = true;
+      package = pkgs.vanilla-dmz;
+      name = "Vanilla-DMZ";
+    };
+  };
 
   services = {
     displayManager = {
