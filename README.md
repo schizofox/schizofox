@@ -1,11 +1,14 @@
+<!--markdownlint-disable MD033 MD041-->
+
 <p align="center">
-    <img src="https://github.com/schizofox/assets/blob/main/logo/logo.png" alt="screenshot" width="200" align="center" />
+    <img
+        src="https://github.com/schizofox/assets/blob/main/logo/logo.png"
+        alt="screenshot"
+        width="200"
+        align="center"
+    />
 </p>
-
-<h1 align="center" style="font-size: 65px">
-    Schizofox
-</h1>
-
+<h1 align="center" style="font-size: 65px">Schizofox</h1>
 <div align="center">
     <p align="center">
         Firefox configuration wrapper for the Delusional and the
@@ -26,30 +29,32 @@
 
 ### Preface
 
-Schizofox has started as an unnamed Firefox configuration as a part of
+Schizofox started as an unnamed Firefox configuration, living inside
 [Sioodmy's dotfiles] and was later adapted by [@NotAShelf] in [Nyx] for future
-use.
-
-As we came to notice it would not be feasible to maintain two separate
-configurations, Schizofox has since been moved into its own standalone flake and
-eventually an organization. Thus, this project is the result of combined efforts
-of two people with special interest in security.
+use. As the two maintainers come to notice that it is not really _feasible_ to
+maintain two separate Firefox configurations while borrowing from
+one-or-another, Schizofox has been created as a standalone Nix flake, and was
+later made into its own organization. Thus, this project is the result of
+combined efforts of two people with special interest in security.
 
 ### What is Schizofox?
 
 Schizofox is, simply put, a Firefox "distribution" (think Neovim distributions)
-with hardened, preferable defaults and extensive customizability. In addition to
-prioritizing privacy and security, Schizofox allows modifying its behaviour for
-extended compatibility, should the user prefer that.
+with hardened, preferable defaults and extensive customizability _without_
+patching Firefox's source code. It takes the base ESR Firefox build, and wraps
+it with reasonably safe defaults to prioritize private and secure browsing. In
+addition, Schizofox offers a declarative interface for you to extend and modify
+the defaults as you see fit.
 
-Compared to other browsers or browser configurations, Schizofox is quite
-_schizoprenic_ but it is also designed for daily-driving, so some compromises
-had to be made. Nevertheless, most options that affect privacy or security are
-behind toggles and you can enable or disable, should you wish to do so.
+Compared to most mainstream browsers, Schizofox is quite _schizoprenic_ but it
+is also designed for daily-driving, so some compromises had to be made. That is,
+with the necessary toggles to either opt in to or out of certain features. Which
+is to say most options that affect privacy or security are behind toggles and
+you can enable or disable, should you wish to do so.
 
 Keep in mind that any _"super ultra privacy friendly Firefox configuration"_
 will make you stick out, and contribute to fingerprinting; sadly there is no
-escape from that, not with a regular browser. If you are really looking for
+escape from that; not with a regular browser. If you are really looking for
 security, we would recommend that look into the Tor browser.
 
 <!-- deno-fmt-ignore-start -->
@@ -60,7 +65,35 @@ security, we would recommend that look into the Tor browser.
 
 <!-- deno-fmt-ignore-end -->
 
-## Notable Features <a name = "doc_features"></a>
+[Arkenfox]: https://github.com/arkenfox/user.js
+[LibreWolf]: https://codeberg.org/librewolf/source/raw/branch/main/settings/librewolf.cfg
+[Mullvad Browser]: https://mullvad.net/en/browser
+[Tor Browser]: https://www.torproject.org/download/
+
+This project learns from hardening work published by [Arkenfox], [LibreWolf],
+[Mullvad Browser], and the [Tor Browser]. Those projects have different
+products, threat models, release processes, and compatibility requirements.
+Their settings are research inputs, not a list to copy.
+
+Schizofox is **not** Tor Browser or Mullvad Browser. It does not provide Tor
+routing, configure a Tor proxy, enable First-Party Isolation, carry their
+patches, or make an anonymity-set claim. In particular, a stock Firefox profile
+with selected hardening preferences is not interchangeable with a browser that
+is designed, built, and released to make its users look alike. Use Tor Browser
+when its network and anonymity properties are required.
+
+In the end Schizofox configures **stock Firefox ESR**. It is a desktop Firefox
+configuration, not an _actual_ browser distribution. The baseline is
+intentionally built for desktop use. We use Firefox's Enhanced Tracking
+Protection (ETP) and Fingerprinting Protection (FPP), while the broader Resist
+Fingerprinting (RFP) mode is an explicit opt-in.
+
+### Hardening
+
+See the [Firefox hardening model](docs/hardening.md) for Schizofox's
+stock-Firefox ESR scope, public controls, and source audit.
+
+### Notable Features <a name = "doc_features"></a>
 
 [Nixpak]: https://github.com/nixpak/nixpak
 
@@ -106,8 +139,8 @@ more about how to modify Schizofox' behaviour.
 ### Using the NixOS module
 
 After adding Schizofox as a flake input add
-`inputs.schizofox.nixosModules.default` to `imports` in a machine
-configuration file. Similarly to Home-Manager module you can now use
+`inputs.schizofox.nixosModules.default` to `imports` in a machine configuration
+file. Similarly to Home-Manager module you can now use
 `programs.schizofox.enable` to enable Schizofox. Refer to sample configuration
 or the module options to learn more about how to modify Schizofox' behaviour.
 
@@ -368,5 +401,14 @@ Thank you in advance!
             </tr>
         </table>
     </div>
-
 </div>
+
+### Source selection
+
+- [Mozilla Firefox Administrator Reference](https://firefox-admin-docs.mozilla.org/)
+  for deployment policies and their support status.
+- [Arkenfox's upstream `user.js`](https://raw.githubusercontent.com/arkenfox/user.js/master/user.js)
+  as a desktop Firefox hardening reference.
+- [LibreWolf's upstream settings file](https://codeberg.org/librewolf/source/raw/branch/main/settings/librewolf.cfg)
+  documents the project's chosen settings, not a portable contract for stock
+  Firefox but considered nevertheless
