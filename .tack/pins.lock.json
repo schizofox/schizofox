@@ -1,0 +1,10 @@
+{
+  "searx-randomizer": {
+    "type": "git",
+    "url": "https://github.com/schizofox/searx-randomizer.git",
+    "ref": "refs/heads/main",
+    "rev": "73a690ec270fe5e200abd051c7f142d6e0c1a404",
+    "narHash": "sha256-7hAdU+YiphWsXNs5r6CKQ+YVJaBBE1nBFgr3pTummDQ=",
+    "lastModified": 1762277104
+  }
+}
