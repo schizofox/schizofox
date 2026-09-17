@@ -975,7 +975,7 @@ in
     # Enable creation of Text Fragment URLs
     "dom.text_fragments.create_text_fragment.enabled" = true;
 
-    ## Hardening (Firefox 140+ AI/ML, telemetry, fingerprinting — framework consensus)
+    ## Hardening
     # AI/ML feature lockdown (Firefox 140+). See Betterfox "PESKYFOX / AI" and Phoenix browser.ai.control.*
     "browser.ai.control.default" = "blocked";
     "browser.ai.control.sidebarChatbot" = "blocked";

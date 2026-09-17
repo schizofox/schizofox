@@ -1,14 +1,13 @@
 {
-  self,
   pkgs,
   lib,
   cfg,
+  darkreaderPkg,
   ...
 }: let
   inherit (lib.attrsets) mapAttrs optionalAttrs filterAttrs;
-  inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) darkreader;
 
-  reader = darkreader.override {
+  reader = darkreaderPkg.override {
     inherit (cfg.theme.colors) background foreground;
   };
 
