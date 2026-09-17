@@ -1,0 +1,39 @@
+name: Update dependencies
+
+on:
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependency-updates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Update flake inputs
+        run: nix flake update --accept-flake-config
+
+      - name: Update Tack pins
+        run: nix run github:manic-systems/tack -- update
+
+      - name: Create update pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/dependency-updates
+          commit-message: "chore: update dependencies"
+          title: "chore: update dependencies"
+          body: Automated flake and Tack dependency update.
+          labels: dependencies
