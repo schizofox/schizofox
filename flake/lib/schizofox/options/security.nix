@@ -10,7 +10,7 @@
   cfg = config.programs.schizofox.security;
 in {
   options.programs.schizofox.security = {
-    javascript.enable = mkEnableOption {
+    javascript.enable = mkOption {
       type = bool;
       default = true;
       example = false;

@@ -38,6 +38,7 @@
         ./flake/pkgs # packages exposed by the flake
         ./flake/tests # machine tests
         ./flake/lib # extended library
+        ./flake/docs # generated module option documentation
         ./flake/modules # modules exported by the flake
       ];
 
