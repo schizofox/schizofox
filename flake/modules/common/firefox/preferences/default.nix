@@ -991,7 +991,7 @@ in
     "browser.ml.linkPreview.optin" = false;
     "browser.ml.linkPreview.longPress" = false;
     "browser.ml.pageAssist.enabled" = false;
-    "extensions.ml.enabled" = false;
+    "extensions.ml.enabled" = cfg.misc.aiRuntime.extensions.enable;
 
     # Additional telemetry controls follow the main telemetry option.
     "toolkit.telemetry.healthping.enabled" = security.telemetry.enable;

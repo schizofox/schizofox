@@ -70,14 +70,17 @@ in {
 
     aiRuntime = {
       enable = mkEnableOption ''
-        Firefox AI Runtime
-        This includes stuff like website summaries when hovering over a link
+        Firefox's local inference runtime.
 
-        ::: {.note}
-        LLM inference is done completely on the client, so there is no data
-        or privacy risk.
-        Model itself gets downloaded from model-hub.mozilla.org
-        :::
+        Models may be downloaded from the configured model hub. Enabling this
+        runtime does not itself enable undocumented built-in AI UI.
+      '';
+      extensions.enable = mkEnableOption ''
+        Firefox's WebExtensions API gate, permitting extensions holding
+        Firefox's trial ML permission to invoke the local inference runtime.
+
+        This requires the master runtime to be enabled and increases the
+        extension-facing inference surface.
       '';
       url = mkOption {
         type = str;
@@ -87,7 +90,7 @@ in {
           else "http://127.0.0.1/";
         defaultText = "http://127.0.0.1/";
         example = literalExpression "file://$${relative/path/to/startpage.html}";
-        description = "An URL or an absolute path to your Firefox startpage";
+        description = "The local inference model-hub root URL.";
       };
     };
 
@@ -143,6 +146,13 @@ in {
       message = ''
         To use a custom .mozilla folder sanboxing must be enabled.
         Enable sandboxing using 'programs.schizofox.security.sandbox.enable'
+      '';
+    }
+    {
+      assertion = !cfg.misc.aiRuntime.extensions.enable || cfg.misc.aiRuntime.enable;
+      message = ''
+        To enable the ML WebExtensions API, Firefox's local inference runtime must be enabled.
+        Enable it using 'programs.schizofox.misc.aiRuntime.enable'.
       '';
     }
   ];
