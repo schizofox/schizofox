@@ -1,12 +1,17 @@
 {
-  config,
+  cfg,
   lib,
   pkgs,
-  self,
   usingNixosModule ? false,
-  cursorTheme,
-  iconTheme,
-  gtkTheme,
+  userChromePkg,
+  userContentPkg,
+  darkreaderPkg,
+  nixpakLib ? null,
+  searxRandomizerPkg ? null,
+  cursorTheme ? null,
+  iconTheme ? null,
+  gtkTheme ? null,
+  wrappedPackage,
   ...
 }: let
   inherit (builtins) toJSON isBool isInt isString;
@@ -14,7 +19,6 @@
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists) optionals optional;
 
-  # can use lockPref here if we want to prevent users from modifying values
   prefString =
     if usingNixosModule
     then "pref"
@@ -89,19 +93,7 @@
     )}
   '';
 
-  cfg = config.programs.schizofox;
-
-  mkNixPak = self.inputs.nixpak.lib.nixpak {
-    inherit (pkgs) lib;
-    inherit pkgs;
-  };
-
-  just' = v: lib.optional (v != null);
-
-  just = v: just' v v;
-
   files = {
-    # profile config
     "profiles.ini".text = ''
       [Profile0]
       Name=default
@@ -113,15 +105,13 @@
       StartWithLastProfile=1
       Version=2
     '';
-    # userChrome content
-    "userChrome.css".text = import ./firefox/userChrome.nix {inherit pkgs lib cfg self;};
-
-    # userContent
-    "userContent.css".text = import ./firefox/userContent.nix {inherit pkgs lib cfg self;};
-
-    # user.js
-    "user.js".text = mkUserJs (import ./firefox/preferences {inherit cfg lib;}) cfg.settings;
+    "userChrome.css".text = import ./userChrome.nix {inherit pkgs lib cfg userChromePkg;};
+    "userContent.css".text = import ./userContent.nix {inherit pkgs lib cfg userContentPkg;};
+    "user.js".text = mkUserJs (import ./preferences.nix {inherit cfg lib;}) cfg.settings;
   };
+
+  just' = v: lib.optional (v != null);
+  just = v: just' v v;
 
   searx-randomizer-unit = {
     Unit = {
@@ -135,25 +125,21 @@
       Environment = let
         engines = toJSON cfg.search.searxRandomizer.instances;
       in ["SEARX_INSTANCES=${pkgs.writeText "engines.json" engines}"];
-      ExecStart = "${self.inputs.searx-randomizer.packages.${pkgs.system}.default}/bin/searx-randomizer";
+      ExecStart = "${searxRandomizerPkg}/bin/searx-randomizer";
       Restart = "always";
       RestartSec = 12;
     };
   };
 
-  packages = let
-    pkg = pkgs.callPackage ../common/firefox {inherit cfg self pkgs lib files usingNixosModule;};
-  in
-    if cfg.security.sandbox.enable
-    then [
-      (mkNixPak {
+  package =
+    if nixpakLib != null && cfg.security.sandbox.enable
+    then
+      (nixpakLib {
         config = {sloth, ...}: let
           appId = "org.mozilla.Firefox";
         in {
-          flatpak = {
-            inherit appId;
-          };
-          app.package = pkg;
+          flatpak = {inherit appId;};
+          app.package = wrappedPackage;
           app.binPath = "bin/schizofox";
 
           dbus.policies = {
@@ -165,22 +151,16 @@
             "org.gtk.vfs.*" = "talk";
             "org.gtk.vfs" = "talk";
             "org.freedesktop.Notifications" = "talk";
-
             "org.freedesktop.portal.FileChooser" = "talk";
             "org.freedesktop.portal.Settings" = "talk";
-
             "org.mpris.MediaPlayer2.firefox.*" = "own";
             "org.mozilla.firefox.*" = "own";
             "org.mozilla.firefox_beta.*" = "own";
-
             "org.freedesktop.DBus" = "talk";
             "org.freedesktop.DBus.*" = "talk";
             "ca.desrt.dconf" = "talk";
-
             "org.freedesktop.portal.*" = "talk";
-
             "org.freedesktop.NetworkManager" = "talk";
-
             "org.freedesktop.FileManager1" = "talk";
           };
 
@@ -188,7 +168,6 @@
           gpu.provider = "bundle";
           fonts.enable = true;
           locale.enable = true;
-
           etc.sslCertificates.enable = true;
 
           bubblewrap = let
@@ -207,7 +186,6 @@
                 ])
                 "/tmp/.X11-unix"
                 (sloth.envOr "XAUTHORITY" "/no-xauth")
-
                 (envSuffix "XDG_RUNTIME_DIR" "/at-spi/bus")
                 (envSuffix "XDG_RUNTIME_DIR" "/gvfsd")
                 (envSuffix "XDG_RUNTIME_DIR" "/pulse")
@@ -215,38 +193,33 @@
                 (envSuffix "XDG_RUNTIME_DIR" "/dconf")
               ]
               ++ (optional (!cfg.misc.customMozillaFolder.enable) (sloth.concat' sloth.homeDir "/.mozilla"))
-              ++ (optional cfg.misc.customMozillaFolder.enable [(sloth.concat' sloth.homeDir cfg.misc.customMozillaFolder.path) (sloth.concat' sloth.homeDir "/.mozilla")]);
+              ++ (optionals cfg.misc.customMozillaFolder.enable [
+                (sloth.concat' sloth.homeDir cfg.misc.customMozillaFolder.path)
+                (sloth.concat' sloth.homeDir "/.mozilla")
+              ]);
 
             bind.ro = builtins.concatLists [
               [
                 "/etc/resolv.conf"
-
                 (sloth.concat' sloth.xdgConfigHome "/gtk-2.0")
                 (sloth.concat' sloth.xdgConfigHome "/gtk-3.0")
                 (sloth.concat' sloth.xdgConfigHome "/gtk-4.0")
                 (sloth.concat' sloth.xdgConfigHome "/dconf")
                 "/etc/localtime"
-
                 "/sys/bus/pci"
-
                 [
-                  "${pkg}/lib/firefox"
+                  "${wrappedPackage}/lib/firefox"
                   "/app/etc/firefox"
                 ]
               ]
-
               (just' cursorTheme "${cursorTheme}")
-
-              # Additional Read-only paths specified by the user
               cfg.security.sandbox.extraBinds
               (optionals cfg.security.sandbox.allowFontPaths ["/etc/fonts"])
             ];
 
             env = {
               XDG_DATA_DIRS = lib.makeSearchPath "share" (
-                [
-                  pkgs.shared-mime-info
-                ]
+                [pkgs.shared-mime-info]
                 ++ just iconTheme
                 ++ just gtkTheme
                 ++ just cursorTheme
@@ -263,10 +236,7 @@
       })
       .config
       .env
-    ]
-    else [pkg];
+    else wrappedPackage;
 in {
-  inherit files;
-  inherit searx-randomizer-unit;
-  inherit packages;
+  inherit files package searx-randomizer-unit;
 }

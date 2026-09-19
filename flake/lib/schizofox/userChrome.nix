@@ -2,12 +2,12 @@
   cfg,
   lib,
   pkgs,
-  self,
+  userChromePkg,
 }: let
   inherit (cfg.theme.colors) background-darker background foreground primary border;
   inherit (cfg.theme) font;
 
-  userChrome = self.packages.${pkgs.stdenv.hostPlatform.system}.userChrome.override {
+  userChrome = userChromePkg.override {
     backgroundDarker = background-darker;
     inherit background border font;
   };

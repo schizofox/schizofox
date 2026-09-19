@@ -24,11 +24,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    searx-randomizer = {
-      url = "github:schizofox/searx-randomizer";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
@@ -43,6 +38,7 @@
         ./flake/pkgs # packages exposed by the flake
         ./flake/tests # machine tests
         ./flake/lib # extended library
+        ./flake/docs # generated module option documentation
         ./flake/modules # modules exported by the flake
       ];
 

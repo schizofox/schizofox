@@ -1,12 +1,12 @@
 {
   cfg,
   lib,
-  self,
   pkgs,
+  userContentPkg,
 }: let
   inherit (cfg.theme) font extraUserContent;
   inherit (cfg.theme.colors) background background-darker foreground primary border;
-  inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) userContent;
+  userContent = userContentPkg;
 in ''
 
   ${

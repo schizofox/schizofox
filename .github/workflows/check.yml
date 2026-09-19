@@ -8,7 +8,7 @@ jobs:
       matrix:
         command:
           - nix flake check --accept-flake-config
-          - nix run nixpkgs#alejandra -- -c .
+          - nix run nixpkgs#alejandra -- -c default.nix flake flake.nix
         platform:
           - ubuntu
           - macos

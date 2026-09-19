@@ -19,6 +19,7 @@ in {
     displayBookmarksInToolbar = mkOption {
       type = enum ["always" "never" "newtab"];
       default = "never";
+      description = "When Firefox displays bookmarks in its toolbar.";
     };
 
     bookmarks = mkOption {
