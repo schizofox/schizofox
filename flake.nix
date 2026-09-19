@@ -4,10 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
 
-    # Overridable flake systems.
-    # See: <https://github.com/nix-systems/nix-systems>
-    systems.url = "github:nix-systems/default-linux";
-
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -19,20 +15,15 @@
       inputs.flake-parts.follows = "flake-parts";
     };
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     flake-compat = {
-      url = "github:edolstra/flake-compat";
+      url = "git+https://git.lix.systems/lix-project/flake-compat.git";
       flake = false;
     };
   };
 
   outputs = inputs:
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = import inputs.systems;
+      systems = ["x86_64-linux" "i686-linux" "aarch64-linux"];
 
       imports = [
         ./flake/pkgs # packages exposed by the flake
