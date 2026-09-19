@@ -111,7 +111,9 @@ stock-Firefox ESR scope, public controls, and source audit.
 
 ## Installing Schizofox
 
-Schizofox supports [Home-Manager] and NixOS module installations.
+Schizofox can be installed through the Home Manager or NixOS module, or
+constructed directly as a Firefox wrapper. The modules supply Schizofox's
+default policies and preferences; direct wrapper callers must supply their own.
 
 Add Schizofox as a flake input:
 
@@ -130,19 +132,88 @@ Add Schizofox as a flake input:
 
 [Home-Manager]: https://github.com/nix-community/home-manager
 
-After adding Schizofox as a flake input add
-`inputs.schizofox.homeManagerModules.default` to `imports` in a Home-Manager
-configuration file. That's all, you can now use `programs.schizofox.enable` to
-enable Schizofox. Refer to sample configuration or the module options to learn
-more about how to modify Schizofox' behaviour.
+In a Home Manager configuration that receives `inputs` through
+`extraSpecialArgs = {inherit inputs;}`:
+
+```nix
+{inputs, pkgs, ...}: {
+  imports = [inputs.schizofox.homeManagerModules.default];
+
+  programs.schizofox = {
+    enable = true;
+    package = pkgs.firefox-esr-140-unwrapped;
+    settings."browser.startup.homepage" = "https://example.org";
+    security.sandbox.enable = true;
+  };
+}
+```
+
+The module installs the configured package and manages its Firefox profile
+files. `security.sandbox.enable` uses NixPak; omit it to use the unsandboxed
+wrapper. `package` must be an unwrapped Firefox ESR package.
 
 ### Using the NixOS module
 
-After adding Schizofox as a flake input add
-`inputs.schizofox.nixosModules.default` to `imports` in a machine configuration
-file. Similarly to Home-Manager module you can now use
-`programs.schizofox.enable` to enable Schizofox. Refer to sample configuration
-or the module options to learn more about how to modify Schizofox' behaviour.
+In a NixOS configuration that receives `inputs` through
+`specialArgs = {inherit inputs;}`:
+
+```nix
+{inputs, pkgs, ...}: {
+  imports = [inputs.schizofox.nixosModules.default];
+
+  programs.schizofox = {
+    enable = true;
+    package = pkgs.firefox-esr-140-unwrapped;
+    settings."browser.startup.homepage" = "https://example.org";
+  };
+}
+```
+
+The module installs Schizofox system-wide. Set
+`programs.schizofox.search.searxRandomizer.enable = true` to install its user
+service; its default search configuration does not require the service.
+
+### Using the wrapper without a module
+
+`lib.mkSchizofox` accepts final package inputs, **not** `programs.schizofox`
+module options. This example installs a directly constructed wrapper in a NixOS
+configuration with `inputs` passed through `specialArgs`:
+
+```nix
+{inputs, pkgs, ...}: let
+  schizofox = (pkgs.callPackage inputs.schizofox.lib.mkSchizofox {}) {
+    firefox-unwrapped = pkgs.firefox-esr-140-unwrapped;
+    preferences = {"browser.startup.homepage" = "about:blank";};
+    searchService.instances = [];
+    wrapWithProxychains = false;
+    chrome = {
+      userChrome = "";
+      userContent = "";
+    };
+
+    policies = {DisableTelemetry = true;};
+    sandbox = {
+      enable = false;
+      extraBinds = [];
+      allowFontPaths = false;
+      customMozillaFolder = {
+        enable = false;
+        path = "";
+      };
+    };
+  };
+in {
+  environment.systemPackages = [schizofox.wrapped];
+}
+```
+
+`policies` replaces the module's policy defaults; the example sets only
+`DisableTelemetry`, so it is **not equivalent to the hardened module
+configuration**. `preferences` supplies `user.js` entries and `chrome` supplies
+CSS strings. `wrapped` is the Firefox wrapper. `package` is the same wrapper
+unless both `nixpakLib` is provided and `sandbox.enable` is true. Direct callers
+must install `files` and `searx-randomizer-unit` themselves if they need Home
+Manager-style profile files or the search service.
 
 ## Contributing <a name="doc_contributing"></a>
 
@@ -150,95 +221,6 @@ Schizofox should still be considered beta software, although it is being daily
 driven by many. Expect breaking changes, and make sure to submit an issue in
 case anything breaks. If you know how to fix an existing issue, or would like to
 implement new changes then feel free to create a pull request.
-
-## Sample Configuration
-
-<!-- deno-fmt-ignore-start -->
-
-> [!WARNING]
-> Sample configuration may be outdated at any given time. If you receive
-> warnings about outdated configuration options, please refer to the module
-> options for intended usage. Schizofox will attempt to remain
-> backwards-compatible at all times, but this is not _always_ feasible.
-
-<!-- deno-fmt-ignore-end -->
-
-<details>
-  <summary>Click to expand!</summary>
-
-```nix
-imports = [ inputs.schizofox.homeManagerModule ];
-programs.schizofox = {
-  enable = true;
-
-  theme = {
-    colors = {
-      background-darker = "181825";
-      background = "1e1e2e";
-      foreground = "cdd6f4";
-    };
-
-    font = "Lexend";
-
-    extraUserChrome = ''
-      body {
-        color: red !important;
-      }
-    '';
-  };
-
-  search = {
-    defaultSearchEngine = "Brave";
-    removeEngines = ["Google" "Bing" "Amazon.com" "eBay" "Twitter" "Wikipedia"];
-    searxUrl = "https://searx.be";
-    searxQuery = "https://searx.be/search?q={searchTerms}&categories=general";
-    addEngines = [
-      {
-        Name = "Etherscan";
-        Description = "Checking balances";
-        Alias = "!eth";
-        Method = "GET";
-        URLTemplate = "https://etherscan.io/search?f=0&q={searchTerms}";
-      }
-    ];
-  };
-
-  security = {
-    sanitizeOnShutdown.enable = true;
-    sandbox.enable = true;
-    userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0";
-  };
-
-  misc = {
-    drmFix = true;
-    disableWebgl = false;
-    startPageURL = "file://${builtins.readFile ./startpage.html}";
-    contextMenu.enable = true;
-  };
-
-  extensions = {
-    simplefox.enable = true;
-    darkreader.enable = true;
-
-    extraExtensions = {
-      "webextension@metamask.io".install_url = "https://addons.mozilla.org/firefox/downloads/latest/ether-metamask/latest.xpi";
-    };
-  };
-
-  bookmarks = [
-    {
-      Title = "Example";
-      URL = "https://example.com";
-      Favicon = "https://example.com/favicon.ico";
-      Placement = "toolbar";
-      Folder = "FolderName";
-    }
-  ];
-
-}
-```
-
-</details>
 
 ## Frequently Asked Questions (FAQ)
 

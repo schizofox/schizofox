@@ -6,10 +6,7 @@
 testers.nixosTest {
   name = "schizofox-basic";
 
-  meta.maintainers = with pkgs.lib.maintainers; [
-    sioodmy
-    NotAShelf
-  ];
+  meta.maintainers = with pkgs.lib.maintainers; [NotAShelf];
 
   nodes.machine = {
     imports = [

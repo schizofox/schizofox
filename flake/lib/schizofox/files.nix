@@ -1,11 +1,11 @@
 {
-  cfg,
+  preferences,
+  chrome,
+  sandbox,
+  searchService,
   lib,
   pkgs,
-  usingNixosModule ? false,
-  userChromePkg,
-  userContentPkg,
-  darkreaderPkg,
+  prefName ? "pref",
   nixpakLib ? null,
   searxRandomizerPkg ? null,
   cursorTheme ? null,
@@ -19,10 +19,7 @@
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists) optionals optional;
 
-  prefString =
-    if usingNixosModule
-    then "pref"
-    else "user_pref";
+  prefString = prefName;
   userPrefValue = pref:
     toJSON (
       if isBool pref || isInt pref || isString pref
@@ -31,8 +28,7 @@
     );
 
   # https://github.com/nix-community/home-manager/blob/master/modules/programs/firefox.nix#L46
-  mkUserJs = prefs: extra: let
-    prefs' = prefs // extra;
+  mkUserJs = prefs: let
     userChrome = pkgs.writeTextFile {
       name = "schizofox-userchrome";
       text = files."userChrome.css".text;
@@ -89,7 +85,7 @@
       mapAttrsToList (name: value: ''
         ${prefString}("${name}", ${userPrefValue value});
       '')
-      prefs'
+      prefs
     )}
   '';
 
@@ -105,9 +101,9 @@
       StartWithLastProfile=1
       Version=2
     '';
-    "userChrome.css".text = import ./userChrome.nix {inherit pkgs lib cfg userChromePkg;};
-    "userContent.css".text = import ./userContent.nix {inherit pkgs lib cfg userContentPkg;};
-    "user.js".text = mkUserJs (import ./preferences.nix {inherit cfg lib;}) cfg.settings;
+    "userChrome.css".text = chrome.userChrome;
+    "userContent.css".text = chrome.userContent;
+    "user.js".text = mkUserJs preferences;
   };
 
   just' = v: lib.optional (v != null);
@@ -123,7 +119,7 @@
 
     Service = {
       Environment = let
-        engines = toJSON cfg.search.searxRandomizer.instances;
+        engines = toJSON searchService.instances;
       in ["SEARX_INSTANCES=${pkgs.writeText "engines.json" engines}"];
       ExecStart = "${searxRandomizerPkg}/bin/searx-randomizer";
       Restart = "always";
@@ -132,7 +128,7 @@
   };
 
   package =
-    if nixpakLib != null && cfg.security.sandbox.enable
+    if nixpakLib != null && sandbox.enable
     then
       (nixpakLib {
         config = {sloth, ...}: let
@@ -192,9 +188,9 @@
                 (envSuffix "XDG_RUNTIME_DIR" "/doc")
                 (envSuffix "XDG_RUNTIME_DIR" "/dconf")
               ]
-              ++ (optional (!cfg.misc.customMozillaFolder.enable) (sloth.concat' sloth.homeDir "/.mozilla"))
-              ++ (optionals cfg.misc.customMozillaFolder.enable [
-                (sloth.concat' sloth.homeDir cfg.misc.customMozillaFolder.path)
+              ++ (optional (!sandbox.customMozillaFolder.enable) (sloth.concat' sloth.homeDir "/.mozilla"))
+              ++ (optionals sandbox.customMozillaFolder.enable [
+                (sloth.concat' sloth.homeDir sandbox.customMozillaFolder.path)
                 (sloth.concat' sloth.homeDir "/.mozilla")
               ]);
 
@@ -213,8 +209,8 @@
                 ]
               ]
               (just' cursorTheme "${cursorTheme}")
-              cfg.security.sandbox.extraBinds
-              (optionals cfg.security.sandbox.allowFontPaths ["/etc/fonts"])
+              sandbox.extraBinds
+              (optionals sandbox.allowFontPaths ["/etc/fonts"])
             ];
 
             env = {

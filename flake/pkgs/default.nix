@@ -1,17 +1,19 @@
 {self, ...}: {
+  _module.args.mkSchizofox = import ./schizofox;
+
   perSystem = {
     pkgs,
     lib,
     ...
   }: let
     inherit (lib.options) mkOption;
-    inherit (lib.types) listOf anything;
-    tack = import ../../.tack;
+    inherit (lib.types) anything listOf;
 
-    darkreaderPkg = pkgs.callPackage ../lib/schizofox/darkreader/package.nix {};
-    userChromePkg = pkgs.callPackage ../lib/schizofox/simplefox/userChrome.nix {};
-    userContentPkg = pkgs.callPackage ../lib/schizofox/simplefox/userContent.nix {};
-    defaultCfg = lib.evalModules {
+    darkreaderPkg = pkgs.callPackage ./darkreader/package.nix {};
+    searxRandomizerPkg = pkgs.callPackage ./searx-randomizer/package.nix {};
+    userChromePkg = pkgs.callPackage ./simplefox/userChrome.nix {};
+    userContentPkg = pkgs.callPackage ./simplefox/userContent.nix {};
+    defaultSchizofoxCfg = lib.evalModules {
       specialArgs = {inherit pkgs;};
       modules = [
         self.lib.schizofoxOptions
@@ -23,19 +25,25 @@
         }
       ];
     };
-    syntheticConfig = {
-      programs.schizofox = defaultCfg.config.programs.schizofox;
-    };
-    schizofox = (pkgs.callPackage self.lib.mkSchizofox {config = syntheticConfig;}) {
-      mode = "nixos";
+    mkSchizofox = pkgs.callPackage self.lib.mkSchizofox {
+      inherit searxRandomizerPkg;
     };
   in {
-    packages = {
+    packages = rec {
       darkreader = darkreaderPkg;
+      searx-randomizer = searxRandomizerPkg;
       userChrome = userChromePkg;
       userContent = userContentPkg;
-      searx-randomizer = tack.searx-randomizer.packages.${pkgs.system}.default;
-      schizofox = schizofox.package;
+      schizofox-unwrapped = defaultSchizofoxCfg.config.programs.schizofox.package;
+      schizofox-wrapped =
+        (mkSchizofox (
+          (import ./schizofox/from-module.nix {
+            cfg = defaultSchizofoxCfg.config.programs.schizofox;
+            inherit pkgs lib darkreaderPkg userChromePkg userContentPkg;
+          })
+          // {firefox-unwrapped = schizofox-unwrapped;}
+        ))
+        .wrapped;
     };
   };
 }

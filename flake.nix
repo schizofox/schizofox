@@ -26,9 +26,9 @@
       systems = ["x86_64-linux" "i686-linux" "aarch64-linux"];
 
       imports = [
+        ./flake/lib # extended library
         ./flake/pkgs # packages exposed by the flake
         ./flake/tests # machine tests
-        ./flake/lib # extended library
         ./flake/docs # generated module option documentation
         ./flake/modules # modules exported by the flake
       ];

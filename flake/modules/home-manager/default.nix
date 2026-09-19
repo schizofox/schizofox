@@ -1,4 +1,7 @@
-{self}: {
+{
+  self,
+  inputs,
+}: {
   config,
   pkgs,
   lib,
@@ -27,13 +30,25 @@
     then "${firefoxConfigPath}/Profiles"
     else firefoxConfigPath;
 
-  schizofox = (pkgs.callPackage self.lib.mkSchizofox {inherit config;}) {
-    mode = "home-manager";
-  };
+  maybeTheme = opt: lib.findFirst builtins.isNull opt.package [opt opt.package];
+  schizofox = (pkgs.callPackage self.lib.mkSchizofox {}) (
+    (import ../../pkgs/schizofox/from-module.nix {inherit cfg pkgs lib;})
+    // {
+      firefox-unwrapped = cfg.package;
+      profilePrefName = "user_pref";
+      cursorTheme = maybeTheme config.home.pointerCursor;
+      iconTheme = maybeTheme config.gtk.iconTheme;
+      gtkTheme = maybeTheme config.gtk.theme;
+      nixpakLib = inputs.nixpak.lib.nixpak {
+        inherit (pkgs) lib;
+        inherit pkgs;
+      };
+    }
+  );
 
   defaultProfile = "${profilesPath}/schizo.default";
 in {
-  meta.maintainers = with lib.maintainers; [sioodmy NotAShelf];
+  meta.maintainers = with lib.maintainers; [NotAShelf];
   imports = [self.lib.schizofoxOptions];
   config = mkIf cfg.enable {
     home = {
