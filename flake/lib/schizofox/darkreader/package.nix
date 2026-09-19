@@ -6,47 +6,48 @@
   background ? "1e1e2e",
   foreground ? "cdd6f4",
   ...
-}: let
-  version = "4.9.128";
-in
-  buildNpmPackage {
-    pname = "darkreader";
-    inherit version;
+}:
+buildNpmPackage (finalAttrs: {
+  pname = "darkreader";
+  version = "4.9.132";
+  extid = "addon@darkreader.org";
 
-    nodejs = nodejs_22;
+  nodejs = nodejs_22;
 
-    src = fetchFromGitHub {
-      owner = "darkreader";
-      repo = "darkreader";
-      tag = "v${version}";
-      hash = "sha256-ZeQsQb4m19mhqmackQYfaqs3Vk2GkIBTefluWU4ALMQ=";
-    };
+  src = fetchFromGitHub {
+    owner = "darkreader";
+    repo = "darkreader";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1GNqwA4RfZ2jTm8FkIk5kSOBj7IWTiICFGLKs0My1G0=";
+  };
 
-    patches = [./no-news.patch];
+  patches = [./no-news.patch];
 
-    npmDepsHash = "sha256-9aH2gUbbAj6xpPoe2FJ5KYMR4KVDxdD6P8f73soc5Ns=";
+  npmDepsHash = "sha256-eyVjBcaDUtoVSAnOWDhGFHeM1JoPXRyuyZp6lO5kB5E=";
 
-    patchPhase = ''
-      runHook prePatch
+  patchPhase = ''
+    runHook prePatch
 
-      substituteInPlace src/defaults.ts \
-        --replace-fail "181a1b" ${background} \
-        --replace-fail "e8e6e3" ${foreground}
+    substituteInPlace src/defaults.ts \
+      --replace-fail "181a1b" ${background} \
+      --replace-fail "e8e6e3" ${foreground}
 
-      runHook postPatch
-    '';
+    runHook postPatch
+  '';
 
-    npmBuildFlags = ["--" "--firefox"];
+  npmBuildFlags = ["--" "--firefox"];
 
-    installPhase = ''
-      runHook preInstall
-      cp -rv build $out/
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    cp -rv build $out/
+    # Make the output look like it was created with fetchFirefoxAddon.
+    cp -v $out/release/darkreader-firefox.xpi $out/${finalAttrs.extid}.xpi
+    runHook postInstall
+  '';
 
-    meta = {
-      description = "Custom build of Darkreader for Schizofox, with color tweaks.";
-      maintainers = with lib.maintainers; [notashelf sioodmy alfarel];
-      license = lib.licenses.mit;
-    };
-  }
+  meta = {
+    description = "Custom build of Darkreader for Schizofox, with color tweaks.";
+    maintainers = with lib.maintainers; [notashelf sioodmy alfarel];
+    license = lib.licenses.mit;
+  };
+})

@@ -1,4 +1,4 @@
-From d81209515fde988be69d86af51a12594d1dbfbc2 Mon Sep 17 00:00:00 2001
+From dc3481a8633a8e377ceaccb925bc93bbd039a916 Mon Sep 17 00:00:00 2001
 From: alfarel <alfarelcynthesis@proton.me>
 Date: Wed, 24 Jun 2026 19:36:11 -0400
 Subject: [PATCH] no news
@@ -9,14 +9,14 @@ Subject: [PATCH] no news
  src/background/newsmaker.ts                   | 221 --------------
  src/ui/connect/connector.ts                   |   4 -
  src/ui/connect/mock.ts                        |   2 -
- src/ui/popup/body/index.tsx                   |   1 -
- src/ui/popup/components/body.tsx              |  63 +---
+ src/ui/popup/body/index.tsx                   |   7 +-
+ src/ui/popup/components/body.tsx              |  76 +----
  src/ui/popup/components/news/index.tsx        |  93 ------
  src/ui/popup/components/news/mobile-links.tsx |  90 ------
  src/ui/popup/components/news/style.less       | 270 ------------------
  src/ui/popup/news-section/index.tsx           | 100 -------
  src/ui/popup/news-section/style.less          | 142 ---------
- 12 files changed, 5 insertions(+), 995 deletions(-)
+ 12 files changed, 6 insertions(+), 1013 deletions(-)
  delete mode 100644 src/background/newsmaker.ts
  delete mode 100644 src/ui/popup/components/news/index.tsx
  delete mode 100644 src/ui/popup/components/news/mobile-links.tsx
@@ -25,7 +25,7 @@ Subject: [PATCH] no news
  delete mode 100644 src/ui/popup/news-section/style.less
 
 diff --git a/src/background/extension.ts b/src/background/extension.ts
-index c1c90faf..9869ccae 100644
+index 09c3f0ea..c62674dc 100644
 --- a/src/background/extension.ts
 +++ b/src/background/extension.ts
 @@ -21,7 +21,6 @@ import DevTools from './devtools';
@@ -36,7 +36,7 @@ index c1c90faf..9869ccae 100644
  import TabManager from './tab-manager';
  import UIHighlights from './ui-highlights';
  import UserStorage from './user-storage';
-@@ -261,7 +260,6 @@ export class Extension {
+@@ -274,7 +273,6 @@ export class Extension {
              TabManager.updateContentScript({runOnProtectedPages: UserStorage.settings.enableForProtectedPages});
          }
  
@@ -44,7 +44,7 @@ index c1c90faf..9869ccae 100644
          Extension.startBarrier!.resolve();
      }
  
-@@ -276,8 +274,6 @@ export class Extension {
+@@ -289,8 +287,6 @@ export class Extension {
              changeSettings: Extension.changeSettings,
              setTheme: Extension.setTheme,
              toggleActiveTab: Extension.toggleActiveTab,
@@ -53,7 +53,7 @@ index c1c90faf..9869ccae 100644
              loadConfig: ConfigManager.load,
              applyDevFixes: DevTools.applyFixes,
              resetDevFixes: DevTools.resetFixes,
-@@ -396,13 +392,12 @@ export class Extension {
+@@ -408,13 +404,12 @@ export class Extension {
      static async collectData(): Promise<ExtensionData> {
          await Extension.loadData();
          const [
@@ -68,7 +68,7 @@ index c1c90faf..9869ccae 100644
              Extension.getShortcuts(),
              Extension.getActiveTabInfo(),
              new Promise<boolean>((r) => chrome.extension.isAllowedFileSchemeAccess(r)),
-@@ -413,7 +408,6 @@ export class Extension {
+@@ -425,7 +420,6 @@ export class Extension {
              isReady: true,
              isAllowedFileSchemeAccess,
              settings: UserStorage.settings,
@@ -76,7 +76,7 @@ index c1c90faf..9869ccae 100644
              shortcuts,
              colorScheme: ConfigManager.COLOR_SCHEMES_RAW!,
              forcedScheme: Extension.autoState === 'scheme-dark' ? 'dark' : Extension.autoState === 'scheme-light' ? 'light' : null,
-@@ -540,9 +534,6 @@ export class Extension {
+@@ -558,9 +552,6 @@ export class Extension {
                  resetWindowTheme();
              }
          }
@@ -368,19 +368,32 @@ index 7d40e4a1..affc9fa6 100644
              'addSite': 'Alt+Shift+A',
              'toggle': 'Alt+Shift+D',
 diff --git a/src/ui/popup/body/index.tsx b/src/ui/popup/body/index.tsx
-index 1fcb736c..d3f2a0a3 100644
+index 4a349978..c2de9437 100644
 --- a/src/ui/popup/body/index.tsx
 +++ b/src/ui/popup/body/index.tsx
-@@ -137,7 +137,6 @@ export default function Body(props: ViewProps) {
+@@ -127,7 +127,7 @@ export default function Body(props: ViewProps) {
+     return (
+         <body
+             class={{
+-                'm-body-short': !props.data.uiHighlights.includes('anniversary'),
++                'm-body-short': true,
+             }}
+         >
              <section class="m-section">
-                 <DonateGroup />
+@@ -136,11 +136,6 @@ export default function Body(props: ViewProps) {
+             <section class="m-section pages-section">
+                 <Pages {...props} />
              </section>
--            <NewsSection {...props} />
+-            {props.data.uiHighlights.includes('anniversary') ? (
+-                <section class="m-section">
+-                    <DonateGroup />
+-                </section>
+-            ) : null}
              <Overlay />
          </body>
      );
 diff --git a/src/ui/popup/components/body.tsx b/src/ui/popup/components/body.tsx
-index cd5a50dd..ceeabe31 100644
+index a39674ac..84d684d3 100644
 --- a/src/ui/popup/components/body.tsx
 +++ b/src/ui/popup/components/body.tsx
 @@ -3,7 +3,7 @@ import {getContext} from 'malevic/dom';
@@ -471,7 +484,7 @@ index cd5a50dd..ceeabe31 100644
      function toggleMoreSiteSettings() {
          setState({moreSiteSettingsOpen: !state.moreSiteSettingsOpen, moreToggleSettingsOpen: false, newToggleMenusHighlightHidden: true});
          if (props.data.uiHighlights.includes('new-toggle-menus')) {
-@@ -138,26 +108,6 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
+@@ -138,29 +108,6 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
          }
      }
  
@@ -481,11 +494,14 @@ index cd5a50dd..ceeabe31 100644
 -        const index10 = birthdayMessage.indexOf('10');
 -        const indexDot = birthdayMessage.indexOf('.', index10);
 -        if (index10 >= 0 && indexDot > index10) {
+-            const timePassed = Date.now() - (new Date(2014, 6, 7)).getTime();
+-            let years = Math.abs((new Date(timePassed)).getFullYear() - 1970);
+-            years = Math.max(10, years);
 -            birthdayMessageSpec = (
 -                <span>
 -                    {birthdayMessage.substring(0, index10)}
 -                    <a href={`${HOMEPAGE_URL}/timeline/`} target="_blank" rel="noopener noreferrer">
--                        {birthdayMessage.substring(index10, indexDot)}
+-                        {`${years}${birthdayMessage.substring(index10 + 2, indexDot)}`}
 -                    </a>
 -                    {birthdayMessage.substring(indexDot)}
 -                </span>
@@ -498,7 +514,24 @@ index cd5a50dd..ceeabe31 100644
      const filterTab = <FilterSettings data={props.data} actions={props.actions}>
          {__PLUS__ ? (
              props.data.uiHighlights.includes('anniversary') ? (
-@@ -258,16 +208,9 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
+@@ -199,16 +146,6 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
+                     </a>
+                 </div>
+             )
+-        ) : props.data.uiHighlights.includes('anniversary') ? (
+-            <div class="birthday-container">
+-                <i class="birthday-icon">🎉</i>
+-                <span class="birthday-message">
+-                    {birthdayMessageSpec}
+-                </span>
+-                <a class="donate-link" href={DONATE_URL} target="_blank" rel="noopener noreferrer">
+-                    <span class="donate-link__text">{getLocalMessage('pay_for_using')}</span>
+-                </a>
+-            </div>
+         ) : null}
+     </FilterSettings>;
+ 
+@@ -261,16 +198,9 @@ function Body(props: BodyProps & {fonts: string[]} & {installation: {date: numbe
              <footer>
                  <div class="footer-buttons">
                      <a class="footer-help-link" href={getHelpURL()} target="_blank" rel="noopener noreferrer">{getLocalMessage('help')}</a>
@@ -1241,5 +1274,5 @@ index 1fd8ad02..00000000
 -    white-space: nowrap;
 -}
 -- 
-2.54.0
+2.55.0
 
