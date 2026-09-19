@@ -1,28 +1,39 @@
 {
+  pkgs,
+  nixosModules,
   testers,
-  inputs,
-  homeManagerModules,
-  ...
 }:
 testers.nixosTest {
-  name = "basic";
+  name = "schizofox-sandbox";
+
+  meta.maintainers = with pkgs.lib.maintainers; [
+    sioodmy
+    NotAShelf
+  ];
 
   nodes.machine = {
     imports = [
-      inputs.home-manager.nixosModules.home-manager
       ../profiles/test-setup.nix
-    ];
-    home-manager.sharedModules = [
-      homeManagerModules.schizofox
+      nixosModules.schizofox
     ];
 
-    home-manager.users.test = {
-      programs.schizofox = {
-        enable = true;
-        security.sandbox.enable = true;
-      };
+    programs.schizofox = {
+      enable = true;
+      security.sandbox.enable = true;
     };
   };
 
-  testScript = "";
+  testScript = ''
+    machine.wait_for_x()
+
+    with subtest("Sandboxed Schizofox launches"):
+        machine.succeed("schizofox about:preferences >&2 &")
+        machine.wait_for_window("Firefox")
+        machine.sleep(30)
+
+    with subtest("Sandboxed Schizofox carries the hardened policies"):
+        pkg = machine.succeed("dirname $(dirname $(readlink -f $(command -v schizofox)))").strip()
+        machine.succeed(f"grep -q 'DisableTelemetry' {pkg}/lib/firefox/distribution/policies.json")
+        machine.succeed(f"grep -q 'privacy.resistFingerprinting' {pkg}/lib/firefox/mozilla.cfg")
+  '';
 }

@@ -1,41 +1,58 @@
 {
-  config,
+  lib,
   pkgs,
   ...
 }: {
-  # he's a thicc boi
   virtualisation = {
     cores = 4;
     memorySize = 4096;
-    qemu.options = ["-vga none -enable-kvm -device virtio-gpu-pci,xres=720,yres=1440"];
-  };
-
-  users.users.test = {
-    isNormalUser = true;
-    password = "";
-  };
-
-  home-manager = {
-    sharedModules = [
-      {home.stateVersion = config.system.stateVersion;}
-    ];
-
-    users.test.home.pointerCursor = {
-      enable = true;
-      package = pkgs.vanilla-dmz;
-      name = "Vanilla-DMZ";
-    };
   };
 
   services = {
-    displayManager = {
-      gdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = "test";
-      };
+    xserver = {
+      # Minimal X11 session as root, based on what the upstream nixpkgs
+      # Firefox tests do.
+      # See:
+      #  nixos/tests/common/x11.nix,
+      #   nixos/tests/common/auto.nix.
+      enable = true;
+      displayManager.lightdm.enable = true;
+      windowManager.icewm.enable = true;
     };
 
-    desktopManager.gnome.enable = true;
+    displayManager.autoLogin = {
+      enable = true;
+      user = "root";
+    };
+
+    displayManager.defaultSession = lib.mkDefault "none+icewm";
+  };
+
+  # lightdm by default doesn't allow auto login for root, which is
+  # required by some nixos tests; override it here.
+  security.pam.services.lightdm-autologin.text = lib.mkForce ''
+    auth     requisite pam_nologin.so
+    auth     required  pam_succeed_if.so quiet
+    auth     required  pam_permit.so
+
+    account  include   lightdm
+    password include   lightdm
+    session  include   lightdm
+  '';
+
+  environment = {
+    etc = {
+      # Help with OCR
+      "icewm/theme".text = ''
+        Theme="gtk2/default.theme"
+      '';
+
+      # Remove task bar to avoid non-determinism
+      "icewm/preferences".text = ''
+        ShowTaskBar=0
+      '';
+    };
+
+    systemPackages = [pkgs.xdotool];
   };
 }
