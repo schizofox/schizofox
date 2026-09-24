@@ -1,8 +1,4 @@
-{
-  inputs,
-  mkSchizofox,
-  ...
-}: let
+{inputs, ...}: let
   inherit (inputs.nixpkgs) lib;
   extendedLib = lib.extend (self: super: let
     callLibs = file: import file {lib = self;};
@@ -12,8 +8,8 @@
     };
 
     inherit (self.schizoLib.extensions) mkForceInstalled;
-    inherit mkSchizofox;
     schizofoxOptions = ./schizofox/options;
+    schizofoxArgsFromModule = import ./schizofox/from-module.nix;
   });
 in {
   perSystem._module.args.lib = extendedLib;

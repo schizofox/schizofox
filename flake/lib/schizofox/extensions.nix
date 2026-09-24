@@ -2,12 +2,11 @@
   pkgs,
   lib,
   cfg,
-  darkreaderPkg,
   ...
 }: let
   inherit (lib.attrsets) mapAttrs optionalAttrs filterAttrs;
 
-  reader = darkreaderPkg.override {
+  reader = pkgs.schizofox-darkreader.override {
     inherit (cfg.theme.colors) background foreground;
   };
 

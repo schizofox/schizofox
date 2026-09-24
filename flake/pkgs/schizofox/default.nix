@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  searxRandomizerPkg ? pkgs.callPackage ../searx-randomizer/package.nix {},
 }: {
   preferences,
   chrome,
@@ -11,13 +10,14 @@
   searchService,
   firefox-unwrapped,
   nixpakLib ? null,
-  profilePrefName ? "pref",
+  prefName ? "pref",
   cursorTheme ? null,
   iconTheme ? null,
   gtkTheme ? null,
+  wrapFirefox ? pkgs.wrapFirefox,
+  wrapperArgs ? {},
 }: let
-  wrapperGenerated = import ../../lib/schizofox/files.nix {
-    prefName = "pref";
+  generated = import ./generated.nix {
     wrappedPackage = wrapped;
     inherit
       preferences
@@ -30,36 +30,15 @@
       lib
       nixpakLib
       pkgs
-      searxRandomizerPkg
+      prefName
       ;
   };
-  profileGenerated =
-    if profilePrefName == "pref"
-    then wrapperGenerated
-    else
-      import ../../lib/schizofox/files.nix {
-        prefName = profilePrefName;
-        wrappedPackage = wrapped;
-        inherit
-          preferences
-          chrome
-          sandbox
-          searchService
-          gtkTheme
-          iconTheme
-          cursorTheme
-          lib
-          nixpakLib
-          pkgs
-          searxRandomizerPkg
-          ;
-      };
+
   wrapped = pkgs.callPackage ./firefox.nix {
-    inherit firefox-unwrapped policies wrapWithProxychains;
-    inherit (wrapperGenerated) files;
+    inherit firefox-unwrapped policies wrapWithProxychains wrapFirefox wrapperArgs;
+    inherit (generated) autoconfig;
   };
 in {
-  inherit (profileGenerated) files;
-  inherit (wrapperGenerated) package searx-randomizer-unit;
+  inherit (generated) package searx-randomizer-unit;
   inherit wrapped;
 }

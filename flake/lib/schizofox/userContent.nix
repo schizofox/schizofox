@@ -2,11 +2,10 @@
   cfg,
   lib,
   pkgs,
-  userContentPkg,
 }: let
   inherit (cfg.theme) font extraUserContent;
   inherit (cfg.theme.colors) background background-darker foreground primary border;
-  userContent = userContentPkg;
+  userContent = pkgs.schizofox-userContent;
 in ''
 
   ${

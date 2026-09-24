@@ -1,10 +1,14 @@
 {
-  makeDesktopItem,
-  wrapFirefox,
+  # Wrapper deps
   firefox-unwrapped,
+  wrapFirefox,
+  # Goodies
+  makeDesktopItem,
+  writeText,
   policies,
   wrapWithProxychains,
-  files,
+  autoconfig,
+  wrapperArgs,
   ...
 }: let
   logo = builtins.fetchurl {
@@ -26,10 +30,11 @@
     mimeTypes = ["text/html" "text/xml"];
   };
 
-  wrappedFox = wrapFirefox firefox-unwrapped {
-    extraPolicies = policies;
-    extraPrefs = files."user.js".text;
-  };
+  wrappedFox = wrapFirefox firefox-unwrapped (wrapperArgs
+    // {
+      extraPolicies = policies // (wrapperArgs.extraPolicies or {});
+      extraPrefsFiles = [(writeText "schizofox.cfg" autoconfig)] ++ (wrapperArgs.extraPrefsFiles or []);
+    });
 
   finalPackage = wrappedFox.overrideAttrs (old: {
     buildCommand =

@@ -2,12 +2,11 @@
   cfg,
   lib,
   pkgs,
-  userChromePkg,
 }: let
   inherit (cfg.theme.colors) background-darker background foreground primary border;
   inherit (cfg.theme) font;
 
-  userChrome = userChromePkg.override {
+  userChrome = pkgs.schizofox-userChrome.override {
     backgroundDarker = background-darker;
     inherit background border font;
   };

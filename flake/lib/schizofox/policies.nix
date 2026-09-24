@@ -2,7 +2,6 @@
   cfg,
   pkgs,
   lib,
-  darkreaderPkg,
 }: {
   ## Features obsoleted by Nix
   AppAutoUpdate = false;
@@ -94,5 +93,5 @@
 
   Bookmarks = cfg.misc.bookmarks;
 
-  ExtensionSettings = import ./extensions.nix {inherit cfg lib pkgs darkreaderPkg;};
+  ExtensionSettings = import ./extensions.nix {inherit cfg lib pkgs;};
 }
