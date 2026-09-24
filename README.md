@@ -88,11 +88,6 @@ intentionally built for desktop use. We use Firefox's Enhanced Tracking
 Protection (ETP) and Fingerprinting Protection (FPP), while the broader Resist
 Fingerprinting (RFP) mode is an explicit opt-in.
 
-### Hardening
-
-See the [Firefox hardening model](docs/hardening.md) for Schizofox's
-stock-Firefox ESR scope, public controls, and source audit.
-
 ### Notable Features <a name = "doc_features"></a>
 
 [Nixpak]: https://github.com/nixpak/nixpak
@@ -102,20 +97,30 @@ stock-Firefox ESR scope, public controls, and source audit.
   - [x] Declarative extension installation with the provided [Home-Manager]
         module.
   - [x] Custom `userStyle` and `userChrome` configurations
+  - [x] Standalone and wrappable packaging
+    - [x] Works on Hjem, NixOS and Home-Manager
 - [x] Declarative theming. Schizofox allows for browser-wide theming with 3
       colors and a font, with DarkReader integration.
 - [x] Optional [NixPak] wrapping sandboxing and additional security
 - [x] Searx instance randomizer
-- [ ] User agent randomizer
-- [ ] Tor wrapper
+
+For future consideration:
+
+- [ ] User agent randomizer (as an extension?)
+- [ ] Tor wrapper (maybe just use the Tor browser...)
 
 ## Installing Schizofox
 
-Schizofox can be installed through the Home Manager or NixOS module, or
-constructed directly as a Firefox wrapper. The modules supply Schizofox's
-default policies and preferences; direct wrapper callers must supply their own.
+Schizofox provides two _module_ interfaces. Those are the NixOS and Home-Manager
+modules, constructed directly through the underlying wrapper interface. The
+modules supply Schizofox's default policies and preferences; direct wrapper
+callers must supply their own.
 
-Add Schizofox as a flake input:
+> [!TIP] Hjem users are encouraged to use the `schizofox-unwrapped` package, and
+> wrap it manually as described in [Using-the-wrapper-without-a-module]. Same
+> mechanism can be used by NixOS and Home-Manager users as well.
+
+To get started, add Schizofox as a flake input:
 
 ```nix
 # flake.nix
@@ -125,6 +130,24 @@ Add Schizofox as a flake input:
     schizofox.url = "github:schizofox/schizofox";
     # ...
   }
+}
+```
+
+### Using the NixOS module
+
+In a NixOS configuration that receives `inputs` through
+`specialArgs = {inherit inputs;}`:
+
+```nix
+{inputs, pkgs, ...}: {
+  imports = [inputs.schizofox.nixosModules.default];
+  nixpkgs.overlays = [inputs.schizofox.overlays.default];
+
+  programs.schizofox = {
+    enable = true;
+    package = pkgs.firefox-esr-140-unwrapped;
+    settings."browser.startup.homepage" = "https://example.org";
+  };
 }
 ```
 
@@ -148,26 +171,17 @@ In a Home Manager configuration that receives `inputs` through
 }
 ```
 
-The module installs the configured package and manages its Firefox profile
-files. `security.sandbox.enable` uses NixPak; omit it to use the unsandboxed
-wrapper. `package` must be an unwrapped Firefox ESR package.
+The module installs the configured wrapper where preferences and stylesheets
+come from the wrapper's Autoconfig. Existing Firefox profiles remain entirely
+yours. Do note that the `package` field MUST be an unwrapped Firefox ESR
+package. Schizofox will refuse to support non-ESR Firefox as well as wrapped
+packages.
 
-### Using the NixOS module
-
-In a NixOS configuration that receives `inputs` through
-`specialArgs = {inherit inputs;}`:
-
-```nix
-{inputs, pkgs, ...}: {
-  imports = [inputs.schizofox.nixosModules.default];
-
-  programs.schizofox = {
-    enable = true;
-    package = pkgs.firefox-esr-140-unwrapped;
-    settings."browser.startup.homepage" = "https://example.org";
-  };
-}
-```
+The modules use the Schizofox package overlay internally. For `pkgs.mkSchizofox`
+and the extension packages to be available throughout your configuration, add
+`inputs.schizofox.overlays.default` to your nixpkgs overlays. For standalone
+Home Manager, set `nixpkgs.overlays`; when Home Manager uses NixOS's global
+`pkgs`, set the overlay on NixOS instead.
 
 The module installs Schizofox system-wide. Set
 `programs.schizofox.search.searxRandomizer.enable = true` to install its user
@@ -175,13 +189,16 @@ service; its default search configuration does not require the service.
 
 ### Using the wrapper without a module
 
-`lib.mkSchizofox` accepts final package inputs, **not** `programs.schizofox`
-module options. This example installs a directly constructed wrapper in a NixOS
+Hjem users or any user planning to install Schizofox on non-NixOS using, say,
+`nix profile` can create a package and construct a wrapper from the overlay. To
+use this mechanism, install the overlay and construct a wrapper in a NixOS
 configuration with `inputs` passed through `specialArgs`:
 
 ```nix
 {inputs, pkgs, ...}: let
-  schizofox = (pkgs.callPackage inputs.schizofox.lib.mkSchizofox {}) {
+  # XXX: this assumes `pkgs` has been constructed from the overlay. You'll need
+  # to consume the overlay, or, call the mkSchizofox package yourself.
+  schizofox = pkgs.mkSchizofox {
     firefox-unwrapped = pkgs.firefox-esr-140-unwrapped;
     preferences = {"browser.startup.homepage" = "about:blank";};
     searchService.instances = [];
@@ -203,17 +220,99 @@ configuration with `inputs` passed through `specialArgs`:
     };
   };
 in {
+  nixpkgs.overlays = [inputs.schizofox.overlays.default]; # <- this is one way of consuming the overlay
+
+  # You can add the wrapped package to environment.systemPackages or
+  # alternatives like users.users.<name>.packages.
   environment.systemPackages = [schizofox.wrapped];
 }
 ```
 
-`policies` replaces the module's policy defaults; the example sets only
-`DisableTelemetry`, so it is **not equivalent to the hardened module
-configuration**. `preferences` supplies `user.js` entries and `chrome` supplies
-CSS strings. `wrapped` is the Firefox wrapper. `package` is the same wrapper
-unless both `nixpakLib` is provided and `sandbox.enable` is true. Direct callers
-must install `files` and `searx-randomizer-unit` themselves if they need Home
-Manager-style profile files or the search service.
+In this example:
+
+- `policies` replaces the module's policy defaults. Setting only
+  `DisableTelemetry` is **not equivalent to the hardened module configuration**.
+- `preferences` sets Autoconfig defaults. `chrome.userChrome` is scoped to
+  `chrome://` browser documents; `chrome.userContent` styles content documents.
+  Both are loaded from the store for every profile on every launch.
+- `wrapped` is the Firefox wrapper. `package` is the same wrapper unless both
+  `nixpakLib` is provided and `sandbox.enable` is true. The wrapper also returns
+  `searx-randomizer-unit` for callers installing the search service.
+- `wrapperArgs` accepts additional wrapper arguments such as
+  `nativeMessagingHosts`, `pkcs11Modules`, `extraPrefsFiles`, and
+  `extraPolicies`. Explicit `extraPolicies` keys override Schizofox defaults.
+  Additional `extraPrefsFiles` follow Schizofox's generated Autoconfig file;
+  only use trusted files because Autoconfig executes privileged JavaScript.
+
+You may set `prefName = "lockPref"` to lock all generated preferences instead of
+providing overridable defaults. This is also available as a module option.
+
+Note that on upgrade from an older Home Manager deployment, its managed
+`profiles.ini`, `schizo.default/user.js`, and `chrome/userChrome.css` /
+`chrome/userContent.css` links are **no longer installed**. Back up your profile
+before switching. Existing profile data is not deleted, but without the old
+`profiles.ini`, Firefox may create a new default profile; select
+`schizo.default` in `about:profiles` if you want to keep using it. Old values
+saved in that profile's `prefs.js` can still override Autoconfig defaults; reset
+them in `about:config` to use the new defaults.
+
+> [!TIP] For a disposable trial, select a new profile explicitly instead of
+> changing your normal Firefox profile (set `security.sandbox.enable = false`
+> first):
+>
+> ```sh
+> # Easy way to test
+> $ profile="$(mktemp -d)"
+> $ schizofox --no-remote --profile "$profile" about:preferences
+> $ rm -rf -- "$profile" # only the directory just created by mktemp
+> ```
+
+### Optional Adifox wrapper
+
+[Adifox]: https://github.com/NotAShelf/adifox
+
+[Adifox] is an alternative Firefox wrapper that has been created as a side
+experiment. Schizofox does not use it by default, but lets you _opt-in_ to using
+Adifox as the wrapper.
+
+You can supply an adapter through `programs.schizofox.wrapFirefox` (or
+`wrapFirefox` when calling `pkgs.mkSchizofox` directly). In a consumer flake,
+add `adifox.url = "github:NotAShelf/adifox"; adifox.flake = false;` and
+`lladios.url = "github:llakala/lladios";`, then pin both in your lockfile:
+
+```nix
+{inputs, pkgs, ...}: let
+  lladios = inputs.lladios.adios;
+  tree = lladios {
+    name = "root";
+    modules = {
+      nixpkgs = {
+        name = "nixpkgs";
+        options = {
+          pkgs.type = lladios.types.attrs;
+          lib = {
+            type = lladios.types.attrs;
+            defaultFunc = {options}: options.pkgs.lib;
+          };
+        };
+      };
+      wrapAdifox = import (inputs.adifox + "/wrapAdifox.nix") lladios;
+    };
+  } {options."/nixpkgs".pkgs = pkgs;};
+in {
+  imports = [inputs.schizofox.nixosModules.default];
+  programs.schizofox = {
+    enable = true;
+    wrapFirefox = browser: args:
+      tree.modules.wrapAdifox ({package = browser;} // args);
+  };
+}
+```
+
+Use `homeManagerModules.default` instead when configuring Home Manager. The
+`package` option remains the **unwrapped** ESR browser; Adifox replaces
+`wrapFirefox`, rather than wrapping a wrapper. `nixExtensions` should not be
+combined with Schizofox's extension policies.
 
 ## Contributing <a name="doc_contributing"></a>
 
@@ -224,12 +323,12 @@ implement new changes then feel free to create a pull request.
 
 ## Frequently Asked Questions (FAQ)
 
-**Q:** An `user.js` preference is greyed out, and overrides my own settings set
-in `programs.schizofox.settings`!
+**Q:** A preference is greyed out, or my `programs.schizofox.settings` value
+does not appear in an existing profile.
 
-**A:** This is usually the case when an _enterprise policy_ takes priority over
-your preferences. If you do not set any enterprise policies yourself, open an
-issue. We will handle it.
+**A:** Enterprise policies can lock a preference. Otherwise, `pref` sets the
+default branch; a saved user value in the profile's `prefs.js` overrides it.
+Reset the preference in `about:config` to restore the wrapper default.
 
 **Q:** How do I customize UI declaratively?
 
