@@ -47,7 +47,7 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Custom build of Darkreader for Schizofox, with color tweaks.";
-    maintainers = with lib.maintainers; [notashelf sioodmy alfarel];
+    maintainers = with lib.maintainers; [NotAShelf alfarel];
     license = lib.licenses.mit;
   };
 })

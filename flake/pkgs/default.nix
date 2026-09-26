@@ -1,17 +1,19 @@
-{self, ...}: {
+{
+  self,
+  inputs,
+  ...
+}: {
+  flake.overlays.default = import ./overlay.nix;
+
   perSystem = {
     pkgs,
+    system,
     lib,
     ...
   }: let
     inherit (lib.options) mkOption;
-    inherit (lib.types) listOf anything;
-    tack = import ../../.tack;
-
-    darkreaderPkg = pkgs.callPackage ../lib/schizofox/darkreader/package.nix {};
-    userChromePkg = pkgs.callPackage ../lib/schizofox/simplefox/userChrome.nix {};
-    userContentPkg = pkgs.callPackage ../lib/schizofox/simplefox/userContent.nix {};
-    defaultCfg = lib.evalModules {
+    inherit (lib.types) anything listOf;
+    defaultSchizofoxCfg = lib.evalModules {
       specialArgs = {inherit pkgs;};
       modules = [
         self.lib.schizofoxOptions
@@ -23,19 +25,34 @@
         }
       ];
     };
-    syntheticConfig = {
-      programs.schizofox = defaultCfg.config.programs.schizofox;
-    };
-    schizofox = (pkgs.callPackage self.lib.mkSchizofox {config = syntheticConfig;}) {
-      mode = "nixos";
-    };
   in {
+    # TODO: there is a better pattern for this but I forgot what it was, and I'm too lazy to figure it out
+    # right now. It involves legacyPackages I think.
+    _module.args.pkgs = import inputs.nixpkgs {
+      inherit system;
+      overlays = [self.overlays.default];
+    };
+
     packages = {
-      darkreader = darkreaderPkg;
-      userChrome = userChromePkg;
-      userContent = userContentPkg;
-      searx-randomizer = tack.searx-randomizer.packages.${pkgs.system}.default;
-      schizofox = schizofox.package;
+      # Extensions and services
+      darkreader = pkgs.schizofox-darkreader;
+      searx-randomizer = pkgs.schizofox-searx-randomizer;
+
+      # userChrome and userContent
+      userChrome = pkgs.schizofox-userChrome;
+      userContent = pkgs.schizofox-userContent;
+
+      # Schizofox packages
+      schizofox-unwrapped = defaultSchizofoxCfg.config.programs.schizofox.package;
+      schizofox-wrapped =
+        (pkgs.mkSchizofox (
+          (self.lib.schizofoxArgsFromModule {
+            cfg = defaultSchizofoxCfg.config.programs.schizofox;
+            inherit pkgs lib;
+          })
+          // {firefox-unwrapped = defaultSchizofoxCfg.config.programs.schizofox.package;}
+        ))
+        .wrapped;
     };
   };
 }

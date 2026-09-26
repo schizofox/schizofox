@@ -10,10 +10,7 @@ stdenvNoCC.mkDerivation {
   pname = "simplefox-userChrome";
   version = "0.1.0";
 
-  src = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/migueravila/SimpleFox/master/chrome/userChrome.css";
-    sha256 = "0jqv1fc1h1a2whgxa8rrq58znfaplrwhpkh5vrcja6hwbix1j1dh";
-  };
+  src = ./src/userChrome.css;
 
   unpackPhase = ''
     cp -v $src userChrome.css
@@ -22,10 +19,6 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
   dontConfigure = true;
-
-  patches = [
-    ./patches/0001-add-font-config.patch
-  ];
 
   postPatch = ''
     sed -i "s/19171a/${backgroundDarker}/g" userChrome.css

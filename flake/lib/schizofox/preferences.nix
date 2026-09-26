@@ -730,7 +730,6 @@ in
 
     # Whether to display bookmarks in the Toolbar
     "browser.toolbars.bookmarks.visibility" = cfg.misc.displayBookmarksInToolbar;
-    "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
     "browser.eme.ui.enabled" = cfg.misc.drm.enable;
     "media.eme.ui.enabled" = cfg.misc.drm.enable;

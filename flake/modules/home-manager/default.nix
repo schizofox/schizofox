@@ -1,4 +1,8 @@
-{self}: {
+{
+  self,
+  inputs,
+}: {
+  options,
   config,
   pkgs,
   lib,
@@ -9,42 +13,41 @@
 
   cfg = config.programs.schizofox;
 
-  inherit (pkgs.stdenvNoCC.hostPlatform) isDarwin;
-  mozillaConfigPath =
-    if isDarwin
-    then "Library/Application Support/Mozilla"
-    else if cfg.misc.customMozillaFolder.enable
-    then "${config.home.homeDirectory}${cfg.misc.customMozillaFolder.path}"
-    else "${config.home.homeDirectory}/.mozilla";
-
-  firefoxConfigPath =
-    if isDarwin
-    then "Library/Application Support/Firefox"
-    else mozillaConfigPath + "/firefox";
-
-  profilesPath =
-    if isDarwin
-    then "${firefoxConfigPath}/Profiles"
-    else firefoxConfigPath;
-
-  schizofox = (pkgs.callPackage self.lib.mkSchizofox {inherit config;}) {
-    mode = "home-manager";
-  };
-
-  defaultProfile = "${profilesPath}/schizo.default";
+  maybeTheme = theme:
+    if theme == null
+    then null
+    else theme.package;
+  schizofoxPkgs =
+    if pkgs ? mkSchizofox
+    then pkgs
+    else pkgs.extend self.overlays.default;
+  schizofox = schizofoxPkgs.mkSchizofox (
+    (self.lib.schizofoxArgsFromModule {
+      inherit cfg lib;
+      pkgs = schizofoxPkgs;
+    })
+    // {
+      firefox-unwrapped = cfg.package;
+      prefName = cfg.prefName;
+      wrapFirefox = cfg.wrapFirefox;
+      wrapperArgs = cfg.wrapperArgs;
+      cursorTheme =
+        if lib.any (definition: definition ? package) options.home.pointerCursor.definitions
+        then config.home.pointerCursor.package
+        else null;
+      iconTheme = maybeTheme config.gtk.iconTheme;
+      gtkTheme = maybeTheme config.gtk.theme;
+      nixpakLib = inputs.nixpak.lib.nixpak {
+        inherit (schizofoxPkgs) lib;
+        pkgs = schizofoxPkgs;
+      };
+    }
+  );
 in {
-  meta.maintainers = with lib.maintainers; [sioodmy NotAShelf];
+  meta.maintainers = with lib.maintainers; [NotAShelf];
   imports = [self.lib.schizofoxOptions];
   config = mkIf cfg.enable {
-    home = {
-      packages = [schizofox.package];
-      file = {
-        "${firefoxConfigPath}/profiles.ini".text = schizofox.files."profiles.ini".text;
-        "${defaultProfile}/chrome/userChrome.css".text = schizofox.files."userChrome.css".text;
-        "${defaultProfile}/chrome/userContent.css".text = schizofox.files."userContent.css".text;
-        "${defaultProfile}/user.js".text = schizofox.files."user.js".text;
-      };
-    };
+    home.packages = [schizofox.package];
 
     systemd.user.services.searx-randomizer = mkIf cfg.search.searxRandomizer.enable schizofox.searx-randomizer-unit;
 

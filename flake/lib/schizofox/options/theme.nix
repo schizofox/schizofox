@@ -44,7 +44,7 @@ in {
       type = str;
       example = "Lato";
       default = "Lexend";
-      description = "Default firefox font";
+      description = "Default Firefox font in the built-in stylesheets (only when defaultUserChrome or defaultUserContent is enabled)";
     };
 
     defaultUserChrome.enable = mkEnableOption "default userChrome for Schizofox" // {default = true;};
