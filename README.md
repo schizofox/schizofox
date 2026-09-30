@@ -145,7 +145,7 @@ In a NixOS configuration that receives `inputs` through
 
   programs.schizofox = {
     enable = true;
-    package = pkgs.firefox-esr-140-unwrapped;
+    package = pkgs.firefox-esr-153-unwrapped;
     settings."browser.startup.homepage" = "https://example.org";
   };
 }
@@ -164,7 +164,7 @@ In a Home Manager configuration that receives `inputs` through
 
   programs.schizofox = {
     enable = true;
-    package = pkgs.firefox-esr-140-unwrapped;
+    package = pkgs.firefox-esr-153-unwrapped;
     settings."browser.startup.homepage" = "https://example.org";
     security.sandbox.enable = true;
   };
@@ -199,7 +199,7 @@ configuration with `inputs` passed through `specialArgs`:
   # XXX: this assumes `pkgs` has been constructed from the overlay. You'll need
   # to consume the overlay, or, call the mkSchizofox package yourself.
   schizofox = pkgs.mkSchizofox {
-    firefox-unwrapped = pkgs.firefox-esr-140-unwrapped;
+    firefox-unwrapped = pkgs.firefox-esr-153-unwrapped;
     preferences = {"browser.startup.homepage" = "about:blank";};
     searchService.instances = [];
     wrapWithProxychains = false;

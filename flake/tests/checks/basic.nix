@@ -39,7 +39,7 @@ testers.nixosTest {
     from datetime import timedelta
 
     with subtest("Wrapper uses the selected unwrapped Firefox"):
-        assert "${pkgs.firefox-esr-140-unwrapped.version}" in machine.succeed("schizofox --version")
+        assert "${pkgs.firefox-esr-153-unwrapped.version}" in machine.succeed("schizofox --version")
 
     machine.wait_for_x()
     with subtest("Firefox opens configured homepage without an Autoconfig error"):
