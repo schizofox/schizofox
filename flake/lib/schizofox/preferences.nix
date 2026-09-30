@@ -7,7 +7,7 @@
   inherit (cfg.theme.colors) background foreground;
 in
   {
-    # # This is an amalgamation of our (Schizofox) and Arkenfox's policies.
+    # This is an amalgamation of our (Schizofox) and Arkenfox's policies.
     # Please report any compatibility issues or security anti-features to the
     # Schizofox team over at <https://github.com/schizofox/schizofox>
     #
@@ -51,6 +51,7 @@ in
     # Disable sponsored content on Firefox Home (Activity Stream)
     "browser.newtabpage.activity-stream.showSponsored" = false;
     "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+    "browser.newtabpage.activity-stream.showSponsoredCheckboxes" = false;
 
     # Clear default topsites
     "browser.newtabpage.activity-stream.default.sites" = "";
@@ -71,10 +72,6 @@ in
     # See:
     #  <https://support.mozilla.org/kb/personalized-extension-recommendations>
     "browser.discovery.enable" = false;
-
-    # Disable shopping experience
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1840156#c0
-    "browser.shopping.experience2023.enabled" = false;
 
     ## Telemetry
     # Allow Firefox telemetry only when explicitly requested. These preferences supplement the
@@ -100,7 +97,7 @@ in
     "browser.newtabpage.activity-stream.feeds.telemetry" = security.telemetry.enable;
     "browser.newtabpage.activity-stream.telemetry" = security.telemetry.enable;
 
-    ## Studies
+    ## Studies / Rollouts
     # Disable Firefox Studies
     "app.shield.optoutstudies.enabled" = false;
 
@@ -110,6 +107,11 @@ in
     #  <https://mozilla.github.io/normandy/>
     "app.normandy.enabled" = false;
     "app.normandy.api_url" = "";
+
+    # Disable Nimbus rollouts
+    # Rollouts are a second studies channel that can silently change feature
+    # configurations between regular Firefox updates
+    "nimbus.rollouts.enabled" = false;
 
     ## Crash Reports
     # Disable Crash Reports
@@ -142,6 +144,11 @@ in
     #  <https://wiki.mozilla.org/Security/Safe_Browsing>
     #  <https://support.mozilla.org/kb/how-does-phishing-and-malware-protection-work>
     #  <https://educatedguesswork.org/posts/safe-browsing-privacy>
+    #
+    # Note: FF147+ uses Safe Browsing v5, which incorporates Oblivious HTTP, and
+    # ships a local list mode. See:
+    #  <https://developers.google.com/safe-browsing/reference>
+    #  <https://developers.google.com/safe-browsing/reference/Local.List.Mode>
 
     # Safe Browsing protects against known phishing, malware, and dangerous downloads. Keep
     # Mozilla's default provider endpoints so its local list protections continue to work.
@@ -212,12 +219,13 @@ in
     #  <https://bugzilla.mozilla.org/1348275>
     "browser.urlbar.speculativeConnect.enabled" = false;
 
-    # Disable location bar contextual suggestions
-    # Note: The UI is controlled by the .enabled pref
+    # Disable location bar contextual suggestions (Firefox Suggest)
+    # Note: The UI is controlled by quicksuggest.enabled = true and
+    # quicksuggest.settingsUi = 0.
     # See:
-    #  <https://blog.mozilla.org/data/2021/09/15/data-and-firefox-suggest/>
-    "browser.urlbar.quicksuggest.enabled" = false;
-    "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
+    #  <https://support.mozilla.org/kb/firefox-suggest>
+    "browser.urlbar.quicksuggest.online.enabled" = false;
+    "browser.urlbar.suggest.quicksuggest.all" = false;
     "browser.urlbar.suggest.quicksuggest.sponsored" = false;
 
     # Disable live search suggestions
@@ -230,13 +238,22 @@ in
 
     # Disable urlbar suggestions
     "browser.urlbar.addons.featureGate" = false;
+    "browser.urlbar.amp.featureGate" = false;
+    "browser.urlbar.flightStatus.featureGate" = false;
+    "browser.urlbar.importantDates.featureGate" = false;
+    "browser.urlbar.market.featureGate" = false;
     "browser.urlbar.mdn.featureGate" = false;
-    "browser.urlbar.pocket.featureGate" = false;
+    "browser.urlbar.sports.featureGate" = false;
     "browser.urlbar.weather.featureGate" = false;
+    "browser.urlbar.wikipedia.featureGate" = false;
     "browser.urlbar.yelp.featureGate" = false;
+    "browser.urlbar.yelpRealtime.featureGate" = false;
 
     # Disable urlbar clipboard suggestions
     "browser.urlbar.clipboard.featureGate" = false;
+
+    # Disable Google Lens visual search
+    "browser.search.visualSearch.featureGate" = false;
 
     # Disable search and form history
     # Be aware that autocomplete form data can be read by third parties
@@ -250,7 +267,7 @@ in
     "browser.search.separatePrivateDefault" = true;
     "browser.search.separatePrivateDefault.ui.enabled" = true;
 
-    ## PASSWORDS
+    ## PASSWORDS / PASSKEYS
     # See:
     #  <https://support.mozilla.org/kb/use-primary-password-protect-stored-logins-and-pas>
 
@@ -276,6 +293,11 @@ in
     # See:
     #  <https://support.mozilla.org/kb/windows-sso>
     "network.http.windows-sso.enabled" = false; # nope!
+
+    # Enforce no direct attestation in passkeys
+    # See:
+    #  <https://bugzilla.mozilla.org/show_bug.cgi?id=1981587>
+    "security.webauthn.always_allow_direct_attestation" = false;
 
     ## DISK AVOIDANCE
     # Disable disk cache
@@ -345,11 +367,11 @@ in
     # Enable CRLite
     #  - 0 = disabled
     #  - 1 = consult CRLite but only collect telemetry
-    #  - 2 = consult CRLite and enforce both "Revoked" and "Not Revoked" results
-    #  - 3 = consult CRLite and enforce "Not Revoked" results, but defer to OCSP for "Revoked" (default)
+    #  - 2 = consult CRLite and enforce both "Revoked" and "Not Revoked" results (default)
     # Also see:
     #  <https://bugzilla.mozilla.org/buglist.cgi?bug_id=1429800,1670985,1753071>
     #  <https://blog.mozilla.org/security/tag/crlite>
+    #  <https://hacks.mozilla.org/2025/08/crlite-fast-private-and-comprehensive-certificate-revocation-checking-in-firefox/>
     "security.remote_settings.crlite_filters.enabled" = true;
     "security.pki.crlite_mode" = 2;
 
@@ -394,10 +416,6 @@ in
     "network.http.referer.XOriginTrimmingPolicy" = 2;
 
     ## CONTAINERS
-
-    # Enable Container Tabs and its UI setting
-    "privacy.userContext.enabled" = true;
-    "privacy.userContext.ui.enabled" = true;
 
     # Set behavior on "+ Tab" button to display container menu on left click
     # Note: The menu is always shown on long press and right click
@@ -542,14 +560,30 @@ in
     "browser.contentblocking.report.monitor.enabled" = false; # default: false
     "browser.contentblocking.report.monitor.home_page_url" = "";
 
+    # Set ETP Strict/Custom exception lists
+    # Keep Mozilla's curated compatibility exception lists enabled so ETP Strict
+    # does not needlessly break major ("baseline") and minor ("convenience")
+    # site functionality
+    # See:
+    #  <https://support.mozilla.org/en-US/kb/manage-enhanced-tracking-protection-exceptions>
+    #  <https://etp-exceptions.mozilla.org/>
+    "privacy.trackingprotection.allow_list.baseline.enabled" = true;
+    "privacy.trackingprotection.allow_list.convenience.enabled" = true;
+
     # Disable ETP web compat features
-    # Includes skip lists, heuristics (SmartBlock) and automatic grants
+    # Includes skip lists, heuristics (SmartBlock) and automatic grants.
     # Opener and redirect heuristics are granted for 30 days.
     # See:
     #  <https://blog.mozilla.org/security/2021/07/13/smartblock-v2/>
     #  <https://hg.mozilla.org/mozilla-central/rev/e5483fd469ab#l4.12>
     #  <https://developer.mozilla.org/docs/Web/Privacy/State_Partitioning#storage_access_heuristics>
     "privacy.antitracking.enableWebcompat" = false;
+
+    # Disable referrer and storage access for resources injected by content scripts
+    "privacy.antitracking.isolateContentScriptResources" = true;
+
+    # Disable CSP violation report uploads
+    "security.csp.reporting.enabled" = false;
 
     ## SHUTDOWN & SANITIZING
 
@@ -905,10 +939,6 @@ in
     # Crypto hardening
     # Require TLS 1.2 minimum
     "security.tls.version.min" = 3;
-
-    # Disable Pocket integration
-    "browser.pocket.enabled" = false;
-    "extensions.pocket.enabled" = false;
 
     # Disable More from Mozilla
     "browser.preferences.moreFromMozilla" = false;
