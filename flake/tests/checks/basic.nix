@@ -23,8 +23,13 @@ testers.nixosTest {
       search.searxRandomizer.enable = true;
       settings."browser.startup.homepage" = "about:preferences";
       settings."browser.startup.page" = 1;
+      theme.colors = {
+        background = "332244";
+        background-darker = "241c32";
+        foreground = "e0cfee";
+      };
       theme.extraUserChrome = ''
-        #nav-bar { background: #00ff00 !important; }
+        .urlbar-background { background: #00ff00 !important; }
       '';
       theme.extraUserContent = ''
         @-moz-document url("about:blank") {
@@ -67,6 +72,16 @@ testers.nixosTest {
             for r, g, b in zip(pixels[::3], pixels[1::3], pixels[2::3])
         )
         assert green_pixels > len(pixels) // 3 // 100, green_pixels
+        settings_pixels = sum(
+            (r, g, b) == (0x24, 0x1c, 0x32)
+            for r, g, b in zip(pixels[::3], pixels[1::3], pixels[2::3])
+        )
+        assert settings_pixels > len(pixels) // 6, settings_pixels
+        toolbar_pixels = sum(
+            (r, g, b) == (0x33, 0x22, 0x44)
+            for r, g, b in zip(pixels[::3], pixels[1::3], pixels[2::3])
+        )
+        assert toolbar_pixels > len(pixels) // 3 // 100, toolbar_pixels
 
     with subtest("Custom CSS applies to an unmodified Firefox profile"):
         machine.succeed("xdotool key ctrl+l")
