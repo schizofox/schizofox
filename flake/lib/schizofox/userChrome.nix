@@ -21,43 +21,49 @@ in ''
       }
 
       :root {
-        --toolbar-bgcolor: #${background} !important;
+        --toolbar-background-color: #${background} !important;
+        --toolbar-text-color: #${foreground} !important;
         --toolbarbutton-icon-fill: #${foreground} !important;
 
-        --system-color-accent: #${primary} !important;
-        --system-color-accent-hover: #${primary} !important;
-        --system-color-accent-active: #${primary} !important;
+        --toolbox-background-color: #${background-darker} !important;
+        --toolbox-background-color-inactive: #${background-darker} !important;
+        --toolbox-text-color: #${foreground} !important;
+        --toolbox-text-color-inactive: #${foreground} !important;
 
-        --arrowpanel-background: #${background} !important;
-        --arrowpanel-color: #${foreground} !important;
-        --arrowpanel-dimmed: #${background} !important;
-        --arrowpanel-border-color: #${border} !important;
+        --color-accent-primary: #${primary} !important;
+        --color-accent-primary-hover: #${primary} !important;
+        --color-accent-primary-active: #${primary} !important;
 
-        --urlbar-box-bgcolor: #${background} !important;
+        --panel-background-color: #${background} !important;
+        --panel-text-color: #${foreground} !important;
+        --panel-background-color-dimmed: #${background} !important;
+        --panel-border-color: #${border} !important;
+
+        --toolbar-field-background-color: #${background-darker} !important;
+        --toolbar-field-background-color-focus: #${background-darker} !important;
+        --toolbar-field-text-color: #${foreground} !important;
+        --toolbar-field-text-color-focus: #${foreground} !important;
+        --toolbar-field-border-color: #${border} !important;
+
+        --urlbar-box-background-color: #${background} !important;
         --urlbar-box-text-color: #${foreground} !important;
 
-        --checkbox-checked-bgcolor: #${primary} !important;
-        --checkbox-checked-hover-bgcolor: #${primary} !important;
+        --checkbox-background-color-checked: #${primary} !important;
+        --checkbox-background-color-checked-hover: #${primary} !important;
 
-        --button-primary-bgcolor: #${primary} !important;
-        --button-primary-hover-bgcolor: #${primary} !important;
-        --button-primary-active-bgcolor: #${primary} !important;
-        --button-primary-color: #${background-darker} !important;
+        --button-background-color-primary: #${primary} !important;
+        --button-background-color-primary-hover: #${primary} !important;
+        --button-background-color-primary-active: #${primary} !important;
+        --button-text-color-primary: #${background-darker} !important;
 
-        --in-content-page-background: #${background-darker} !important;
-
-        --in-content-button-background: #${background} !important;
-        --in-content-button-background-hover: #${background} !important;
-        --in-content-button-background-active: #${background} !important;
-        --in-content-button-text-color: #${foreground} !important;
-
-        --in-content-primary-button-background: #${primary} !important;
-        --in-content-primary-button-background-hover: #${primary} !important;
-        --in-content-primary-button-text-color: #${background-darker} !important;
+        --background-color-canvas: #${background-darker} !important;
+        --text-color: #${foreground} !important;
+        --button-background-color: #${background} !important;
+        --button-background-color-hover: #${background} !important;
+        --button-background-color-active: #${background} !important;
+        --button-text-color: #${foreground} !important;
 
         --focus-outline-color: #${primary} !important;
-
-        --lwt-text-color: #${foreground} !important;
         --tab-loading-fill: #${primary} !important;
       }
 
@@ -78,7 +84,7 @@ in ''
         color: #${foreground} !important;
       }
 
-      #urlbar-background {
+      .urlbar-background {
         background: #${background-darker} !important;
         border-color: #${border} !important;
       }
@@ -111,13 +117,13 @@ in ''
         background-color: #${primary} !important;
       }
 
-      html|button[autofocus], html|button[type="submit"], xul|button[default], button.primary {
+      button[autofocus], button[type="submit"], button[default], button.primary {
         background-color: #${primary} !important;
       }
 
       menupopup {
-        --panel-background: #${background} !important;
-        --panel-color: #${foreground} !important;
+        --panel-background-color: #${background} !important;
+        --panel-text-color: #${foreground} !important;
         font-family: "${font}" !important;
       }
 

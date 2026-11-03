@@ -15,21 +15,15 @@ in ''
           font-family: "${font}" !important;
         }
 
-        html {
-          background: #${background-darker};
-        }
-
         :root {
-          --in-content-page-background: #${background-darker} !important;
-          --in-content-page-color: #${foreground} !important;
+          --background-color-canvas: #${background-darker} !important;
+          --text-color: #${foreground} !important;
 
-          --in-content-text-color: #${foreground} !important;
+          --background-color-box: #${background} !important;
+          --background-color-box-info: #${background} !important;
+          --border-color: #${border} !important;
 
-          --in-content-box-background: #${background} !important;
-          --in-content-box-info-background: #${background} !important;
-          --in-content-box-border-color: #${border} !important;
-
-          --in-content-table-background: #${background} !important;
+          --table-background-color: #${background} !important;
 
           --newtab-background-color: #${background-darker} !important;
           --newtab-background-color-secondary: #${background} !important;
@@ -37,20 +31,22 @@ in ''
           --newtab-primary-element-text-color: #${background-darker} !important;
           --newtab-primary-action-background: #${primary} !important;
 
-          --brand-color-accent: #${primary} !important;
+          --color-accent-primary: #${primary} !important;
           --color-accent-primary-hover: #${primary} !important;
           --color-accent-primary-active: #${primary} !important;
 
-          --in-content-primary-button-background: #${primary} !important;
-          --in-content-primary-button-background-active: #${primary} !important;
-          --in-content-primary-button-background-hover: #${primary} !important;
-          --in-content-primary-button-text-color: #${background-darker} !important;
+          --button-background-color-primary: #${primary} !important;
+          --button-background-color-primary-active: #${primary} !important;
+          --button-background-color-primary-hover: #${primary} !important;
+          --button-text-color-primary: #${background-darker} !important;
 
-          --checkbox-unchecked-bgcolor: #${background} !important;
-          --checkbox-unchecked-hover-bgcolor: #${background} !important;
+          --checkbox-background-color: #${background} !important;
+          --checkbox-background-color-hover: #${background} !important;
 
-          --in-content-button-background: #${background} !important;
-          --in-content-button-background-hover: #${background} !important;
+          --button-background-color: #${background} !important;
+          --button-background-color-hover: #${background} !important;
+          --button-background-color-active: #${background} !important;
+          --button-text-color: #${foreground} !important;
 
           --card-shadow: transparent !important;
         }
@@ -63,13 +59,13 @@ in ''
           color: #${background-darker} !important;
         }
 
-        html|button[autofocus], html|button[type="submit"], xul|button[default], button.primary {
+        button[autofocus], button[type="submit"], button[default], button.primary {
           background-color: #${primary} !important;
         }
 
         panel {
-          --panel-background: #${background} !important;
-          --panel-color: #${foreground} !important;
+          --panel-background-color: #${background} !important;
+          --panel-text-color: #${foreground} !important;
         }
 
         panel-list {
