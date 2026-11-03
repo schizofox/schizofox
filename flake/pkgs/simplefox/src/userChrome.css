@@ -66,7 +66,7 @@ by Miguel Avila
   > .tab-stack
   > .tab-background[selected='true'] {
   background-image: none !important;
-  background-color: var(--toolbar-bgcolor) !important;
+  background-color: var(--toolbar-background-color) !important;
 }
 
 /* Inactive tabs color */
@@ -76,10 +76,10 @@ by Miguel Avila
 
 /* Window colors  */
 :root {
-  --toolbar-bgcolor: var(--sfsecondary) !important;
+  --toolbar-background-color: var(--sfsecondary) !important;
   --tabs-border-color: var(--sfsecondary) !important;
   --lwt-sidebar-background-color: var(--sfwindow) !important;
-  --lwt-toolbar-field-focus: var(--sfsecondary) !important;
+  --toolbar-field-background-color-focus: var(--sfsecondary) !important;
 }
 
 /* Sidebar color  */
@@ -144,7 +144,7 @@ by Miguel Avila
 }
 
 /* Url Bar  */
-#urlbar-input-container {
+.urlbar-input-container {
   background-color: var(--sfsecondary) !important;
   border: 1px solid rgba(0, 0, 0, 0) !important;
 }
@@ -153,7 +153,7 @@ by Miguel Avila
   margin-left: 0 !important;
 }
 
-#urlbar[focused='true'] > #urlbar-background {
+#urlbar[focused='true'] > .urlbar-background {
   box-shadow: none !important;
 }
 
