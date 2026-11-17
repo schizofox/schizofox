@@ -22,9 +22,10 @@
     genericName = "Web Browser";
     exec =
       if wrapWithProxychains
-      then "proxychains4 schizofox %U"
-      else "schizofox %U";
+      then "proxychains4 schizofox --name Schizofox %U"
+      else "schizofox --name Schizofox %U";
     icon = "${logo}";
+    startupWMClass = "Schizofox";
     terminal = false;
     categories = ["Network" "WebBrowser"];
     mimeTypes = ["text/html" "text/xml"];
