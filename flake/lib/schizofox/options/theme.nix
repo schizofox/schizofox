@@ -1,7 +1,18 @@
 {lib, ...}: let
+  inherit (lib.modules) mkRemovedOptionModule;
   inherit (lib.options) mkOption mkEnableOption literalExpression;
   inherit (lib.types) str;
 in {
+  imports = [
+    (
+      mkRemovedOptionModule ["programs" "schizofox" "theme" "font"] ''
+        Deprecated in favour of using OS-level font configuration.
+
+        On NixOS, that means setting `fonts.fontconfig.defaultFonts`.
+      ''
+    )
+  ];
+
   options.programs.schizofox.theme = {
     colors = {
       background-darker = mkOption {
@@ -38,13 +49,6 @@ in {
         default = "00000000";
         description = "Border color";
       };
-    };
-
-    font = mkOption {
-      type = str;
-      example = "Lato";
-      default = "Lexend";
-      description = "Default Firefox font in the built-in stylesheets (only when defaultUserChrome or defaultUserContent is enabled)";
     };
 
     defaultUserChrome.enable = mkEnableOption "default userChrome for Schizofox" // {default = true;};

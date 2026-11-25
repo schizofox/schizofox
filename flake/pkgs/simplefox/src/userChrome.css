@@ -24,13 +24,11 @@ by Miguel Avila
 }
 
 :root {
-  --mff-tab-font-family: "Lato";
   --mff-tab-font-size: 11pt;
   --mff-tab-font-weight: 400;
   --mff-urlbar-font-family: "Lato";
   --mff-urlbar-font-size: 11pt;
   --mff-urlbar-font-weight: 700;
-  --mff-urlbar-results-font-family: "Lato";
   --mff-urlbar-results-font-size: 11pt;
   --mff-urlbar-results-font-weight: 700;
 }

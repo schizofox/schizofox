@@ -2,7 +2,6 @@
   stdenvNoCC,
   backgroundDarker ? "19171a",
   background ? "201e21",
-  font ? "Lato",
   border ? "rgba(0, 0, 0, 0)",
   ...
 }:
@@ -24,8 +23,6 @@ stdenvNoCC.mkDerivation {
     sed -i "s/19171a/${backgroundDarker}/g" userChrome.css
     sed -i "s/201e21/${background}/g" userChrome.css
     sed -i "s/rgba(0, 0, 0, 0)/#${border}/g" userChrome.css
-    sed -i "s/Lato/${font}/g" userChrome.css
-    printf '\n* { font-family: "${font}" !important; }' >> userChrome.css
   '';
 
   installPhase = ''
