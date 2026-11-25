@@ -3,7 +3,7 @@
   lib,
   pkgs,
 }: let
-  inherit (cfg.theme) font extraUserContent;
+  inherit (cfg.theme) extraUserContent;
   inherit (cfg.theme.colors) background background-darker foreground primary border;
   userContent = pkgs.schizofox-userContent;
 in ''
@@ -11,10 +11,6 @@ in ''
   ${
     lib.optionalString cfg.theme.defaultUserContent.enable ''
       @-moz-document url-prefix("about:") {
-        * {
-          font-family: "${font}" !important;
-        }
-
         :root {
           --background-color-canvas: #${background-darker} !important;
           --text-color: #${foreground} !important;

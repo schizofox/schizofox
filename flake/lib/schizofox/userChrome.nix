@@ -4,11 +4,10 @@
   pkgs,
 }: let
   inherit (cfg.theme.colors) background-darker background foreground primary border;
-  inherit (cfg.theme) font;
 
   userChrome = pkgs.schizofox-userChrome.override {
     backgroundDarker = background-darker;
-    inherit background border font;
+    inherit background border;
   };
 in ''
   ${lib.optionalString cfg.extensions.simplefox.enable (builtins.readFile userChrome)}
@@ -16,10 +15,6 @@ in ''
 
    ${
     lib.optionalString cfg.theme.defaultUserChrome.enable ''
-      * {
-        font-family: "${font}" !important;
-      }
-
       :root {
         --toolbar-background-color: #${background} !important;
         --toolbar-text-color: #${foreground} !important;
@@ -124,7 +119,6 @@ in ''
       menupopup {
         --panel-background-color: #${background} !important;
         --panel-text-color: #${foreground} !important;
-        font-family: "${font}" !important;
       }
 
       menuitem {
